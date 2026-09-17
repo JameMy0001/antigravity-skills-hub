@@ -1,0 +1,66 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# antigravity-skills-hub — .gitignore
+# Maintained by Jamemm (@JameMy0001)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Obsidian session files (local-only, NOT shared) ──────────────────────────
+# These store your personal window state, tab history, and local draft names.
+# They change on every save and will cause merge conflicts if committed.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# ── macOS system artifacts ────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# ── Windows system artifacts ──────────────────────────────────────────────────
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ── Linux system artifacts ────────────────────────────────────────────────────
+*~
+
+# ── Python cache / bytecode ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg
+*.egg-info/
+dist/
+build/
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+.env
+
+# ── Editor/IDE project files ──────────────────────────────────────────────────
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# ── Temporary / scratch files ─────────────────────────────────────────────────
+*.tmp
+*.bak
+*.swp
+*.swo
+.scratch/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# KEEP these Obsidian shared config files (explicitly tracked):
+# !.obsidian/app.json
+# !.obsidian/appearance.json
+# !.obsidian/canvas.json
+# !.obsidian/core-plugins.json
+# !.obsidian/graph.json
+# ─────────────────────────────────────────────────────────────────────────────

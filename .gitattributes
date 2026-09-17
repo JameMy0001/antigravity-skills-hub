@@ -1,0 +1,51 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# antigravity-skills-hub — .gitattributes
+# Maintained by Jamemm (@JameMy0001)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Enforce Unix line endings on all text files for cross-platform consistency.
+# Windows users who clone this repo will get LF checkouts too.
+* text=auto eol=lf
+
+# Markdown files — text, LF
+*.md    text eol=lf diff=markdown
+*.mdx   text eol=lf
+
+# Python scripts — text, LF
+*.py    text eol=lf diff=python
+
+# Shell scripts — text, LF, binary-safe
+*.sh    text eol=lf
+*.bash  text eol=lf
+
+# PowerShell — text, CRLF (Windows-native)
+*.ps1   text eol=crlf
+*.psm1  text eol=crlf
+
+# JSON / YAML / TOML / Canvas — text, LF
+*.json   text eol=lf
+*.yaml   text eol=lf
+*.yml    text eol=lf
+*.toml   text eol=lf
+*.canvas text eol=lf
+
+# CFF (Citation) — text, LF
+*.cff  text eol=lf
+
+# Plain text
+*.txt   text eol=lf
+
+# Binary files — never modify
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.pdf   binary
+*.zip   binary
+*.tar   binary
+*.gz    binary
+
+# ── macOS Unicode / NFD filename normalization ────────────────────────────────
+# Ensures Thai and Emoji filenames round-trip correctly across macOS/Linux/Win.
+# Run: git config core.precomposeunicode true && git config core.quotepath false

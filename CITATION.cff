@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: >
+  If you use this Agentic Skills Vault in your AI workflows, research, or
+  personal projects, please cite it using the metadata below.
+type: software
+title: "Antigravity Skills Hub: Unified 8-Stage SDLC Agentic Skills Ecosystem"
+abstract: >
+  A production-grade, interconnected AI agent skills vault designed around an
+  8-Stage SDLC lifecycle. Integrates 61 curated skills across Google Antigravity,
+  Cursor IDE, Claude Code, and Hermes Agent frameworks through a bidirectional
+  Obsidian Knowledge Graph. Features automated dispatch routing, cross-platform
+  symlink installation, and a visual Canvas workflow.
+authors:
+  - given-names: "Jamemm"
+    alias: "JameMy0001"
+    email: "Jamerrmool@gmail.com"
+    orcid: ""
+repository-code: "https://github.com/JameMy0001/antigravity-skills-hub"
+url: "https://github.com/JameMy0001/antigravity-skills-hub"
+license: MIT
+version: "1.0.0"
+date-released: "2026-09-17"
+keywords:
+  - "AI agents"
+  - "agentic skills"
+  - "Obsidian"
+  - "knowledge graph"
+  - "SDLC"
+  - "Google Antigravity"
+  - "Cursor IDE"
+  - "Claude Code"
+  - "LLM tooling"
+  - "prompt engineering"
+  - "multi-agent systems"
+  - "skill dispatch"
