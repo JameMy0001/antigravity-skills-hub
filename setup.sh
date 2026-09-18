@@ -37,6 +37,40 @@ fi
 SKILL_COUNT=$(ls "$SKILLS_DIR" | wc -l | tr -d ' ')
 log "Found $SKILL_COUNT skills in vault"
 
+backup_path_if_exists() {
+    local target_path="$1"
+    local backup_path="${target_path}.backup"
+    if [[ -e "$backup_path" || -L "$backup_path" ]]; then
+        backup_path="${backup_path}.$(date +%s)"
+    fi
+    mv "$target_path" "$backup_path"
+    warn "Backed up existing path to $backup_path"
+}
+
+ensure_skills_symlink() {
+    local link_path="$1"
+    local platform_name="$2"
+
+    mkdir -p "$(dirname "$link_path")"
+
+    if [[ -L "$link_path" ]]; then
+        local resolved_target
+        resolved_target="$(realpath "$link_path" 2>/dev/null || true)"
+        if [[ "$resolved_target" == "$SKILLS_DIR" ]]; then
+            ok "${platform_name} symlink already correct → $link_path"
+            return
+        fi
+        warn "${platform_name} symlink points to wrong target (${resolved_target:-unresolved}) — replacing"
+        backup_path_if_exists "$link_path"
+    elif [[ -e "$link_path" ]]; then
+        warn "Path exists at $link_path and is not a symlink — replacing"
+        backup_path_if_exists "$link_path"
+    fi
+
+    ln -s "$SKILLS_DIR" "$link_path"
+    ok "Symlink created → $link_path"
+}
+
 # ── Git configuration for Thai/Emoji filenames ────────────────────────────────
 log "Configuring git for Unicode filenames (Thai + Emoji)..."
 git -C "$VAULT_DIR" config core.precomposeunicode true 2>/dev/null || warn "Not a git repo (skipping git config)"
@@ -46,36 +80,12 @@ ok "Git Unicode config applied"
 # ── Symlink: Google Antigravity ───────────────────────────────────────────────
 ANTIGRAVITY_SKILLS="$HOME/.gemini/config/skills"
 log "Setting up Google Antigravity symlink → $ANTIGRAVITY_SKILLS"
-
-if [[ -L "$ANTIGRAVITY_SKILLS" ]]; then
-    warn "Symlink already exists at $ANTIGRAVITY_SKILLS (skipping)"
-elif [[ -d "$ANTIGRAVITY_SKILLS" ]]; then
-    warn "Directory exists at $ANTIGRAVITY_SKILLS — backing up to ${ANTIGRAVITY_SKILLS}.backup"
-    mv "$ANTIGRAVITY_SKILLS" "${ANTIGRAVITY_SKILLS}.backup"
-    ln -s "$SKILLS_DIR" "$ANTIGRAVITY_SKILLS"
-    ok "Symlink created → $ANTIGRAVITY_SKILLS"
-else
-    mkdir -p "$(dirname "$ANTIGRAVITY_SKILLS")"
-    ln -s "$SKILLS_DIR" "$ANTIGRAVITY_SKILLS"
-    ok "Symlink created → $ANTIGRAVITY_SKILLS"
-fi
+ensure_skills_symlink "$ANTIGRAVITY_SKILLS" "Google Antigravity"
 
 # ── Symlink: Cursor IDE ────────────────────────────────────────────────────────
 CURSOR_SKILLS="$HOME/.cursor/skills"
 log "Setting up Cursor IDE symlink → $CURSOR_SKILLS"
-
-if [[ -L "$CURSOR_SKILLS" ]]; then
-    warn "Symlink already exists at $CURSOR_SKILLS (skipping)"
-elif [[ -d "$CURSOR_SKILLS" ]]; then
-    warn "Directory exists at $CURSOR_SKILLS — backing up to ${CURSOR_SKILLS}.backup"
-    mv "$CURSOR_SKILLS" "${CURSOR_SKILLS}.backup"
-    ln -s "$SKILLS_DIR" "$CURSOR_SKILLS"
-    ok "Symlink created → $CURSOR_SKILLS"
-else
-    mkdir -p "$(dirname "$CURSOR_SKILLS")"
-    ln -s "$SKILLS_DIR" "$CURSOR_SKILLS"
-    ok "Symlink created → $CURSOR_SKILLS"
-fi
+ensure_skills_symlink "$CURSOR_SKILLS" "Cursor IDE"
 
 # ── Python dependencies ────────────────────────────────────────────────────────
 log "Installing Python dependencies..."

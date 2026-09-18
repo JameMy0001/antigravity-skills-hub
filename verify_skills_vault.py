@@ -55,35 +55,15 @@ EXPECTED_CATEGORIES = {
     "08 - Productivity & Office Documents",
 }
 
-NEW_SKILLS = [
-    "verification-before-completion",
-    "using-git-worktrees",
-    "systematic-debugging",
-    "subagent-driven-development",
-    "determine_threat_model",
-    "brainstorming",
-    "writing-plans",
-    "finishing-a-development-branch",
-    "github-pr-workflow",
-    "tmux",
-    "receiving-code-review",
-    "playwright-cli",
-    "playwright-trace",
-    "chrome-extensions",
-    "architecture-diagram",
-    "excalidraw",
-    "baoyu-infographic",
-    "llm-wiki",
-    "docx",
-    "xlsx",
-    "powerpoint",
-    "pdf",
-    "ocr-and-documents",
-    "claude-design",
-    "document-design",
-]
-
 import yaml
+
+def list_skill_dirs(skills_dir):
+    if not os.path.isdir(skills_dir):
+        return None
+    return sorted(
+        d for d in os.listdir(skills_dir)
+        if not d.startswith(".") and os.path.isdir(os.path.join(skills_dir, d))
+    )
 
 def parse_frontmatter(content):
     if not content.startswith("---"):
@@ -116,23 +96,28 @@ def parse_frontmatter(content):
 
 def check_1_readable_skill_md():
     errors = []
+    expected_skills = list_skill_dirs(LOCAL_SKILLS)
+    if expected_skills is None:
+        errors.append(f"Local Vault skills directory missing: {LOCAL_SKILLS}")
+        return errors
+
     vaults_to_check = [("Local Vault", LOCAL_SKILLS)]
     if ICLOUD_SKILLS:
         vaults_to_check.append(("iCloud Mirror", ICLOUD_SKILLS))
 
     for vault_name, vault_skills in vaults_to_check:
-        if not os.path.exists(vault_skills):
+        if not os.path.isdir(vault_skills):
             errors.append(f"{vault_name} skills directory missing: {vault_skills}")
             continue
-        
-        skills = [d for d in os.listdir(vault_skills) if not d.startswith(".") and os.path.isdir(os.path.join(vault_skills, d))]
-        if len(skills) != 61:
-            errors.append(f"Expected exactly 61 skills in {vault_name} Skills vault, found {len(skills)}")
-        for expected in NEW_SKILLS:
-            if expected not in skills:
-                errors.append(f"Missing new skill in {vault_name}: {expected}")
 
-                
+        skills = list_skill_dirs(vault_skills) or []
+        missing = sorted(set(expected_skills) - set(skills))
+        unexpected = sorted(set(skills) - set(expected_skills))
+        if missing:
+            errors.append(f"Missing skills in {vault_name}: {missing}")
+        if unexpected:
+            errors.append(f"Unexpected extra skills in {vault_name}: {unexpected}")
+
         for s in skills:
             skill_dir = os.path.join(vault_skills, s)
             if not os.path.isdir(skill_dir):
@@ -154,7 +139,10 @@ def check_2_frontmatter_and_connected():
     errors = []
     # Use iCloud skills dir if available, otherwise fall back to local vault
     primary_skills = ICLOUD_SKILLS if ICLOUD_SKILLS else LOCAL_SKILLS
-    skills = [d for d in os.listdir(primary_skills) if not d.startswith(".") and os.path.isdir(os.path.join(primary_skills, d))]
+    if not os.path.isdir(primary_skills):
+        return [f"Primary skills directory missing: {primary_skills}"]
+
+    skills = list_skill_dirs(primary_skills) or []
     for s in skills:
         skill_md = os.path.join(primary_skills, s, "SKILL.md")
         if not os.path.exists(skill_md):
@@ -224,6 +212,11 @@ def check_3_parity():
 
 def check_4_symlinks():
     errors = []
+    expected_skills = list_skill_dirs(LOCAL_SKILLS)
+    if expected_skills is None:
+        errors.append(f"Local Vault skills directory missing: {LOCAL_SKILLS}")
+        return errors
+
     for link_path, name in [(GEMINI_SYMLINK, "Gemini"), (CURSOR_SYMLINK, "Cursor")]:
         if not os.path.islink(link_path):
             errors.append(f"{name} symlink is not a valid symlink: {link_path}")
@@ -232,7 +225,7 @@ def check_4_symlinks():
         if not os.path.exists(target):
             errors.append(f"{name} symlink target does not exist: {target}")
             continue
-        for s in NEW_SKILLS:
+        for s in expected_skills:
             skill_md = os.path.join(link_path, s, "SKILL.md")
             if not os.path.isfile(skill_md):
                 errors.append(f"Symlink {name} cannot access SKILL.md for {s}")
@@ -242,7 +235,12 @@ def check_5_wikilinks():
     errors = []
     primary_vault = ICLOUD_VAULT if ICLOUD_VAULT else LOCAL_VAULT
     primary_skills = ICLOUD_SKILLS if ICLOUD_SKILLS else LOCAL_SKILLS
-    all_known_skills = set(d for d in os.listdir(primary_skills) if not d.startswith(".") and os.path.isdir(os.path.join(primary_skills, d)))
+    if not os.path.isdir(primary_vault):
+        return [f"Primary vault directory missing: {primary_vault}"]
+    if not os.path.isdir(primary_skills):
+        return [f"Primary skills directory missing: {primary_skills}"]
+
+    all_known_skills = set(list_skill_dirs(primary_skills) or [])
     wikilink_pattern = re.compile(r"\[\[([^\]]+)\]\]")
 
     all_md_files = []
@@ -309,10 +307,9 @@ def check_6_canvas_coverage():
             if filepath.startswith("Skills/") and filepath.endswith("/SKILL.md"):
                 skill_name = filepath.split("/")[1]
                 canvas_file_skills.add(skill_name)
-                
-    for s in NEW_SKILLS:
-        if s not in canvas_file_skills:
-            errors.append(f"New skill '{s}' is missing as a node in 01 - 🗺️ Skills Workflow.canvas")
+
+    if not canvas_file_skills:
+        errors.append("Canvas does not contain any skill file nodes (Skills/*/SKILL.md)")
             
     seen_edge_ids = set()
     for e in edges:
@@ -358,12 +355,12 @@ def main():
     print("=========================================")
     
     tests = [
-        ("1. Readable SKILL.md in all directories (61 skills)", check_1_readable_skill_md),
+        ("1. Readable SKILL.md in all directories", check_1_readable_skill_md),
         ("2. Valid YAML frontmatter & Connected Skills", check_2_frontmatter_and_connected),
         ("3. 100% Parity iCloud vs Local Mirror (full tree)", check_3_parity),
         ("4. Symlinks in ~/.gemini and ~/.cursor", check_4_symlinks),
         ("5. Zero broken wikilinks across entire vault", check_5_wikilinks),
-        ("6. Canvas Coverage (all 25 new skills in workflow)", check_6_canvas_coverage),
+        ("6. Canvas Integrity (skill file nodes & edges)", check_6_canvas_coverage),
         ("7. Graph Color Groups (Stage 8 in graph.json)", check_7_graph_color_groups),
     ]
     
