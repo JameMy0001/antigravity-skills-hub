@@ -4,12 +4,12 @@ Verification Script for Centralized Obsidian Skills Vault Integration
 Architected by Jamemm (@JameMy0001) — https://github.com/JameMy0001/antigravity-skills-hub
 
 Validates:
-1. Every skill directory in the vault has a readable SKILL.md (61 skills total).
+1. Every skill directory in the vault has a readable SKILL.md.
 2. Every SKILL.md has valid YAML frontmatter (name, description, aliases, category,
    tags with agent-skill & stage) and "## 🔗 Connected Skills".
 3. Symlinks in ~/.gemini/config/skills and ~/.cursor/skills resolve cleanly.
 4. Zero broken wikilinks across ALL markdown files.
-5. Canvas Coverage: Skills Workflow.canvas contains nodes for all skills.
+5. Canvas Integrity: Skills Workflow.canvas file nodes and edges are valid.
 6. Graph Color Groups: .obsidian/graph.json defines color group for Stage 8.
 
 Usage:
