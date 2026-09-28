@@ -47,8 +47,7 @@ This vault implements an **8-Stage SDLC Skill Dispatch System** — one centrali
 │  06 Git/Release   ──►  git-workflow · github-pr-workflow · finishing   │
 │  07 Exploration   ──►  codebase-onboarding · llm-wiki · tmux          │
 │  08 Office/Docs   ──►  docx · xlsx · powerpoint · pdf · ocr           │
-│                                                                         │
-│  🔀 Auto-Dispatch Directive → routes every request automatically       │
+│  🛡️ On-Demand Protocol → asks user confirmation & saves tokens         │
 │  🕸️  Obsidian Graph → bidirectional [[Wikilinks]] across all skills    │
 │  🔗  Symlinks → ~/.gemini/config/skills && ~/.cursor/skills            │
 └─────────────────────────────────────────────────────────────────────────┘

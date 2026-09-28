@@ -373,9 +373,11 @@ Use these Hermes tools during Phase 1:
 - **`terminal`** — Run tests, check git history, reproduce bugs
 - **`web_search`/`web_extract`** — Research error messages, library docs
 
-### With delegate_task
+### With delegate_task (Optional)
 
-For complex multi-component debugging, dispatch investigation subagents:
+> [!NOTE] Default to direct investigation. Only dispatch subagents if explicitly requested by the user to save tokens and prevent quota exhaustion.
+
+For complex multi-component debugging when explicitly requested:
 
 ```python
 delegate_task(

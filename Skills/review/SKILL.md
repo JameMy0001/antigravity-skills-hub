@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review code changes with the Bugbot or Security Review subagent.
+description: Review code changes for bugs, defects, and security issues.
 disable-model-invocation: true
 aliases:
   - review
@@ -12,6 +12,9 @@ tags:
 ---
 
 # Review
+
+> [!NOTE] Single-Agent Mode (Default)
+> If autonomous subagents are disabled, perform the review directly within the current session.
 
 Ask the user which review to run with the AskQuestion tool. If the AskQuestion tool is not available, ask the user directly. Provide exactly one single-select question with two options:
 

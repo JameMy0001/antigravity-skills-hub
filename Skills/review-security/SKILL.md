@@ -1,6 +1,6 @@
 ---
 name: review-security
-description: Review code changes with Security Review subagent.
+description: Review code changes for security vulnerabilities, entry points, and trust boundaries.
 aliases:
   - review-security
 category: "05 - Security & Code Quality"
@@ -12,9 +12,12 @@ tags:
 
 # Review Security
 
+> [!NOTE] Single-Agent Mode (Default)
+> If autonomous subagents are disabled or the user did not explicitly request a subagent, **do not launch a subagent**. Instead, perform the security review directly within this session by analyzing git diffs, inspecting dependencies, and auditing authentication/authorization boundaries.
+
 Use this skill when the user asks to run `/review-security`.
 
-Launch exactly one `security-review` subagent with:
+If running with a subagent (explicitly requested by user), launch exactly one `security-review` subagent with:
 
 - `run_in_background: false` unless explicitly asked to run in background
 - `description: "Security Review"`

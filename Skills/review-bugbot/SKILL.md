@@ -1,6 +1,6 @@
 ---
 name: review-bugbot
-description: Review code changes with Bugbot subagent.
+description: Review code changes for bugs and defect regressions.
 aliases:
   - review-bugbot
 category: "05 - Security & Code Quality"
@@ -12,9 +12,12 @@ tags:
 
 # Review Bugbot
 
+> [!NOTE] Single-Agent Mode (Default)
+> If autonomous subagents are disabled or the user did not explicitly request a subagent, **do not launch a subagent**. Instead, perform the bug analysis directly within this session by analyzing git diffs, inspecting failure conditions, and checking edge cases.
+
 Use this skill when the user asks to run `/review-bugbot`.
 
-Launch exactly one `bugbot` subagent with:
+If running with a subagent (explicitly requested by user), launch exactly one `bugbot` subagent with:
 
 - `run_in_background: false` unless explicitly asked to run in background
 - `description: "Bugbot"`
