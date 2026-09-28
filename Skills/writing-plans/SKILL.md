@@ -183,3 +183,5 @@ After saving the plan, offer execution choice:
 - [[Skills/brainstorming/SKILL|brainstorming]] — รวบรวมความต้องการก่อนเริ่มเขียนแผน
 - [[Skills/subagent-driven-development/SKILL|subagent-driven-development]] — ส่งมอบแผนให้ Subagent นำไปลงมือทำ
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — กำหนดขั้นตอนการเขียน Test ก่อนโค้ดจริงในแต่ละ Task ย่อย
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

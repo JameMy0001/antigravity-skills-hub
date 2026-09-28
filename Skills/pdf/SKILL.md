@@ -179,3 +179,5 @@ Read [forms.md](forms.md) first — it distinguishes fillable (AcroForm) PDFs fr
 ## 🔗 Connected Skills (ทักษะที่เกี่ยวข้อง)
 - [[Skills/ocr-and-documents/SKILL|ocr-and-documents]] — สกัดตัวอักษรและ OCR จากสแกน PDF
 - [[Skills/docx/SKILL|docx]] — แปลงหรือสร้างเอกสารคู่ขนาน
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

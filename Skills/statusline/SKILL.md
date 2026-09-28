@@ -207,3 +207,5 @@ The command is spawned with `child_process.spawn` (no shell on Unix, `shell: tru
 
 ## 🔗 Connected Skills
 - [[Skills/update-cursor-settings/SKILL|update-cursor-settings]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

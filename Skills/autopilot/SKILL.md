@@ -62,3 +62,5 @@ Lead with the cause when reporting an action or finding. If you are blocked, say
 - [[Skills/review/SKILL|review]]
 - [[Skills/review-security/SKILL|review-security]]
 - [[Skills/review-bugbot/SKILL|review-bugbot]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

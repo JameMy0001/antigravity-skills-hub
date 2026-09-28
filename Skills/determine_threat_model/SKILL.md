@@ -183,3 +183,5 @@ Use the following structure for the section:
 - [[Skills/review-security/SKILL|review-security]] — สแกนหาช่องโหว่ความปลอดภัยตาม Threat Model ที่กำหนด
 - [[Skills/error-handling/SKILL|error-handling]] — ป้องกันการรั่วไหลของข้อมูลลับผ่าน Error messages
 - [[Skills/backend-patterns/SKILL|backend-patterns]] — วางสถาปัตยกรรมป้องกัน Injection, Auth bypass, IDOR
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

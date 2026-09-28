@@ -135,3 +135,5 @@ Wake notifications include an output file path, not a submitted prompt. Put the 
 - [[Skills/automate/SKILL|automate]]
 - [[Skills/autopilot/SKILL|autopilot]]
 - [[Skills/goal/SKILL|goal]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

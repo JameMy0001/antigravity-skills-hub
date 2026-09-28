@@ -113,3 +113,5 @@ try {
 } catch {
     Write-Warning "Verification completed with warnings. See output above for details."
 }
+
+# v1.1.0 synchronized: 2026-09-29

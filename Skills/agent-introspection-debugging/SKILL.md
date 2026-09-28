@@ -167,3 +167,5 @@ Always provide:
 - [[Skills/orch-fix-defect/SKILL|orch-fix-defect]] — การแก้บักในระดับ Application Code
 - [[Skills/loop/SKILL|loop]] — ตรวจสอบเมื่อ Autonomous Loop ทำงานซ้ำซ้อน
 - [[Skills/goal/SKILL|goal]] — จัดการ Goal Execution เมื่อพบปัญหา Context Drift
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

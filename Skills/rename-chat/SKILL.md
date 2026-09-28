@@ -27,3 +27,5 @@ Call `cursor-app-control.rename_chat` once with that title. Do not ask for confi
 
 ## 🔗 Connected Skills
 - [[Skills/onboard/SKILL|onboard]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

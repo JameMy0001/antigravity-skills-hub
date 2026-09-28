@@ -52,3 +52,5 @@ tags:
 - **สิ่งที่ต้องทำ:**
   - สรุป Release Notes หรือ Executive Summary ในรูปแบบเอกสารทางการ
   - แปลงรายงานเป็น PDF คุณภาพสูงระดับนิตยสารผ่าน Playwright
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

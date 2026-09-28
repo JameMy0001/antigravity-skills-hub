@@ -265,3 +265,5 @@ If they agree to the companion, read the detailed guide before proceeding:
 - [[Skills/writing-plans/SKILL|writing-plans]] — แปลงผลลัพธ์จากการ Brainstorm เป็นแผนการพัฒนาที่เป็นรูปธรรม
 - [[Skills/architecture-diagram/SKILL|architecture-diagram]] — วาดผังภาพประกอบการออกแบบระบบ
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — นำ Use Cases ที่ได้ไประบุเป็น Acceptance Tests
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

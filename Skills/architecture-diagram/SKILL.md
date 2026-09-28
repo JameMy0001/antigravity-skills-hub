@@ -154,3 +154,5 @@ The template contains working examples of every component type (frontend, backen
 - [[Skills/backend-patterns/SKILL|backend-patterns]] — ถ่ายทอดภาพสถาปัตยกรรม Backend ลงในแผนภาพ
 - [[Skills/brainstorming/SKILL|brainstorming]] — นำไปใช้ประกอบการ Brainstorm ออกแบบระบบ
 - [[Skills/excalidraw/SKILL|excalidraw]] — วาดผังแบบร่าง Hand-drawn คู่ขนานกัน
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

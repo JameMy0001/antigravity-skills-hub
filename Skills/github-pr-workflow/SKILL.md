@@ -373,3 +373,5 @@ git push -u origin HEAD
 - [[Skills/git-workflow/SKILL|git-workflow]] — รูปแบบ Conventional Commits ใน PR
 - [[Skills/autopilot/SKILL|autopilot]] — รันและแก้ CI ให้ผ่านแบบอัตโนมัติ
 - [[Skills/receiving-code-review/SKILL|receiving-code-review]] — ปรับปรุงโค้ดตาม Feedback ใน PR
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

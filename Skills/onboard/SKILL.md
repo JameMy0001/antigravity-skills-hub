@@ -189,3 +189,5 @@ If there is no safe agent path to apply a recommendation, point the user to the 
 - [[Skills/update-cursor-settings/SKILL|update-cursor-settings]]
 - [[Skills/update-cli-config/SKILL|update-cli-config]]
 - [[Skills/new-repo/SKILL|new-repo]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

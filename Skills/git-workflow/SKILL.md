@@ -730,3 +730,5 @@ git add node_modules/
 - [[Skills/split-to-prs/SKILL|split-to-prs]] — การแบ่งชุดการแก้ไขออกเป็น PR ย่อย
 - [[Skills/autopilot/SKILL|autopilot]] — การจัดการ Merge conflict และการตรวจ CI
 - [[Skills/deploy-with-vercel/SKILL|deploy-with-vercel]] — การปล่อยระบบหลังผ่านการ Merge
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

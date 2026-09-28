@@ -512,3 +512,5 @@ use llmwiki when you want batch compile of a source directory.
 ## 🔗 Connected Skills (ทักษะที่เกี่ยวข้อง)
 - [[Skills/codebase-onboarding/SKILL|codebase-onboarding]] — บันทึกข้อมูลสถาปัตยกรรมลงใน Wiki
 - [[Skills/ocr-and-documents/SKILL|ocr-and-documents]] — สกัดเนื้อหาจากเอกสารมาจัดเก็บใน Wiki
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

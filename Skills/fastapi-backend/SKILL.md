@@ -112,3 +112,5 @@ async def list_items(
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — การเขียนเทสต์ด้วย Pytest และ HTTPX AsyncClient
 - [[Skills/database-migrations/SKILL|database-migrations]] — จัดการ Schema Migration ด้วย Alembic
 - [[Skills/docker-and-compose/SKILL|docker-and-compose]] — บรรจุแอปพลิเคชันลงใน Docker Container
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

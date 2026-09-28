@@ -127,3 +127,5 @@ If the output is truncated, you must repeat the command but redirect to a file a
 - [[Skills/canvas/SKILL|canvas]] — สำหรับสร้าง interactive React UI artifacts
 - [[Skills/visualize/SKILL|visualize]] — สำหรับแสดงผลแผนภูมิและ UI inline
 - [[Skills/api-design/SKILL|api-design]] — สำหรับเชื่อมต่อกับ Frontend API contracts
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

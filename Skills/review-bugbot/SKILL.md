@@ -81,3 +81,5 @@ Do not fix findings or rerun review unless the user explicitly asks for that nex
 ## 🔗 Connected Skills
 - [[Skills/review/SKILL|review]]
 - [[Skills/autopilot/SKILL|autopilot]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

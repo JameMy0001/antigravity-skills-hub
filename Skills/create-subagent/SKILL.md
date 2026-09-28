@@ -237,3 +237,5 @@ Use the my-agent subagent to [task description]
 ## 🔗 Connected Skills
 - [[Skills/create-skill/SKILL|create-skill]]
 - [[Skills/sdk/SKILL|sdk]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

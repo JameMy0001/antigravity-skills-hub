@@ -133,3 +133,5 @@ export async function updateProfile(prevState: ActionState, formData: FormData):
 - [[Skills/modern-web-guidance/SKILL|modern-web-guidance]] — ตรวจสอบมาตรฐาน Web APIs และ Core Web Vitals
 - [[Skills/api-design/SKILL|api-design]] — กำหนดโครงสร้าง Route Handlers (`app/api/.../route.ts`)
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — เขียน Unit/Integration Tests ด้วย Vitest หรือ Jest
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

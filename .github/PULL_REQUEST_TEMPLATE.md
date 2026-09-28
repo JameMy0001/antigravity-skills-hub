@@ -17,3 +17,5 @@ Briefly describe the skill, bugfix, or enhancement introduced by this PR.
 - [ ] No hardcoded machine paths (`/Users/...`)
 - [ ] Adheres to Single-Agent First (no autonomous subagent spawning)
 - [ ] Passed `python3 verify_skills_vault.py` locally
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

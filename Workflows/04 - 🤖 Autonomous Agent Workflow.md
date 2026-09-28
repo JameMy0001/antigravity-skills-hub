@@ -38,3 +38,5 @@ tags:
   - [[Skills/create-skill/SKILL|create-skill]] — สกัดกระบวนการที่ทำสำเร็จเป็น Skill ถาวร
   - [[Skills/create-rule/SKILL|create-rule]] — เพิ่มกฎบังคับเฉพาะโปรเจกต์
   - [[Templates/Skill Template|Skill Template]] — บันทึกลง Obsidian Vault พร้อมเชื่อมโยง `[[Wikilinks]]`
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

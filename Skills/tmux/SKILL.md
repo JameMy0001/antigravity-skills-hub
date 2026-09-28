@@ -133,3 +133,5 @@ tmux -S "$SOCKET" capture-pane -p -t agent-1 -S -500
 ## 🔗 Connected Skills (ทักษะที่เกี่ยวข้อง)
 - [[Skills/shell/SKILL|shell]] — ควบคุมการรันคำสั่ง Terminal ผ่าน AI
 - [[Skills/automate/SKILL|automate]] — ผูกงานอัตโนมัติเข้ากับ Persistent Sessions
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

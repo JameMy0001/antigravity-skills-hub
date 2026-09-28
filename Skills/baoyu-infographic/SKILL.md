@@ -242,3 +242,5 @@ Report: topic, layout, style, aspect, language, output path, files created.
 ## 🔗 Connected Skills (ทักษะที่เกี่ยวข้อง)
 - [[Skills/visualize/SKILL|visualize]] — สรุปข้อมูลเชิงภาพอย่างรวดเร็ว
 - [[Skills/powerpoint/SKILL|powerpoint]] — นำ Infographic ไปวางในสไลด์นำเสนอ
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

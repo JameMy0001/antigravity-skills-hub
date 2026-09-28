@@ -181,3 +181,5 @@ Ready to implement <feature-name>
 - [[Skills/git-workflow/SKILL|git-workflow]] — มาตรฐาน Git Branching และ Conventional Commits
 - [[Skills/finishing-a-development-branch/SKILL|finishing-a-development-branch]] — การผสานและลบ Worktree หลังงานเสร็จ
 - [[Skills/github-pr-workflow/SKILL|github-pr-workflow]] — สร้าง Pull Request จาก Branch ที่ทำใน Worktree
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

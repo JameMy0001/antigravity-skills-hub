@@ -128,3 +128,5 @@ spec:
 - [[Skills/docker-and-compose/SKILL|docker-and-compose]] — บิลด์ Docker Image ให้พร้อมสำหรับ Kubernetes
 - [[Skills/git-workflow/SKILL|git-workflow]] — วงจร GitOps และการกำหนด Tag Semantic Versioning
 - [[Skills/verification-before-completion/SKILL|verification-before-completion]] — ตรวจสอบ Manifest ด้วย `kubectl diff` หรือ `kubeval` ก่อนปล่อยระบบ
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

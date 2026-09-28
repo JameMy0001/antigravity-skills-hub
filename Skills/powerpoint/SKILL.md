@@ -262,3 +262,5 @@ ls -1 "$PWD"/slide-*.jpg
 ## 🔗 Connected Skills (ทักษะที่เกี่ยวข้อง)
 - [[Skills/baoyu-infographic/SKILL|baoyu-infographic]] — สร้างภาพ Infographic มาวางประกอบในสไลด์
 - [[Skills/architecture-diagram/SKILL|architecture-diagram]] — นำแผนผังระบบมาแทรกใน Presentation
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

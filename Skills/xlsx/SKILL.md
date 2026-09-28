@@ -110,3 +110,5 @@ For full investment-banking conventions (balance checks, sensitivity tables, nam
 ## 🔗 Connected Skills (ทักษะที่เกี่ยวข้อง)
 - [[Skills/docx/SKILL|docx]] — ส่งออกตารางข้อมูลไปทำรายงานใน Word
 - [[Skills/visualize/SKILL|visualize]] — สรุปข้อมูลตัวเลขใน Spreadsheet เป็นกราฟ
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

@@ -390,3 +390,5 @@ Before merging any code that touches error handling:
 - [[Skills/backend-patterns/SKILL|backend-patterns]] — ใช้งานร่วมกับ Service & Controller layers
 - [[Skills/api-design/SKILL|api-design]] — กำหนด HTTP Error Status Code และ Error Body
 - [[Skills/orch-fix-defect/SKILL|orch-fix-defect]] — แก้ปัญหาเมื่อเกิด Unhandled Exceptions
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

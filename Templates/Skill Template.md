@@ -33,3 +33,5 @@ category: General
 
 ## 💡 Guidelines สำหรับ AI Agent
 - ข้อควรระวัง หรือ Best Practice เฉพาะทาง
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

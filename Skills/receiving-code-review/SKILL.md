@@ -219,3 +219,5 @@ When replying to inline review comments on GitHub, reply in the comment thread (
 - [[Skills/verification-before-completion/SKILL|verification-before-completion]] — ตรวจสอบการแก้ไขให้มีผลทดสอบยืนยัน
 - [[Skills/github-pr-workflow/SKILL|github-pr-workflow]] — อัปเดตการเปลี่ยนแปลงกลับไปยัง PR
 - [[Skills/review/SKILL|review]] — เทียบกับเกณฑ์มาตรฐาน Code Review
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

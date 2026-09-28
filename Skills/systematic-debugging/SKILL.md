@@ -421,3 +421,5 @@ From debugging sessions:
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — สร้าง Failing Regression Test เพื่อยืนยันบักก่อนแก้โค้ด
 - [[Skills/error-handling/SKILL|error-handling]] — ออกแบบ Exception Handling ให้ครอบคลุมจุดที่เกิดบั๊ก
 - [[Skills/verification-before-completion/SKILL|verification-before-completion]] — ยืนยันผลการแก้ไขด้วยการรัน Test ซ้ำ
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

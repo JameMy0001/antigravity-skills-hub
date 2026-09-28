@@ -176,3 +176,5 @@ alwaysApply: false
 ## 🔗 Connected Skills
 - [[Skills/create-skill/SKILL|create-skill]]
 - [[Skills/create-hook/SKILL|create-hook]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

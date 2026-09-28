@@ -201,3 +201,5 @@ See `references/colors.md` for full color tables. Quick reference:
 - [[Skills/visualize/SKILL|visualize]] — สร้างชาร์ตหรือภาพประกอบในบทสนทนา
 - [[Skills/architecture-diagram/SKILL|architecture-diagram]] — สำหรับไดอะแกรมสถาปัตยกรรมแบบ Technical SVG
 - [[Skills/baoyu-infographic/SKILL|baoyu-infographic]] — สำหรับการทำ Infographic เพื่อการนำเสนอ
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

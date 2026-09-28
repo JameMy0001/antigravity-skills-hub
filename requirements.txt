@@ -38,3 +38,5 @@ pyyaml>=6.0
 
 # Browser automation (Skills/playwright-cli, Skills/playwright-trace)
 playwright>=1.44.0
+
+# v1.1.0 synchronized: 2026-09-29

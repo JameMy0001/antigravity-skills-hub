@@ -252,3 +252,5 @@ If you are editing an existing hooks setup, preserve unrelated hooks and only ch
 - [[Skills/create-skill/SKILL|create-skill]]
 - [[Skills/create-rule/SKILL|create-rule]]
 - [[Skills/automate/SKILL|automate]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

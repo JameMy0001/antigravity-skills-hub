@@ -577,3 +577,5 @@ export async function GET(request: Request) {
 - [[Skills/database-migrations/SKILL|database-migrations]] — บริหารจัดการ Database Schema แบบ Zero-downtime
 - [[Skills/error-handling/SKILL|error-handling]] — รูปแบบ Typed Error handling สำหรับ API
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — เขียน Test ครอบคลุม Service & Repository Layer
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

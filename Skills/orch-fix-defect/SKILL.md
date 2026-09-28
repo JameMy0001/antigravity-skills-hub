@@ -60,3 +60,5 @@ orch-fix-defect: poller crashes on empty NWS response
 - [[Skills/error-handling/SKILL|error-handling]] — จัดการข้อผิดพลาดและ Exception Hierarchy
 - [[Skills/verification-before-completion/SKILL|verification-before-completion]] — ตรวจสอบและรันเทสต์ครบถ้วนก่อนปิดงาน
 - [[Skills/review/SKILL|review]] — ตรวจทานโค้ดหลังแก้ไข
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

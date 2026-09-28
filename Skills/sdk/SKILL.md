@@ -392,3 +392,5 @@ If the user's integration monitors, lists, or visualizes agents - dashboards of 
 ## 🔗 Connected Skills
 - [[Skills/create-subagent/SKILL|create-subagent]]
 - [[Skills/shell/SKILL|shell]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

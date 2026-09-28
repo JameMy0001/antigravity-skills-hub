@@ -133,3 +133,5 @@ The script writes `comments.xml`, `commentsExtended.xml`, `commentsIds.xml`, `co
 - [[Skills/pdf/SKILL|pdf]] — แปลงหรือทำงานร่วมกับเอกสาร PDF
 - [[Skills/ocr-and-documents/SKILL|ocr-and-documents]] — สกัดข้อความจากเอกสารภาพมาสร้างเป็น Docx
 - [[Skills/xlsx/SKILL|xlsx]] — ดึงข้อมูลจากตารางคำนวณมาใส่ในรายงาน Word
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

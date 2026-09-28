@@ -56,3 +56,5 @@ After the deployment is triggered, do not stop at "deployment started":
 ## 🔗 Connected Skills
 - [[Skills/new-repo/SKILL|new-repo]]
 - [[Skills/review-security/SKILL|review-security]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

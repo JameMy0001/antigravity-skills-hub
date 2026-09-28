@@ -32,3 +32,5 @@ After the user chooses, run the matching review once:
 - [[Skills/review-security/SKILL|review-security]]
 - [[Skills/review-bugbot/SKILL|review-bugbot]]
 - [[Skills/autopilot/SKILL|autopilot]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

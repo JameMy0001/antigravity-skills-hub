@@ -105,3 +105,5 @@ These are internal/cached state and should not be edited manually:
 
 ## 🔗 Connected Skills
 - [[Skills/update-cursor-settings/SKILL|update-cursor-settings]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

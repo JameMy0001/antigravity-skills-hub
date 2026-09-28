@@ -145,3 +145,5 @@ If you don't have the Task tool available:
 
 ## 🔗 Connected Skills
 - [[Skills/create-skill/SKILL|create-skill]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

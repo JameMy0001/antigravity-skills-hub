@@ -136,3 +136,5 @@ Skip any step = lying, not verifying
 - [[Skills/review/SKILL|review]] — ตรวจสอบ Code Quality และ Diff ก่อนส่งมอบงาน
 - [[Skills/systematic-debugging/SKILL|systematic-debugging]] — หากการทดสอบล้มเหลว ย้อนกลับไปวินิจฉัยหาสาเหตุรากเหง้า
 - [[Skills/finishing-a-development-branch/SKILL|finishing-a-development-branch]] — ปิดและรวม Branch หลังจากผ่านการ Verify แล้ว
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

@@ -597,3 +597,5 @@ test('updates user', () => {
 - [[Skills/error-handling/SKILL|error-handling]] — รูปแบบ Typed Errors สำหรับเขียน Assertions
 - [[Skills/autopilot/SKILL|autopilot]] — รัน CI และแก้ปัญหาจนผ่าน
 - [[Skills/backend-patterns/SKILL|backend-patterns]] — สถาปัตยกรรมที่เอื้อต่อการทำ Unit/Integration Test
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

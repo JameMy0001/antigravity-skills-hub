@@ -180,3 +180,5 @@ No extra dependencies needed — pymupdf covers split, merge, search, and text e
 - [[Skills/pdf/SKILL|pdf]] — จัดการและเปิดไฟล์ PDF ต้นฉบับ
 - [[Skills/docx/SKILL|docx]] — นำข้อความที่สกัดได้ไปจัดรูปแบบใน Word
 - [[Skills/llm-wiki/SKILL|llm-wiki]] — รวบรวมข้อมูลที่แปลงได้เข้าสู่ Knowledge Base
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

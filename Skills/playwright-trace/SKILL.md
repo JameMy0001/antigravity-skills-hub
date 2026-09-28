@@ -184,3 +184,5 @@ npx playwright trace console --errors-only
 ## 🔗 Connected Skills (ทักษะที่เกี่ยวข้อง)
 - [[Skills/playwright-cli/SKILL|playwright-cli]] — รัน Browser Test เพื่อสร้างไฟล์ Trace
 - [[Skills/systematic-debugging/SKILL|systematic-debugging]] — ใช้วิเคราะห์ Root Cause ของบั๊กบน Frontend
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

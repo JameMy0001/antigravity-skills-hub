@@ -390,3 +390,5 @@ Optional `projectIds`.
 - [[Skills/create-hook/SKILL|create-hook]]
 - [[Skills/loop/SKILL|loop]]
 - [[Skills/goal/SKILL|goal]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

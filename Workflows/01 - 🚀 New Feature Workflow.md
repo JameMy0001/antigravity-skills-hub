@@ -70,3 +70,5 @@ tags:
   - [[Skills/git-workflow/SKILL|git-workflow]] — เขียน Conventional Commits (`feat: ...`)
   - [[Skills/split-to-prs/SKILL|split-to-prs]] — แตก Branch และเปิด PR ขนาดกะทัดรัด
   - [[Skills/autopilot/SKILL|autopilot]] ➔ [[Skills/deploy-with-vercel/SKILL|deploy-with-vercel]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

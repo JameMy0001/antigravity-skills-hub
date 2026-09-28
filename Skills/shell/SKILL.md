@@ -36,3 +36,5 @@ Use this skill only when the user explicitly invokes `/shell`.
 ## 🔗 Connected Skills
 - [[Skills/sdk/SKILL|sdk]]
 - [[Skills/automate/SKILL|automate]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

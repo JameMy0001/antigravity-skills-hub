@@ -538,3 +538,5 @@ Before shipping a new endpoint:
 - [[Skills/backend-patterns/SKILL|backend-patterns]] — สถาปัตยกรรมและ Layer ภายในระบบ
 - [[Skills/error-handling/SKILL|error-handling]] — โครงสร้าง Response ของ Error ที่ส่งกลับไปยัง Client
 - [[Skills/modern-web-guidance/SKILL|modern-web-guidance]] — การเชื่อมต่อกับ Frontend Web Clients
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

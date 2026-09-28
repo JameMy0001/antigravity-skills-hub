@@ -518,3 +518,5 @@ Before finalizing a skill, verify:
 - [[Skills/create-hook/SKILL|create-hook]]
 - [[Skills/create-subagent/SKILL|create-subagent]]
 - [[Skills/migrate-to-skills/SKILL|migrate-to-skills]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

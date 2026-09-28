@@ -239,3 +239,5 @@ place. If your platform provides a workspace-exit tool, use it.
 - [[Skills/verification-before-completion/SKILL|verification-before-completion]] — ตรวจสอบว่า Test ทั้งหมดผ่านก่อนปิด Branch
 - [[Skills/using-git-worktrees/SKILL|using-git-worktrees]] — เก็บกวาด Worktree ที่ใช้งานเสร็จแล้ว
 - [[Skills/github-pr-workflow/SKILL|github-pr-workflow]] — เปิดและจัดการ Pull Request สู่ Branch หลัก
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

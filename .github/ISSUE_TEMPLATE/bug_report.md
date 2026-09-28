@@ -25,3 +25,5 @@ A clear and concise description of what is broken or misbehaving.
 - OS: [e.g., macOS, Ubuntu, Windows]
 - Platform: [e.g., Google Antigravity, Cursor IDE, Claude Code]
 - Python Version: [e.g., 3.11]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

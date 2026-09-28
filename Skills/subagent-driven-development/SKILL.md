@@ -588,3 +588,5 @@ Done! Using superpowers:finishing-a-development-branch.
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — ให้แต่ละ Subagent เขียนและรัน Test แบบ TDD
 - [[Skills/receiving-code-review/SKILL|receiving-code-review]] — ปรับปรุงโค้ดตามผล Review ของแต่ละ Task
 - [[Skills/verification-before-completion/SKILL|verification-before-completion]] — ตรวจสอบผลรวมก่อนส่งมอบงาน
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

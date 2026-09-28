@@ -247,3 +247,5 @@ Generate or update a project-specific CLAUDE.md based on detected conventions. I
 - [[Skills/backend-patterns/SKILL|backend-patterns]] — ทำความเข้าใจโครงสร้างสถาปัตยกรรมของโปรเจกต์
 - [[Skills/git-workflow/SKILL|git-workflow]] — ตรวจสอบประวัติ Commit และ Branching strategy
 - [[Skills/onboard/SKILL|onboard]] — การตั้งค่า Environment และ Cursor preferences
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

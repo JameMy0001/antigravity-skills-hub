@@ -61,3 +61,5 @@ Keep it short: PR titles and URLs, plus anything left on the starting branch or 
 ## 🔗 Connected Skills
 - [[Skills/autopilot/SKILL|autopilot]]
 - [[Skills/review/SKILL|review]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

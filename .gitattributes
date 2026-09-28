@@ -49,3 +49,5 @@
 # ── macOS Unicode / NFD filename normalization ────────────────────────────────
 # Ensures Thai and Emoji filenames round-trip correctly across macOS/Linux/Win.
 # Run: git config core.precomposeunicode true && git config core.quotepath false
+
+# v1.1.0 synchronized: 2026-09-29

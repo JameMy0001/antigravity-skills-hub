@@ -435,3 +435,5 @@ playwright-cli show --annotate
 - [[Skills/playwright-trace/SKILL|playwright-trace]] — ตรวจสอบ Trace File เมื่อ Browser Test ทำงานผิดพลาด
 - [[Skills/modern-web-guidance/SKILL|modern-web-guidance]] — ตรวจสอบการแสดงผลบน Modern Web APIs
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — นำไปใช้ในส่วน E2E Test ของวงจร TDD
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

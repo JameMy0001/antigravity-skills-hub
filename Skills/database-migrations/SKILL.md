@@ -444,3 +444,5 @@ Day 7: Migration drops old status column
 - [[Skills/backend-patterns/SKILL|backend-patterns]] — วางโครงสร้าง Data Access Layer
 - [[Skills/git-workflow/SKILL|git-workflow]] — จัดการ Branching และ PR สำหรับ Migration scripts
 - [[Skills/deploy-with-vercel/SKILL|deploy-with-vercel]] — ขั้นตอน Deploy ก่อนและหลัง Migration
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

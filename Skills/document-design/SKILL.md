@@ -466,3 +466,5 @@ def add_callout_box(doc, title: str, text: str):
 - [[Skills/claude-design/SKILL|claude-design]] — เชื่อมต่อการออกแบบ UI และ Digital Artifacts สู่เอกสารจริง
 - [[Skills/playwright-cli/SKILL|playwright-cli]] — เรนเดอร์ HTML สู่ PDF ระดับสิ่งพิมพ์ผ่าน CLI
 - [[Skills/verification-before-completion/SKILL|verification-before-completion]] — ตรวจสอบความถูกต้องและสัดส่วนก่อนส่งมอบ
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

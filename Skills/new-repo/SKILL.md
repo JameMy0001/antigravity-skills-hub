@@ -87,3 +87,5 @@ Report the repo's page: `https://cursor.com/codebase/<org>/<name>` (the
 - [[Skills/origin/SKILL|origin]]
 - [[Skills/onboard/SKILL|onboard]]
 - [[Skills/deploy-with-vercel/SKILL|deploy-with-vercel]]
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

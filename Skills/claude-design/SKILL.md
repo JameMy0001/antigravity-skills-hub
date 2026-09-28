@@ -406,3 +406,5 @@ When the user asks for a specific visual identity (e.g., *"Make it look like Str
 - [[Skills/chrome-extensions/SKILL|chrome-extensions]] — พัฒนา UI ในรูปแบบส่วนขยายเบราว์เซอร์
 - [[Skills/tdd-workflow/SKILL|tdd-workflow]] — พัฒนา Component ด้วยหลักการ Test-Driven Development
 - [[Skills/verification-before-completion/SKILL|verification-before-completion]] — ตรวจสอบและยืนยันคุณภาพก่อนส่งมอบงาน
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

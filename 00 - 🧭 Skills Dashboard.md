@@ -162,3 +162,5 @@ SORT category ASC, file.name ASC
 ## 🔗 โครงสร้างการเชื่อมต่อ AI
 - **Antigravity Global Discovery:** `~/.gemini/config/skills/` ➔ ซิงค์กับ Vault นี้แบบ Real-time
 - **Cursor Personal Skills:** `~/.cursor/skills/` ➔ ซิงค์กับ Vault นี้แบบ Real-time
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->

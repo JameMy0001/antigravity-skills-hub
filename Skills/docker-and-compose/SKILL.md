@@ -155,3 +155,5 @@ volumes:
 - [[Skills/database-migrations/SKILL|database-migrations]] — รัน Migration เชื่อมต่อกับ Database Container แบบปลอดภัย
 - [[Skills/deploy-with-vercel/SKILL|deploy-with-vercel]] — ทางเลือกในการ Deploy Web Application สู่ Cloud
 - [[Skills/systematic-debugging/SKILL|systematic-debugging]] — วินิจฉัยข้อผิดพลาดในการบิลด์และรัน Container
+
+<!-- v1.1.0 synchronized: 2026-09-29 -->
