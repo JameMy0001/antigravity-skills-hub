@@ -5,7 +5,8 @@
 ### The Unified 8-Stage SDLC Agentic Skills Ecosystem
 
 [![Architect](https://img.shields.io/badge/Architect-Jamemm-blue?style=flat-square&logo=github)](https://github.com/JameMy0001)
-[![Skills](https://img.shields.io/badge/Skills-61%20Production--Grade-10B981?style=flat-square)](./Skills)
+[![Skills](https://img.shields.io/badge/Skills-65%20Production--Grade-10B981?style=flat-square)](./Skills)
+[![CI Pipeline](https://github.com/JameMy0001/antigravity-skills-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/JameMy0001/antigravity-skills-hub/actions/workflows/ci.yml)
 [![Platforms](https://img.shields.io/badge/Platforms-Antigravity%20%7C%20Cursor%20%7C%20Claude-purple?style=flat-square)](./setup.sh)
 [![License](https://img.shields.io/badge/License-MIT-F59E0B?style=flat-square)](./LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-JameMy0001-181717?style=flat-square&logo=github)](https://github.com/JameMy0001/antigravity-skills-hub)
@@ -112,7 +113,7 @@ ln -s "$(pwd)/Skills" ~/.cursor/skills
 
 ---
 
-## 📚 Skill Catalog (61 Skills)
+## 📚 Skill Catalog (65 Skills)
 
 ### 🟢 Stage 01 — New Features & Business Logic
 
@@ -123,6 +124,7 @@ ln -s "$(pwd)/Skills" ~/.cursor/skills
 | `writing-plans` | Write comprehensive, bite-sized implementation plans from specs |
 | `api-design` | REST API design: resources, status codes, pagination, versioning, rate limiting |
 | `backend-patterns` | Node.js/Express/Next.js backend architecture and data access patterns |
+| `fastapi-backend` | High-performance async Python APIs: FastAPI, Pydantic v2, Clean Architecture |
 | `subagent-driven-development` | Dispatch parallel implementer subagents for independent tasks |
 | `canvas` | Live React canvas artifacts: data visualizations, interactive explorations |
 | `goal` | Long-running goal achievement with thoroughness and iteration |
@@ -140,6 +142,7 @@ ln -s "$(pwd)/Skills" ~/.cursor/skills
 | Skill | Description |
 |---|---|
 | `database-migrations` | Zero-downtime migrations: PostgreSQL, MySQL, Prisma, Drizzle, Kysely |
+| `docker-and-compose` | Production containerization: multi-stage Dockerfiles, Compose, non-root security |
 
 ### 🔵 Stage 04 — Web & Frontend
 
@@ -147,6 +150,7 @@ ln -s "$(pwd)/Skills" ~/.cursor/skills
 |---|---|
 | `claude-design` | World-class UI/UX: 4-layer atomic button craft, 7 archetypes, 10-point quality gates |
 | `modern-web-guidance` | MANDATORY first-check for HTML/CSS/JS tasks — checks latest web APIs |
+| `nextjs-fullstack` | Next.js 15 App Router, React Server Components (RSC), Server Actions & caching |
 | `playwright-cli` | Browser automation, E2E testing, screenshots, web scraping |
 | `playwright-trace` | Inspect Playwright trace zip files: actions, requests, console errors |
 | `chrome-extensions` | Build Chrome Extensions with Manifest V3: service workers, content scripts |
@@ -171,6 +175,7 @@ ln -s "$(pwd)/Skills" ~/.cursor/skills
 |---|---|
 | `git-workflow` | Branching strategies, Conventional Commits, merge vs rebase, conflict resolution |
 | `github-pr-workflow` | PR lifecycle: branch, commit, open PR, monitor CI, merge safely |
+| `kubernetes-manifests` | Production Kubernetes manifests: Deployments, Services, Ingress, Probes |
 | `using-git-worktrees` | Isolated feature work via git worktrees |
 | `finishing-a-development-branch` | Integration readiness: verify tests, clean worktrees, prepare PR |
 | `split-to-prs` | Split large changes into small, reviewable pull requests |
@@ -226,7 +231,7 @@ Open this vault in [Obsidian](https://obsidian.md) to explore the full bidirecti
 3. Open `00 - 🧭 Skills Dashboard.md` for the command center
 4. Open `01 - 🗺️ Skills Workflow.canvas` for the visual workflow map
 
-All 61 skills are interconnected via `[[Wikilinks]]` with color-coded stage groupings in the Graph.
+All 65 skills are interconnected via `[[Wikilinks]]` with color-coded stage groupings in the Graph.
 
 ---
 

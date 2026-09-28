@@ -4,7 +4,7 @@ Verification Script for Centralized Obsidian Skills Vault Integration
 Architected by Jamemm (@JameMy0001) — https://github.com/JameMy0001/antigravity-skills-hub
 
 Validates:
-1. Every skill directory in the vault has a readable SKILL.md (61 skills total).
+1. Every skill directory in the vault has a readable SKILL.md (65 skills total).
 2. Every SKILL.md has valid YAML frontmatter (name, description, aliases, category,
    tags with agent-skill & stage) and "## 🔗 Connected Skills".
 3. Symlinks in ~/.gemini/config/skills and ~/.cursor/skills resolve cleanly.
@@ -81,6 +81,10 @@ NEW_SKILLS = [
     "ocr-and-documents",
     "claude-design",
     "document-design",
+    "docker-and-compose",
+    "nextjs-fullstack",
+    "fastapi-backend",
+    "kubernetes-manifests",
 ]
 
 import yaml
@@ -126,8 +130,8 @@ def check_1_readable_skill_md():
             continue
         
         skills = [d for d in os.listdir(vault_skills) if not d.startswith(".") and os.path.isdir(os.path.join(vault_skills, d))]
-        if len(skills) != 61:
-            errors.append(f"Expected exactly 61 skills in {vault_name} Skills vault, found {len(skills)}")
+        if len(skills) != 65:
+            errors.append(f"Expected exactly 65 skills in {vault_name} Skills vault, found {len(skills)}")
         for expected in NEW_SKILLS:
             if expected not in skills:
                 errors.append(f"Missing new skill in {vault_name}: {expected}")
@@ -358,12 +362,12 @@ def main():
     print("=========================================")
     
     tests = [
-        ("1. Readable SKILL.md in all directories (61 skills)", check_1_readable_skill_md),
+        ("1. Readable SKILL.md in all directories (65 skills)", check_1_readable_skill_md),
         ("2. Valid YAML frontmatter & Connected Skills", check_2_frontmatter_and_connected),
         ("3. 100% Parity iCloud vs Local Mirror (full tree)", check_3_parity),
         ("4. Symlinks in ~/.gemini and ~/.cursor", check_4_symlinks),
         ("5. Zero broken wikilinks across entire vault", check_5_wikilinks),
-        ("6. Canvas Coverage (all 25 new skills in workflow)", check_6_canvas_coverage),
+        ("6. Canvas Coverage (all 29 new skills in workflow)", check_6_canvas_coverage),
         ("7. Graph Color Groups (Stage 8 in graph.json)", check_7_graph_color_groups),
     ]
     

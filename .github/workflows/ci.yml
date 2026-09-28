@@ -1,0 +1,53 @@
+name: Antigravity Skills Hub CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-vault:
+    name: Verify Skills Vault Integrity
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Validate Python Scripts Syntax
+        run: |
+          python -c "
+          import os, py_compile
+          errors = []
+          for r, _, fs in os.walk('.'):
+              if '.git' in r: continue
+              for f in fs:
+                  if f.endswith('.py'):
+                      fp = os.path.join(r, f)
+                      try:
+                          py_compile.compile(fp, doraise=True)
+                      except Exception as e:
+                          errors.append((fp, str(e)))
+          if errors:
+              print(f'❌ Syntax errors in {len(errors)} files')
+              for fp, err in errors:
+                  print(f'  {fp}: {err}')
+              exit(1)
+          print('✅ All Python scripts compiled cleanly with zero syntax errors!')
+          "
+
+      - name: Run Skills Vault Verification
+        run: |
+          python verify_skills_vault.py

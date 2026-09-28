@@ -8,7 +8,7 @@ tags:
   - agent-skills
 ---
 
-# 🧭 Agent Skills System: คู่มือและสารบัญ 8 ขั้นตอน (61 Skills)
+# 🧭 Agent Skills System: คู่มือและสารบัญ 8 ขั้นตอน (65 Skills)
 
 ยินดีต้อนรับสู่ระบบจัดเก็บและเรียกใช้งาน **Agent Skills** ที่จัดระเบียบตาม **Software Development Life Cycle (SDLC) 8 ขั้นตอน**
 ช่วยให้ AI Assistant ทำงานได้อย่างแม่นยำ เป็นขั้นเป็นตอน ไม่ลัดขั้นตอน และเรียกใช้เครื่องมือที่ถูกต้องเสมอ
@@ -42,6 +42,7 @@ tags:
 | [[Skills/architecture-diagram/SKILL|`architecture-diagram`]] | สร้างไดอะแกรมสถาปัตยกรรมระบบและโครงสร้างพื้นฐาน Cloud แบบ Dark SVG ฝังใน HTML |
 | [[Skills/backend-patterns/SKILL|`backend-patterns`]] | สถาปัตยกรรม Backend, Controller-Service-Repository pattern, Caching, และลด N+1 Query |
 | [[Skills/brainstorming/SKILL|`brainstorming`]] | สำรวจความต้องการของผู้ใช้ อภิปรายข้อดีข้อเสีย และทำ Specification ก่อนลงมือเขียนโค้ด |
+| [[Skills/fastapi-backend/SKILL|`fastapi-backend`]] | สถาปัตยกรรม Asynchronous Python REST API ด้วย FastAPI, Pydantic v2, และ Clean Architecture |
 | [[Skills/subagent-driven-development/SKILL|`subagent-driven-development`]] | แตกแผนงานใหญ่เป็น Task ย่อยและกระจายงานให้ Subagent อิสระทำทีละส่วนพร้อม Code Review |
 | [[Skills/tdd-workflow/SKILL|`tdd-workflow`]] | วงจร Test-Driven Development (Red-Green-Refactor) รับประกัน Test Coverage 80%+ ป้องกันโค้ดมโน |
 | [[Skills/writing-plans/SKILL|`writing-plans`]] | เขียนแผนงานการพัฒนาแบบละเอียด กะทัดรัด พร้อมเกณฑ์การทดสอบและตัวชี้วัดที่ชัดเจน |
@@ -60,6 +61,7 @@ tags:
 | ทักษะ (Skill) | หน้าที่และจังหวะเวลาที่เรียกใช้ |
 | :--- | :--- |
 | [[Skills/database-migrations/SKILL|`database-migrations`]] | การทำ Database Migration แบบ Zero-downtime, ป้องกัน Table Lock และรองรับทุก ORM |
+| [[Skills/docker-and-compose/SKILL|`docker-and-compose`]] | การทำ Containerization ด้วย Multi-stage Dockerfile, Non-root user และ Docker Compose สำหรับ Dev/Prod |
 
 ### ==💻 Stage 4: ส่วนติดต่อผู้ใช้และมาตรฐานเว็บ (04 - Web & Frontend)==
 > *ใช้ตอนพัฒนา Frontend, ทดสอบเบราว์เซอร์อัตโนมัติ และสร้าง Extension*
@@ -70,6 +72,7 @@ tags:
 | [[Skills/chrome-extensions/SKILL|`chrome-extensions`]] | พัฒนาและเผยแพร่ Chrome Extension ตามมาตรฐาน Manifest V3 (Service Workers, Storage, UI) |
 | [[Skills/claude-design/SKILL|`claude-design`]] | ออกแบบ UI/UX ระดับโลก, Dual-Mode Delivery (HTML Artifacts และ React/Tailwind), Atomic Button Craft, และ Slop Diagnostics |
 | [[Skills/modern-web-guidance/SKILL|`modern-web-guidance`]] | ดึงแนวทางมาตรฐานเว็บล่าสุด (Core Web Vitals, Native HTML5, View Transitions) แบบ Real-time |
+| [[Skills/nextjs-fullstack/SKILL|`nextjs-fullstack`]] | สถาปัตยกรรม Next.js 15 App Router, React Server Components (RSC), Type-safe Server Actions และการจัดการ Cache |
 | [[Skills/playwright-cli/SKILL|`playwright-cli`]] | สั่งการเบราว์เซอร์อัตโนมัติ ทดสอบหน้าเว็บ แคปภาพหน้าจอ และขูดข้อมูลผ่าน Playwright CLI |
 | [[Skills/playwright-trace/SKILL|`playwright-trace`]] | วิเคราะห์ไฟล์ Playwright Trace Zip จาก CLI เจาะลึก Request, Console Errors, DOM Snapshots |
 | [[Skills/visualize/SKILL|`visualize`]] | สร้างแผนภูมิ ชาร์ต หรือภาพจำลองข้อมูลแบบกระชับในบทสนทนา |
@@ -97,6 +100,7 @@ tags:
 | [[Skills/finishing-a-development-branch/SKILL|`finishing-a-development-branch`]] | ปิดกิ่งพัฒนาอย่างสมบูรณ์ ยืนยันผลเทสต์ ทำความสะอาด worktree และเตรียมส่งมอบเข้าสายหลัก |
 | [[Skills/git-workflow/SKILL|`git-workflow`]] | มาตรฐาน Git, Conventional Commits (feat:, fix:), การแตก Branch และกระบวนการ Release |
 | [[Skills/github-pr-workflow/SKILL|`github-pr-workflow`]] | วงจรชีวิต GitHub PR แบบครบวงจร: แตก branch, เปิด PR ด้วย Template, เฝ้าระวัง CI, และ Merge |
+| [[Skills/kubernetes-manifests/SKILL|`kubernetes-manifests`]] | สเปก Kubernetes Manifests ระดับ Production: Deployments, Services, Ingress, Resource Limits และ Health Probes |
 | [[Skills/new-repo/SKILL|`new-repo`]] | เริ่มต้นสร้าง Git Repository และเชื่อมต่อไปยัง Remote ปลายทาง |
 | [[Skills/origin/SKILL|`origin`]] | ติดตั้งและจัดการ Git remote สำหรับ Repo ที่โฮสต์บน Cursor |
 | [[Skills/share/SKILL|`share`]] | บันทึกและแชร์ Snapshot ของโปรเจกต์อย่างปลอดภัย |

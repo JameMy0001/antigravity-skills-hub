@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
 # antigravity-skills-hub — setup.sh
-# One-command installer for macOS and Linux
+# One-command modular installer for macOS and Linux
 # Architected by Jamemm (@JameMy0001)
 # https://github.com/JameMy0001/antigravity-skills-hub
 # ─────────────────────────────────────────────────────────────────────────────
@@ -16,6 +16,87 @@ ok()    { echo -e "${GREEN}[  ✅  ]${RESET} $*"; }
 warn()  { echo -e "${YELLOW}[ WARN ]${RESET} $*"; }
 error() { echo -e "${RED}[ ERR  ]${RESET} $*" >&2; exit 1; }
 
+# ── Detect vault root ────────────────────────────────────────────────────────
+VAULT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILLS_DIR="$VAULT_DIR/Skills"
+
+if [[ ! -d "$SKILLS_DIR" ]]; then
+    error "Skills directory not found at: $SKILLS_DIR\n  Make sure you cloned the full repository."
+fi
+
+SKILL_COUNT=$(ls "$SKILLS_DIR" | wc -l | tr -d ' ')
+
+# ── Parse Arguments ──────────────────────────────────────────────────────────
+MODE="all"
+TARGET_ARG=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --list|-l)
+            MODE="list"
+            shift
+            ;;
+        --skill|-s)
+            MODE="single"
+            TARGET_ARG="${2:-}"
+            if [[ -z "$TARGET_ARG" ]]; then error "Missing argument for --skill <name>"; fi
+            shift 2
+            ;;
+        --stage)
+            MODE="stage"
+            TARGET_ARG="${2:-}"
+            if [[ -z "$TARGET_ARG" ]]; then error "Missing argument for --stage <1-8>"; fi
+            shift 2
+            ;;
+        --help|-h)
+            echo -e "${BOLD}Antigravity Skills Hub Installer${RESET}"
+            echo "Usage: ./setup.sh [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  (none)              Install and link all $SKILL_COUNT skills (Default)"
+            echo "  --list, -l          List all available skills organized by SDLC stage"
+            echo "  --skill, -s <name>  Link only a specific skill into agent directories"
+            echo "  --stage <1-8>       Link only skills belonging to a specific SDLC stage"
+            echo "  --help, -h          Show this help message"
+            exit 0
+            ;;
+        *)
+            warn "Unknown option: $1 (ignoring)"
+            shift
+            ;;
+    esac
+done
+
+# ── Mode: List ───────────────────────────────────────────────────────────────
+if [[ "$MODE" == "list" ]]; then
+    echo -e "${BOLD}${BLUE}⚡ Antigravity Skills Hub — Catalog (${SKILL_COUNT} Skills)${RESET}\n"
+    python3 -c "
+import os, yaml
+s_dir = '$SKILLS_DIR'
+skills = sorted([d for d in os.listdir(s_dir) if os.path.isdir(os.path.join(s_dir, d)) and not d.startswith('.')])
+by_cat = {}
+for s in skills:
+    f = os.path.join(s_dir, s, 'SKILL.md')
+    cat = 'Uncategorized'
+    if os.path.exists(f):
+        with open(f) as fh:
+            parts = fh.read().split('---', 2)
+            if len(parts) >= 3:
+                try:
+                    data = yaml.safe_load(parts[1])
+                    cat = data.get('category', 'Uncategorized')
+                except: pass
+    by_cat.setdefault(cat, []).append(s)
+
+for c in sorted(by_cat.keys()):
+    print(f'\033[1m[{c}]\033[0m ({len(by_cat[c])} skills)')
+    for s in by_cat[c]:
+        print(f'  - {s}')
+    print()
+"
+    exit 0
+fi
+
 # ── Banner ────────────────────────────────────────────────────────────────────
 echo -e "${BOLD}${BLUE}"
 echo "  ⚡ Antigravity Skills Hub — Setup Installer"
@@ -23,59 +104,78 @@ echo "  By Jamemm (@JameMy0001)"
 echo "  https://github.com/JameMy0001/antigravity-skills-hub"
 echo -e "${RESET}"
 
-# ── Detect vault root (the directory this script lives in) ───────────────────
-VAULT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILLS_DIR="$VAULT_DIR/Skills"
-
 log "Vault root: $VAULT_DIR"
 log "Skills dir: $SKILLS_DIR"
-
-if [[ ! -d "$SKILLS_DIR" ]]; then
-    error "Skills directory not found at: $SKILLS_DIR\n  Make sure you cloned the full repository."
-fi
-
-SKILL_COUNT=$(ls "$SKILLS_DIR" | wc -l | tr -d ' ')
-log "Found $SKILL_COUNT skills in vault"
+log "Total skills: $SKILL_COUNT"
 
 # ── Git configuration for Thai/Emoji filenames ────────────────────────────────
 log "Configuring git for Unicode filenames (Thai + Emoji)..."
-git -C "$VAULT_DIR" config core.precomposeunicode true 2>/dev/null || warn "Not a git repo (skipping git config)"
+git -C "$VAULT_DIR" config core.precomposeunicode true 2>/dev/null || true
 git -C "$VAULT_DIR" config core.quotepath false 2>/dev/null || true
 ok "Git Unicode config applied"
 
-# ── Symlink: Google Antigravity ───────────────────────────────────────────────
-ANTIGRAVITY_SKILLS="$HOME/.gemini/config/skills"
-log "Setting up Google Antigravity symlink → $ANTIGRAVITY_SKILLS"
+# ── Selective Skill Linking Helper ───────────────────────────────────────────
+link_target_dir() {
+    local target_base="$1"
+    local agent_name="$2"
 
-if [[ -L "$ANTIGRAVITY_SKILLS" ]]; then
-    warn "Symlink already exists at $ANTIGRAVITY_SKILLS (skipping)"
-elif [[ -d "$ANTIGRAVITY_SKILLS" ]]; then
-    warn "Directory exists at $ANTIGRAVITY_SKILLS — backing up to ${ANTIGRAVITY_SKILLS}.backup"
-    mv "$ANTIGRAVITY_SKILLS" "${ANTIGRAVITY_SKILLS}.backup"
-    ln -s "$SKILLS_DIR" "$ANTIGRAVITY_SKILLS"
-    ok "Symlink created → $ANTIGRAVITY_SKILLS"
-else
-    mkdir -p "$(dirname "$ANTIGRAVITY_SKILLS")"
-    ln -s "$SKILLS_DIR" "$ANTIGRAVITY_SKILLS"
-    ok "Symlink created → $ANTIGRAVITY_SKILLS"
-fi
+    mkdir -p "$target_base"
+    
+    if [[ "$MODE" == "all" ]]; then
+        log "Setting up $agent_name symlink (All $SKILL_COUNT skills) → $target_base"
+        if [[ -L "$target_base" ]]; then
+            warn "Symlink already exists at $target_base (skipping)"
+        elif [[ -d "$target_base" ]]; then
+            warn "Directory exists at $target_base — backing up to ${target_base}.backup"
+            mv "$target_base" "${target_base}.backup"
+            ln -s "$SKILLS_DIR" "$target_base"
+            ok "Symlink created → $target_base"
+        else
+            mkdir -p "$(dirname "$target_base")"
+            ln -s "$SKILLS_DIR" "$target_base"
+            ok "Symlink created → $target_base"
+        fi
+    elif [[ "$MODE" == "single" ]]; then
+        local src_skill="$SKILLS_DIR/$TARGET_ARG"
+        if [[ ! -d "$src_skill" ]]; then
+            error "Skill '$TARGET_ARG' not found in $SKILLS_DIR"
+        fi
+        log "Linking single skill '$TARGET_ARG' into $agent_name..."
+        mkdir -p "$target_base"
+        ln -sfn "$src_skill" "$target_base/$TARGET_ARG"
+        ok "Skill '$TARGET_ARG' linked → $target_base/$TARGET_ARG"
+    elif [[ "$MODE" == "stage" ]]; then
+        log "Linking Stage $TARGET_ARG skills into $agent_name..."
+        mkdir -p "$target_base"
+        python3 -c "
+import os, yaml
+s_dir = '$SKILLS_DIR'
+target = '$target_base'
+stage_num = '$TARGET_ARG'
+for s in sorted(os.listdir(s_dir)):
+    f = os.path.join(s_dir, s, 'SKILL.md')
+    if os.path.exists(f):
+        with open(f) as fh:
+            parts = fh.read().split('---', 2)
+            if len(parts) >= 3:
+                try:
+                    data = yaml.safe_load(parts[1])
+                    tags = data.get('tags', [])
+                    if f'stage-{stage_num}' in tags:
+                        dest = os.path.join(target, s)
+                        if os.path.islink(dest) or os.path.exists(dest):
+                            try: os.unlink(dest)
+                            except: pass
+                        os.symlink(os.path.join(s_dir, s), dest)
+                        print(f'  [Linked] {s}')
+                except: pass
+"
+        ok "Stage $TARGET_ARG skills linked"
+    fi
+}
 
-# ── Symlink: Cursor IDE ────────────────────────────────────────────────────────
-CURSOR_SKILLS="$HOME/.cursor/skills"
-log "Setting up Cursor IDE symlink → $CURSOR_SKILLS"
-
-if [[ -L "$CURSOR_SKILLS" ]]; then
-    warn "Symlink already exists at $CURSOR_SKILLS (skipping)"
-elif [[ -d "$CURSOR_SKILLS" ]]; then
-    warn "Directory exists at $CURSOR_SKILLS — backing up to ${CURSOR_SKILLS}.backup"
-    mv "$CURSOR_SKILLS" "${CURSOR_SKILLS}.backup"
-    ln -s "$SKILLS_DIR" "$CURSOR_SKILLS"
-    ok "Symlink created → $CURSOR_SKILLS"
-else
-    mkdir -p "$(dirname "$CURSOR_SKILLS")"
-    ln -s "$SKILLS_DIR" "$CURSOR_SKILLS"
-    ok "Symlink created → $CURSOR_SKILLS"
-fi
+link_target_dir "$HOME/.gemini/config/skills" "Google Antigravity"
+link_target_dir "$HOME/.cursor/skills" "Cursor IDE"
 
 # ── Python dependencies ────────────────────────────────────────────────────────
 log "Installing Python dependencies..."
@@ -91,12 +191,6 @@ elif command -v pip &>/dev/null; then
     pip install -r "$VAULT_DIR/requirements.txt" && ok "Dependencies installed via pip"
 else
     warn "No pip or uv found. Install Python 3.9+ and run: pip install -r requirements.txt"
-fi
-
-# ── Playwright browser binaries ───────────────────────────────────────────────
-if command -v python3 &>/dev/null && python3 -c "import playwright" 2>/dev/null; then
-    log "Installing Playwright browser binaries (chromium)..."
-    python3 -m playwright install chromium --with-deps 2>/dev/null && ok "Playwright chromium installed" || warn "Playwright browser install failed — run manually: playwright install"
 fi
 
 # ── Verification ──────────────────────────────────────────────────────────────
