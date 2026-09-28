@@ -228,8 +228,12 @@ def check_3_parity():
 
 def check_4_symlinks():
     errors = []
+    is_ci = os.environ.get("CI") == "true" or os.environ.get("GITHUB_ACTIONS") == "true"
     for link_path, name in [(GEMINI_SYMLINK, "Gemini"), (CURSOR_SYMLINK, "Cursor")]:
         if not os.path.islink(link_path):
+            if is_ci and not os.path.exists(os.path.dirname(link_path)):
+                # In headless CI containers without local agent installation
+                continue
             errors.append(f"{name} symlink is not a valid symlink: {link_path}")
             continue
         target = os.path.realpath(link_path)

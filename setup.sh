@@ -130,7 +130,7 @@ link_target_dir() {
     local target_base="$1"
     local agent_name="$2"
 
-    mkdir -p "$target_base"
+    mkdir -p "$(dirname "$target_base")"
     
     if [[ "$MODE" == "all" ]]; then
         log "Setting up $agent_name symlink (All $SKILL_COUNT skills) → $target_base"
@@ -142,11 +142,11 @@ link_target_dir() {
             ln -s "$SKILLS_DIR" "$target_base"
             ok "Symlink created → $target_base"
         else
-            mkdir -p "$(dirname "$target_base")"
             ln -s "$SKILLS_DIR" "$target_base"
             ok "Symlink created → $target_base"
         fi
     elif [[ "$MODE" == "single" ]]; then
+        mkdir -p "$target_base"
         local src_skill="$SKILLS_DIR/$TARGET_ARG"
         if [[ ! -d "$src_skill" ]]; then
             error "Skill '$TARGET_ARG' not found in $SKILLS_DIR"

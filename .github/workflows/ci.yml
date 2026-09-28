@@ -48,6 +48,11 @@ jobs:
           print('✅ All Python scripts compiled cleanly with zero syntax errors!')
           "
 
+      - name: Run Installer & Setup Symlinks
+        run: |
+          chmod +x setup.sh
+          ./setup.sh --no-deps
+
       - name: Run Skills Vault Verification
         run: |
           python verify_skills_vault.py
