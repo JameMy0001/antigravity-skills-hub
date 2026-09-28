@@ -17,7 +17,7 @@ from helpers import safe_extract
 def _load_schema(schema_path: str):
     with open(schema_path, "rb") as xsd_file:
         xsd_doc = lxml.etree.parse(
-            xsd_file, parser=lxml.etree.XMLParser(), base_url=schema_path
+            xsd_file, parser=lxml.etree.XMLParser(resolve_entities=False, no_network=True), base_url=schema_path
         )
     return lxml.etree.XMLSchema(xsd_doc)
 

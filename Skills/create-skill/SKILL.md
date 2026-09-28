@@ -481,7 +481,7 @@ Format feedback as:
 
 ## Additional Resources
 
-- For detailed coding standards, see [STANDARDS.md](STANDARDS.md)
+- For detailed coding standards, see [reference.md](reference.md)
 - For example reviews, see [examples.md](examples.md)
 ```
 

@@ -29,6 +29,7 @@ SKILL_COUNT=$(ls "$SKILLS_DIR" | wc -l | tr -d ' ')
 # ── Parse Arguments ──────────────────────────────────────────────────────────
 MODE="all"
 TARGET_ARG=""
+INSTALL_DEPS=true
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -40,13 +41,23 @@ while [[ $# -gt 0 ]]; do
             MODE="single"
             TARGET_ARG="${2:-}"
             if [[ -z "$TARGET_ARG" ]]; then error "Missing argument for --skill <name>"; fi
+            if [[ ! -d "$SKILLS_DIR/$TARGET_ARG" ]]; then
+                error "Skill '$TARGET_ARG' not found in $SKILLS_DIR.\n  Run './setup.sh --list' to view all available skills."
+            fi
             shift 2
             ;;
         --stage)
             MODE="stage"
             TARGET_ARG="${2:-}"
             if [[ -z "$TARGET_ARG" ]]; then error "Missing argument for --stage <1-8>"; fi
+            if ! [[ "$TARGET_ARG" =~ ^[1-8]$ ]]; then
+                error "Invalid stage '$TARGET_ARG'. Please specify a stage number between 1 and 8.\n  Run './setup.sh --list' to view skills by stage."
+            fi
             shift 2
+            ;;
+        --no-deps)
+            INSTALL_DEPS=false
+            shift
             ;;
         --help|-h)
             echo -e "${BOLD}Antigravity Skills Hub Installer${RESET}"
@@ -56,13 +67,13 @@ while [[ $# -gt 0 ]]; do
             echo "  (none)              Install and link all $SKILL_COUNT skills (Default)"
             echo "  --list, -l          List all available skills organized by SDLC stage"
             echo "  --skill, -s <name>  Link only a specific skill into agent directories"
-            echo "  --stage <1-8>       Link only skills belonging to a specific SDLC stage"
+            echo "  --stage <1-8>       Link only skills belonging to a specific SDLC stage (1 to 8)"
+            echo "  --no-deps           Skip installing Python dependencies"
             echo "  --help, -h          Show this help message"
             exit 0
             ;;
         *)
-            warn "Unknown option: $1 (ignoring)"
-            shift
+            error "Unknown option: $1\n  Run './setup.sh --help' for usage."
             ;;
     esac
 done
@@ -178,19 +189,22 @@ link_target_dir "$HOME/.gemini/config/skills" "Google Antigravity"
 link_target_dir "$HOME/.cursor/skills" "Cursor IDE"
 
 # ── Python dependencies ────────────────────────────────────────────────────────
-log "Installing Python dependencies..."
-
-if command -v uv &>/dev/null; then
-    log "Using uv (fast Python package manager)"
-    uv pip install -r "$VAULT_DIR/requirements.txt" && ok "Dependencies installed via uv"
-elif command -v pip3 &>/dev/null; then
-    log "Using pip3"
-    pip3 install -r "$VAULT_DIR/requirements.txt" && ok "Dependencies installed via pip3"
-elif command -v pip &>/dev/null; then
-    log "Using pip"
-    pip install -r "$VAULT_DIR/requirements.txt" && ok "Dependencies installed via pip"
+if [[ "$INSTALL_DEPS" == true ]]; then
+    log "Installing Python dependencies..."
+    if command -v uv &>/dev/null; then
+        log "Using uv (fast Python package manager)"
+        uv pip install -r "$VAULT_DIR/requirements.txt" && ok "Dependencies installed via uv"
+    elif command -v pip3 &>/dev/null; then
+        log "Using pip3"
+        pip3 install -r "$VAULT_DIR/requirements.txt" && ok "Dependencies installed via pip3"
+    elif command -v pip &>/dev/null; then
+        log "Using pip"
+        pip install -r "$VAULT_DIR/requirements.txt" && ok "Dependencies installed via pip"
+    else
+        warn "No pip or uv found. Install Python 3.9+ and run: pip install -r requirements.txt"
+    fi
 else
-    warn "No pip or uv found. Install Python 3.9+ and run: pip install -r requirements.txt"
+    log "Skipping Python dependencies installation (--no-deps specified)"
 fi
 
 # ── Verification ──────────────────────────────────────────────────────────────
