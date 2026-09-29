@@ -4,7 +4,7 @@ Verification Script for Centralized Obsidian Skills Vault Integration
 Architected by Jamemm (@JameMy0001) — https://github.com/JameMy0001/antigravity-skills-hub
 
 Validates:
-1. Every skill directory in the vault has a readable SKILL.md (65 skills total).
+1. Every skill directory in the vault has a readable SKILL.md (66 skills total).
 2. Every SKILL.md has valid YAML frontmatter (name, description, aliases, category,
    tags with agent-skill & stage) and "## 🔗 Connected Skills".
 3. Symlinks in ~/.gemini/config/skills and ~/.cursor/skills resolve cleanly.
@@ -85,6 +85,7 @@ NEW_SKILLS = [
     "nextjs-fullstack",
     "fastapi-backend",
     "kubernetes-manifests",
+    "no-emoji-minimalism",
 ]
 
 import yaml
@@ -130,8 +131,8 @@ def check_1_readable_skill_md():
             continue
         
         skills = [d for d in os.listdir(vault_skills) if not d.startswith(".") and os.path.isdir(os.path.join(vault_skills, d))]
-        if len(skills) != 65:
-            errors.append(f"Expected exactly 65 skills in {vault_name} Skills vault, found {len(skills)}")
+        if len(skills) != 66:
+            errors.append(f"Expected exactly 66 skills in {vault_name} Skills vault, found {len(skills)}")
         for expected in NEW_SKILLS:
             if expected not in skills:
                 errors.append(f"Missing new skill in {vault_name}: {expected}")
@@ -366,7 +367,7 @@ def main():
     print("=========================================")
     
     tests = [
-        ("1. Readable SKILL.md in all directories (65 skills)", check_1_readable_skill_md),
+        ("1. Readable SKILL.md in all directories (66 skills)", check_1_readable_skill_md),
         ("2. Valid YAML frontmatter & Connected Skills", check_2_frontmatter_and_connected),
         ("3. 100% Parity iCloud vs Local Mirror (full tree)", check_3_parity),
         ("4. Symlinks in ~/.gemini and ~/.cursor", check_4_symlinks),

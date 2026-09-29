@@ -8,7 +8,7 @@ tags:
   - agent-skills
 ---
 
-# 🧭 Agent Skills System: คู่มือและสารบัญ 8 ขั้นตอน (65 Skills)
+# 🧭 Agent Skills System: คู่มือและสารบัญ 8 ขั้นตอน (66 Skills)
 
 ยินดีต้อนรับสู่ระบบจัดเก็บและเรียกใช้งาน **Agent Skills** ที่จัดระเบียบตาม **Software Development Life Cycle (SDLC) 8 ขั้นตอน**
 ช่วยให้ AI Assistant ทำงานได้อย่างแม่นยำ เป็นขั้นเป็นตอน ไม่ลัดขั้นตอน และเรียกใช้เครื่องมือที่ถูกต้องเสมอ
@@ -89,6 +89,7 @@ tags:
 | [[Skills/review-bugbot/SKILL|`review-bugbot`]] | สแกนหาบั๊กที่อาจเล็ดลอดด้วย Bugbot subagent |
 | [[Skills/review-security/SKILL|`review-security`]] | สแกนหาช่องโหว่ความปลอดภัย วิเคราะห์ Threat Model และตรวจสิทธิ์การเข้าถึง |
 | [[Skills/verification-before-completion/SKILL|`verification-before-completion`]] | ยืนยันผลลัพธ์ด้วยหลักฐานก่อนแจ้งเสร็จ (Evidence before assertions) รันเทสต์และตรวจ git diff |
+| [[Skills/no-emoji-minimalism/SKILL|`no-emoji-minimalism`]] | ควบคุมความสะอาดของตัวอักษร ตัด Emoji ตกแต่งทุกชนิดในโค้ด/เอกสาร อนุญาตเฉพาะสถานะตรวจเช็คและระดับความรุนแรง |
 
 ### ==🚀 Stage 6: จัดการ Git, Pull Request และปล่อยระบบ (06 - Git, Commits & Release)==
 > *ใช้ทำ Conventional Commits, จัดการ Worktree, ตรวจ CI, และ Deploy สู่ Production*

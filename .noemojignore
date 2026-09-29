@@ -1,0 +1,7 @@
+# .noemojignore
+# Ignore legacy vault navigation files and UI preview files with decorative icons
+00 - 🧭 Skills Dashboard.md
+01 - 🗺️ Skills Workflow.canvas
+docs/index.html
+README.md
+verify_skills_vault.py

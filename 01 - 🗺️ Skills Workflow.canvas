@@ -36,7 +36,7 @@
       "x": 205,
       "y": -410,
       "width": 350,
-      "height": 1350,
+      "height": 1560,
       "color": "3",
       "label": "🛡️ Stage 5: Review & Security"
     },
@@ -538,6 +538,15 @@
       "y": 1120,
       "width": 320,
       "height": 180
+    },
+    {
+      "id": "node_no_emoji_minimalism",
+      "type": "file",
+      "file": "Skills/no-emoji-minimalism/SKILL.md",
+      "x": 220,
+      "y": 950,
+      "width": 320,
+      "height": 180
     }
   ],
   "edges": [
@@ -776,6 +785,13 @@
       "fromNode": "node_finishing_a_development_branch",
       "fromSide": "bottom",
       "toNode": "node_kubernetes_manifests",
+      "toSide": "top"
+    },
+    {
+      "id": "edge_verify_to_no_emoji",
+      "fromNode": "node_verification_before_completion",
+      "fromSide": "bottom",
+      "toNode": "node_no_emoji_minimalism",
       "toSide": "top"
     }
   ],

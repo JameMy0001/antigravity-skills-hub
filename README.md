@@ -5,7 +5,7 @@
 ### The Unified 8-Stage SDLC Agentic Skills Ecosystem
 
 [![Architect](https://img.shields.io/badge/Architect-Jamemm-blue?style=flat-square&logo=github)](https://github.com/JameMy0001)
-[![Skills](https://img.shields.io/badge/Skills-65%20Production--Grade-10B981?style=flat-square)](./Skills)
+[![Skills](https://img.shields.io/badge/Skills-66%20Production--Grade-10B981?style=flat-square)](./Skills)
 [![CI Pipeline](https://github.com/JameMy0001/antigravity-skills-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/JameMy0001/antigravity-skills-hub/actions/workflows/ci.yml)
 [![Web Showcase](https://img.shields.io/badge/Web%20Showcase-Live%20Explorer-6366F1?style=flat-square&logo=googlechrome)](https://jamemy0001.github.io/antigravity-skills-hub/)
 [![Platforms](https://img.shields.io/badge/Platforms-Antigravity%20%7C%20Cursor%20%7C%20Claude-purple?style=flat-square)](./setup.sh)
@@ -129,7 +129,7 @@ The upgraded installer supports flexible, targeted installations:
 
 ## 🌐 Interactive Web Showcase
 
-Explore all 65 skills in our responsive web app at [**jamemy0001.github.io/antigravity-skills-hub**](https://jamemy0001.github.io/antigravity-skills-hub/):
+Explore all 66 skills in our responsive web app at [**jamemy0001.github.io/antigravity-skills-hub**](https://jamemy0001.github.io/antigravity-skills-hub/):
 - 🔍 **Real-Time Live Search**: Instant filtering by skill name, description, category, or tags.
 - 🏷️ **Stage Filtering**: Filter by any of the 8 SDLC stages.
 - 📋 **One-Click Prompt Copy**: Instantly copy trigger prompts formatted for any AI chat.
@@ -137,7 +137,7 @@ Explore all 65 skills in our responsive web app at [**jamemy0001.github.io/antig
 
 ---
 
-## 📚 Skill Catalog (65 Skills Across 8 Stages)
+## 📚 Skill Catalog (66 Skills Across 8 Stages)
 
 ### 🟢 Stage 01 — New Features & Business Logic (8 skills)
 | Skill | Description |
@@ -176,13 +176,14 @@ Explore all 65 skills in our responsive web app at [**jamemy0001.github.io/antig
 | `chrome-extensions` | Build Chrome Extensions with Manifest V3: service workers, content scripts |
 | `visualize` | Inline charts, Mermaid diagrams, and compact visual representations |
 
-### 🟡 Stage 05 — Security & Code Quality (7 skills)
+### 🟡 Stage 05 — Security & Code Quality (8 skills)
 | Skill | Description |
 |---|---|
 | `review-security` | Security review subagent for code changes |
 | `determine_threat_model` | Build threat models: entry points, trust boundaries, attack surfaces |
 | `error-handling` | Typed errors, retries, circuit breakers in TypeScript/Python/Go |
 | `verification-before-completion` | Verify before claiming done — test evidence before assertions |
+| `no-emoji-minimalism` | Strict plain text typography & zero decorative emojis in code, commits, and docs |
 | `receiving-code-review` | Process code review feedback with technical rigor and honest debate |
 | `review-bugbot` | Bugbot review subagent for automated bug detection |
 | `review` | General code review for quality, maintainability, and correctness |
