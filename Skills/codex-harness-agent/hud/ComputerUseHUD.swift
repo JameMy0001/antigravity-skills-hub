@@ -372,8 +372,13 @@ class MiniDisplayWindow: NSPanel {
         }
     }
 
+    private var lastCaptureTime: TimeInterval = 0
     func updateScreenPreview() {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        let now = Date().timeIntervalSince1970
+        if now - lastCaptureTime < 2.0 { return }
+        lastCaptureTime = now
+
+        DispatchQueue.global(qos: .utility).async { [weak self] in
             let path = "/tmp/cua_preview.jpg"
             let task = Process()
             task.launchPath = "/usr/sbin/screencapture"
@@ -457,10 +462,19 @@ class HUDAppController: NSObject, NSApplicationDelegate {
     }
 
     private func handleCommandString(_ line: String) {
-        // Parses simple json or key=value
+        // Parses simple pipe commands
         // Format: status|x|y|click|done
         let parts = line.components(separatedBy: "|")
         let status = parts.first ?? "Working..."
+
+        // Check for explicit termination command
+        if status.lowercased() == "quit" || status.lowercased() == "exit" {
+            DispatchQueue.main.async {
+                NSApp.terminate(nil)
+            }
+            return
+        }
+
         var x: CGFloat? = nil
         var y: CGFloat? = nil
         var click = false
@@ -479,11 +493,7 @@ class HUDAppController: NSObject, NSApplicationDelegate {
 
         DispatchQueue.main.async { [weak self] in
             self?.updateAction(status: status, x: x, y: y, click: click, isDone: isDone)
-            if isDone {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    NSApp.terminate(nil)
-                }
-            }
+            // Persistent Mode: Keep HUD open and ready for subsequent commands without closing!
         }
     }
 
