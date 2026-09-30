@@ -311,6 +311,13 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     private var titleLabel: NSTextField!
     private var cmdToggleBtn: NSButton!
 
+    // Phase 4: Human Takeover Mode & Sensitive Field Privacy Shield
+    var isTakeoverMode = false
+    private var takeoverHeaderBtn: NSButton!
+    private var takeoverContainer: NSView!
+    private var takeoverLabel: NSTextField!
+    private var takeoverResumeBtn: NSButton!
+
     // Collapsed Dynamic Island Pill Controls
     private var headerSpinner: NSProgressIndicator!
     private var headerStatusLabel: NSTextField!
@@ -473,11 +480,27 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
         // Title Label (Shown when expanded)
         titleLabel = NSTextField(labelWithString: "Computer Use Mini Display")
-        titleLabel.frame = NSRect(x: 74, y: 9, width: width - 150, height: 20)
+        titleLabel.frame = NSRect(x: 74, y: 9, width: width - 235, height: 20)
         titleLabel.font = NSFont.systemFont(ofSize: 11.5, weight: .semibold)
         titleLabel.textColor = NSColor.white.withAlphaComponent(0.9)
         titleLabel.alignment = .center
         headerBarView.addSubview(titleLabel)
+
+        // Phase 4: Human Takeover Button [Take Over]
+        takeoverHeaderBtn = NSButton(frame: NSRect(x: width - 142, y: 9, width: 88, height: 18))
+        takeoverHeaderBtn.isBordered = false
+        takeoverHeaderBtn.title = "Take Over"
+        takeoverHeaderBtn.font = NSFont.systemFont(ofSize: 9.5, weight: .bold)
+        takeoverHeaderBtn.wantsLayer = true
+        takeoverHeaderBtn.layer?.cornerRadius = 4
+        takeoverHeaderBtn.layer?.backgroundColor = NSColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 0.2).cgColor
+        takeoverHeaderBtn.layer?.borderWidth = 0.8
+        takeoverHeaderBtn.layer?.borderColor = NSColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 0.8).cgColor
+        takeoverHeaderBtn.contentTintColor = NSColor(red: 1.0, green: 0.8, blue: 0.2, alpha: 1.0)
+        takeoverHeaderBtn.toolTip = "เข้าควบคุมหน้าจอด้วยตัวเองชั่วคราวและระงับการจับภาพ (Human Takeover Mode)"
+        takeoverHeaderBtn.target = self
+        takeoverHeaderBtn.action = #selector(handleTakeoverHeaderClick)
+        headerBarView.addSubview(takeoverHeaderBtn)
 
         // Phase 3: Toggle Command Box Button [⌘K] (Shown when expanded)
         cmdToggleBtn = NSButton(frame: NSRect(x: width - 48, y: 9, width: 34, height: 18))
@@ -835,6 +858,35 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         approvalContainer.addSubview(denyBtn)
 
         statusPillView.addSubview(approvalContainer)
+
+        // Phase 4: Human Takeover Overlay Container (Hidden by default)
+        takeoverContainer = NSView(frame: NSRect(x: 0, y: 0, width: pillWidth, height: pillHeight))
+        takeoverContainer.wantsLayer = true
+        takeoverContainer.layer?.cornerRadius = 16
+        takeoverContainer.layer?.backgroundColor = NSColor(red: 0.26, green: 0.16, blue: 0.03, alpha: 0.96).cgColor
+        takeoverContainer.layer?.borderWidth = 1.0
+        takeoverContainer.layer?.borderColor = NSColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 0.95).cgColor
+        takeoverContainer.isHidden = true
+
+        takeoverLabel = NSTextField(labelWithString: "🟡 [TAKEOVER] AI Paused - Private Shield Active")
+        takeoverLabel.frame = NSRect(x: 12, y: 6, width: pillWidth - 118, height: 20)
+        takeoverLabel.font = NSFont.systemFont(ofSize: 10.0, weight: .bold)
+        takeoverLabel.textColor = NSColor(red: 1.0, green: 0.82, blue: 0.2, alpha: 1.0)
+        takeoverContainer.addSubview(takeoverLabel)
+
+        takeoverResumeBtn = NSButton(frame: NSRect(x: pillWidth - 96, y: 5, width: 90, height: 22))
+        takeoverResumeBtn.title = "Resume AI"
+        takeoverResumeBtn.font = NSFont.systemFont(ofSize: 10.5, weight: .bold)
+        takeoverResumeBtn.wantsLayer = true
+        takeoverResumeBtn.layer?.cornerRadius = 5
+        takeoverResumeBtn.layer?.backgroundColor = NSColor(red: 0.15, green: 0.75, blue: 0.25, alpha: 0.95).cgColor
+        takeoverResumeBtn.contentTintColor = NSColor.white
+        takeoverResumeBtn.isBordered = false
+        takeoverResumeBtn.target = self
+        takeoverResumeBtn.action = #selector(handleTakeoverResumeClick)
+        takeoverContainer.addSubview(takeoverResumeBtn)
+
+        statusPillView.addSubview(takeoverContainer)
         visualEffectView.addSubview(statusPillView)
     }
 
@@ -877,6 +929,64 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         visualEffectView.layer?.borderWidth = 1.0
     }
 
+    // MARK: - Phase 4: Human Takeover Mode Handlers
+    @objc func handleTakeoverHeaderClick() {
+        if isTakeoverMode {
+            exitTakeoverMode()
+        } else {
+            enterTakeoverMode(reason: "Human Takeover Mode (Screen Capture Paused)")
+        }
+    }
+
+    @objc func handleTakeoverResumeClick() {
+        exitTakeoverMode()
+    }
+
+    func enterTakeoverMode(reason: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.isTakeoverMode = true
+            self.takeoverLabel.stringValue = "🟡 [TAKEOVER] \(reason)"
+            self.takeoverContainer.isHidden = false
+            self.takeoverHeaderBtn.title = "Resume"
+            self.takeoverHeaderBtn.layer?.backgroundColor = NSColor(red: 0.15, green: 0.75, blue: 0.25, alpha: 0.4).cgColor
+            self.takeoverHeaderBtn.contentTintColor = NSColor(red: 0.4, green: 1.0, blue: 0.4, alpha: 1.0)
+            self.visualEffectView.layer?.borderColor = NSColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 0.95).cgColor
+            self.visualEffectView.layer?.borderWidth = 2.0
+            self.hideMiniPointer(animated: true)
+            HUDAppController.shared?.ghostCursor.hideCursor(animated: true)
+            self.orderFrontRegardless()
+            self.sendTakeoverSignal("takeover_active")
+        }
+    }
+
+    func exitTakeoverMode() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.isTakeoverMode = false
+            self.takeoverContainer.isHidden = true
+            self.takeoverHeaderBtn.title = "Take Over"
+            self.takeoverHeaderBtn.layer?.backgroundColor = NSColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 0.2).cgColor
+            self.takeoverHeaderBtn.contentTintColor = NSColor(red: 1.0, green: 0.8, blue: 0.2, alpha: 1.0)
+            self.visualEffectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.25).cgColor
+            self.visualEffectView.layer?.borderWidth = 1.0
+            self.sendTakeoverSignal("resumed")
+            self.setStatus("Working... ผู้ใช้ส่งคืนการควบคุม กำลังดำเนินงานต่อ")
+        }
+    }
+
+    private func sendTakeoverSignal(_ signal: String) {
+        let pipePath = "/tmp/cua_takeover.pipe"
+        DispatchQueue.global(qos: .userInitiated).async {
+            if let handle = FileHandle(forWritingAtPath: pipePath) {
+                if let data = (signal + "\n").data(using: .utf8) {
+                    handle.write(data)
+                    try? handle.close()
+                }
+            }
+        }
+    }
+
     func setStatus(_ text: String, isDone: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -915,7 +1025,11 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     }
 
     func forceScreenPreview() {
+        if isTakeoverMode {
+            return
+        }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self, !self.isTakeoverMode else { return }
             let path = "/tmp/cua_preview.jpg"
             let task = Process()
             task.launchPath = "/usr/sbin/screencapture"
@@ -925,7 +1039,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
             if let img = NSImage(contentsOfFile: path) {
                 DispatchQueue.main.async {
-                    self?.previewImageView.image = img
+                    self.previewImageView.image = img
                 }
             }
         }
@@ -949,6 +1063,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
             headerBarView.frame = NSRect(x: 0, y: standardHeight - 38, width: standardWidth, height: 38)
             titleLabel.isHidden = false
+            takeoverHeaderBtn?.isHidden = false
             cmdToggleBtn.isHidden = false
             headerSpinner.isHidden = true
             headerStatusLabel.isHidden = true
@@ -970,6 +1085,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
             headerBarView.frame = NSRect(x: 0, y: 1, width: standardWidth, height: 38)
             titleLabel.isHidden = true
+            takeoverHeaderBtn?.isHidden = true
             cmdToggleBtn.isHidden = true
             let isFinished = statusLabel.stringValue.contains("[PASS]") || statusLabel.stringValue.contains("พร้อม")
             headerSpinner.isHidden = isFinished
@@ -1056,11 +1172,13 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
 // MARK: - Controller & Runner
 class HUDAppController: NSObject, NSApplicationDelegate {
+    static weak var shared: HUDAppController?
     var miniDisplay: MiniDisplayWindow!
     var ghostCursor: GhostCursorWindow!
     var commandPipePath = "/tmp/cua_hud.pipe"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        HUDAppController.shared = self
         miniDisplay = MiniDisplayWindow()
         ghostCursor = GhostCursorWindow()
 
@@ -1133,14 +1251,25 @@ class HUDAppController: NSObject, NSApplicationDelegate {
             mkfifo(commandPipePath, 0o666)
         }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let pipePath = self?.commandPipePath else { return }
+            let fd = open(pipePath, O_RDWR)
+            guard fd >= 0 else { return }
+            var buffer = [UInt8](repeating: 0, count: 4096)
+            var currentLine = ""
             while true {
-                guard let handle = FileHandle(forReadingAtPath: self?.commandPipePath ?? "") else {
-                    Thread.sleep(forTimeInterval: 0.5)
-                    continue
-                }
-                let data = handle.readDataToEndOfFile()
-                if let str = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), !str.isEmpty {
-                    self?.handleCommandString(str)
+                let bytesRead = read(fd, &buffer, buffer.count)
+                if bytesRead > 0 {
+                    let chunk = String(decoding: buffer[0..<bytesRead], as: UTF8.self)
+                    currentLine += chunk
+                    while let newlineRange = currentLine.range(of: "\n") {
+                        let line = String(currentLine[..<newlineRange.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+                        currentLine = String(currentLine[newlineRange.upperBound...])
+                        if !line.isEmpty {
+                            self?.handleCommandString(line)
+                        }
+                    }
+                } else {
+                    usleep(10000) // 10ms sleep
                 }
             }
         }
@@ -1183,21 +1312,37 @@ class HUDAppController: NSObject, NSApplicationDelegate {
             return
         }
 
-        // 2. Phase 2: Safety Approval Gate Command: ask_approval|<message>
+        // 2. Phase 4: Human Takeover Mode Command: takeover|<reason> or resume
+        if header.lowercased() == "takeover" {
+            let reason = (parts.count > 1) ? parts[1] : "Human Takeover Active (Screen Capture Suspended)"
+            DispatchQueue.main.async { [weak self] in
+                self?.miniDisplay.enterTakeoverMode(reason: reason)
+            }
+            return
+        }
+
+        if header.lowercased() == "resume" {
+            DispatchQueue.main.async { [weak self] in
+                self?.miniDisplay.exitTakeoverMode()
+            }
+            return
+        }
+
+        // 3. Phase 2: Safety Approval Gate Command: ask_approval|<message>
         if header.lowercased() == "ask_approval" {
             let warningMsg = (parts.count > 1) ? parts[1] : "ยืนยันการทำคำสั่งเสี่ยง?"
             miniDisplay.requestApproval(message: warningMsg)
             return
         }
 
-        // 3. Phase 1: Neural Vision OCR Click Command: ocr_click|<target_text>
+        // 4. Phase 1: Neural Vision OCR Click Command: ocr_click|<target_text>
         if header.lowercased() == "ocr_click" {
             let targetQuery = (parts.count > 1) ? parts[1] : ""
             executeOCRClick(query: targetQuery)
             return
         }
 
-        // 4. Standard Coordinate Movement Command: <status>|<x>|<y>|<click>|<done>
+        // 5. Standard Coordinate Movement Command: <status>|<x>|<y>|<click>|<done>
         let status = header
         var x: CGFloat? = nil
         var y: CGFloat? = nil
@@ -1222,10 +1367,14 @@ class HUDAppController: NSObject, NSApplicationDelegate {
 
     // Phase 1: Apple Vision Neural Engine OCR Execution
     private func executeOCRClick(query: String) {
+        if miniDisplay.isTakeoverMode {
+            return
+        }
         miniDisplay.setStatus("Working... Apple Vision กำลังตรวจหา '\(query)' บนหน้าจอ")
         let snapshotPath = "/tmp/cua_ocr_temp.jpg"
 
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self, !self.miniDisplay.isTakeoverMode else { return }
             let captureProc = Process()
             captureProc.launchPath = "/usr/sbin/screencapture"
             captureProc.arguments = ["-x", "-t", "jpg", snapshotPath]
@@ -1235,7 +1384,7 @@ class HUDAppController: NSObject, NSApplicationDelegate {
             guard let img = NSImage(contentsOfFile: snapshotPath),
                   let cgImage = img.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
                 DispatchQueue.main.async {
-                    self?.miniDisplay.setStatus("ล้มเหลว: ไม่สามารถจับภาพหน้าจอเพื่อทำ OCR", isDone: true)
+                    self.miniDisplay.setStatus("ล้มเหลว: ไม่สามารถจับภาพหน้าจอเพื่อทำ OCR", isDone: true)
                 }
                 return
             }

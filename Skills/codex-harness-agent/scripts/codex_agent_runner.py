@@ -57,7 +57,7 @@ def request_human_approval(warning_message, pipe_path="/tmp/cua_hud.pipe", timeo
             pass
 
     print(f"\n🔴 [SAFETY GATE] Critical Action Detected: '{warning_message}'")
-    print(f"👉 Awaiting human approval via Mini Display HUD (Timeout: {int(timeout)}s)...")
+    print(f"* Awaiting human approval via Mini Display HUD (Timeout: {int(timeout)}s)...")
 
     pipe_fd = os.open(approval_pipe, os.O_RDONLY | os.O_NONBLOCK)
     try:
@@ -120,6 +120,11 @@ def run_native_codex(task, sandbox="workspace-write", worktree=False):
 def launch_hud_session():
     """Starts or reuses the persistent native macOS Mini Display & Ghost Cursor HUD daemon."""
     hud_bin = shutil.which("computer-use-hud")
+    if not hud_bin:
+        local_bin = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "hud", "computer-use-hud")
+        if os.path.exists(local_bin):
+            hud_bin = local_bin
+
     pipe_path = "/tmp/cua_hud.pipe"
     if not hud_bin:
         return None, None
@@ -133,7 +138,7 @@ def launch_hud_session():
         if os.path.exists(pipe_path):
             os.remove(pipe_path)
         os.mkfifo(pipe_path, 0o666)
-        proc = subprocess.Popen([hud_bin], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        proc = subprocess.Popen([hud_bin], start_new_session=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(0.35)
         return proc, pipe_path
     except Exception:
@@ -193,14 +198,15 @@ def get_real_window_geometry(app_name):
     return {"x": 100.0, "y": 60.0, "w": 1200.0, "h": 800.0}
 
 # MARK: - Computer Use Agent (CUA) Dispatch
-def run_cua_driver(task, headed=True, pip=False, ocr_target=None):
+def run_cua_driver(task, headed=True, pip=False, ocr_target=None, model="google/gemini-2.5-flash", steps=15):
     """Executes a visual Computer Use task using persistent macOS Mini Display HUD and Ghost Cursor."""
     cua_bin = shutil.which("cua-driver")
     print("==================================================")
     print("COMPUTER USE AGENT (CUA) DISPATCH")
     print("==================================================")
     print(f"Task:         {task}")
-    print(f"Driver:       {cua_bin if cua_bin else 'Playwright (Browser) / macOS Native'}")
+    print(f"Driver:       Autonomous Closed-Loop VLM ReAct Engine (codex_vision_loop)")
+    print(f"Model:        {model}")
     print(f"Mini Display: [ENABLED] Persistent Frosted-Glass HUD with Filmstrip Tray")
     print(f"Ghost Cursor: [ENABLED] Real Coordinate Glide & Ripple Click")
     print(f"Neural Vision:[ENABLED] Apple Silicon VNRecognizeTextRequest")
@@ -224,6 +230,21 @@ def run_cua_driver(task, headed=True, pip=False, ocr_target=None):
         send_ocr_click(pipe_path, ocr_target)
         print(f"[PASS] ✅ Apple Vision OCR dispatched for '{ocr_target}'.")
         return
+
+    # Phase 1: Autonomous Closed-Loop VLM ReAct Engine
+    try:
+        from codex_vision_loop import ComputerUseAgentLoop
+        print("[INFO] Initiating Autonomous Closed-Loop VLM ReAct Engine...")
+        vlm_model = model if model else "google/gemini-2.5-flash"
+        loop = ComputerUseAgentLoop(task=task, model=vlm_model, max_steps=steps, hud_pipe=pipe_path)
+        success = loop.run()
+        if success:
+            print("[PASS] ✅ Autonomous Closed-Loop Computer Use completed successfully.")
+            return
+        else:
+            print("[WARN] Closed-loop VLM finished without complete status. Executing fallback.")
+    except Exception as e:
+        print(f"[INFO] Closed-loop VLM notice: {e}. Executing targeted fallback.")
 
     # 2. Check for native macOS app control (Safari, Xcode, Finder, etc.)
     target_apps = ["Safari", "Xcode", "Finder", "Notes", "Simulator", "Calculator"]
@@ -470,7 +491,8 @@ def main():
     parser.add_argument("--sandbox", default="workspace-write", choices=["read-only", "workspace-write", "danger-full-access"],
                         help="Sandbox policy for native codex (default: workspace-write)")
     parser.add_argument("--worktree", action="store_true", help="Run native codex in a new managed git worktree")
-    parser.add_argument("--model", default="gpt-4o", help="Target model for cloud/hybrid harness (default: gpt-4o)")
+    parser.add_argument("--model", default="google/gemini-2.5-flash", help="Target model for VLM/cloud harness (default: google/gemini-2.5-flash)")
+    parser.add_argument("--steps", type=int, default=15, help="Maximum number of CUA ReAct steps (default: 15)")
     parser.add_argument("--display", default="1280x800", help="Display resolution (default: 1280x800)")
 
     args = parser.parse_args()
@@ -499,7 +521,7 @@ def main():
     if mode == "native":
         run_native_codex(task, sandbox=args.sandbox, worktree=args.worktree)
     elif mode == "cua":
-        run_cua_driver(task, headed=not args.headless, pip=args.pip, ocr_target=args.ocr)
+        run_cua_driver(task, headed=not args.headless, pip=args.pip, ocr_target=args.ocr, model=args.model, steps=args.steps)
     elif mode == "hybrid":
         run_hybrid_pipeline(task, model=args.model, display=args.display, headed=not args.headless)
     elif mode == "cloud":
