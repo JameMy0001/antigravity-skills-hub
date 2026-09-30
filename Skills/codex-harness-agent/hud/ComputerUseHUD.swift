@@ -71,7 +71,9 @@ class GhostCursorWindow: NSPanel {
         self.isOpaque = false
         self.hasShadow = false
         self.ignoresMouseEvents = true
-        self.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
+        self.hidesOnDeactivate = false
+        self.isReleasedWhenClosed = false
+        self.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
 
         cursorView = GhostCursorView(frame: screenRect)
         self.contentView = cursorView
@@ -84,6 +86,14 @@ class GhostCursorWindow: NSPanel {
     func clickAt(point: CGPoint, completion: (() -> Void)? = nil) {
         cursorView.clickAt(point: point, completion: completion)
     }
+
+    func hideCursor(animated: Bool = true) {
+        cursorView.hideCursor(animated: animated)
+    }
+
+    func showCursor(animated: Bool = true) {
+        cursorView.showCursor(animated: animated)
+    }
 }
 
 // MARK: - Ghost Cursor View
@@ -91,6 +101,7 @@ class GhostCursorView: NSView {
     private var pointerLayer: CALayer!
     private var rippleLayer: CAShapeLayer!
     private(set) var currentPosition: CGPoint = CGPoint(x: 400, y: 400)
+    private var idleTimer: Timer?
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -108,6 +119,7 @@ class GhostCursorView: NSView {
         pointerLayer.bounds = CGRect(x: 0, y: 0, width: 32, height: 32)
         pointerLayer.anchorPoint = CGPoint(x: 0.15, y: 0.85)
         pointerLayer.position = currentPosition
+        pointerLayer.opacity = 0.0 // Start hidden on boot! Zero frozen cursor.
 
         let img = createPointerImage()
         pointerLayer.contents = img
@@ -130,6 +142,50 @@ class GhostCursorView: NSView {
         rippleLayer.lineWidth = 2.5
         rippleLayer.opacity = 0.0
         self.layer?.addSublayer(rippleLayer)
+    }
+
+    func showCursor(animated: Bool = true) {
+        resetIdleTimer()
+        if pointerLayer.opacity >= 0.95 { return }
+        if animated {
+            let anim = CABasicAnimation(keyPath: "opacity")
+            anim.fromValue = pointerLayer.opacity
+            anim.toValue = 1.0
+            anim.duration = 0.2
+            pointerLayer.opacity = 1.0
+            pointerLayer.add(anim, forKey: "fadeIn")
+        } else {
+            pointerLayer.opacity = 1.0
+        }
+    }
+
+    func hideCursor(animated: Bool = true) {
+        idleTimer?.invalidate()
+        idleTimer = nil
+        if pointerLayer.opacity <= 0.05 { return }
+        if animated {
+            CATransaction.begin()
+            CATransaction.setAnimationDuration(0.35)
+            CATransaction.setCompletionBlock { [weak self] in
+                self?.pointerLayer.opacity = 0.0
+            }
+            let anim = CABasicAnimation(keyPath: "opacity")
+            anim.fromValue = pointerLayer.opacity
+            anim.toValue = 0.0
+            anim.duration = 0.35
+            pointerLayer.opacity = 0.0
+            pointerLayer.add(anim, forKey: "fadeOut")
+            CATransaction.commit()
+        } else {
+            pointerLayer.opacity = 0.0
+        }
+    }
+
+    private func resetIdleTimer() {
+        idleTimer?.invalidate()
+        idleTimer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: false) { [weak self] _ in
+            self?.hideCursor(animated: true)
+        }
     }
 
     private func createPointerImage() -> CGImage? {
@@ -164,12 +220,14 @@ class GhostCursorView: NSView {
     }
 
     func moveTo(point: CGPoint, animated: Bool, completion: (() -> Void)? = nil) {
+        showCursor(animated: animated)
         if !animated {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             pointerLayer.position = point
             currentPosition = point
             CATransaction.commit()
+            resetIdleTimer()
             completion?()
             return
         }
@@ -179,6 +237,7 @@ class GhostCursorView: NSView {
         CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
         CATransaction.setCompletionBlock { [weak self] in
             self?.currentPosition = point
+            self?.resetIdleTimer()
             completion?()
         }
 
@@ -194,9 +253,11 @@ class GhostCursorView: NSView {
     }
 
     func clickAt(point: CGPoint, completion: (() -> Void)? = nil) {
+        showCursor(animated: true)
         moveTo(point: point, animated: true) { [weak self] in
             guard let self = self else { return }
             self.triggerClickRipple(at: point)
+            self.resetIdleTimer()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 completion?()
             }
@@ -310,9 +371,19 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         self.isMovable = true
         self.isMovableByWindowBackground = true
         self.ignoresMouseEvents = false
-        self.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
+        self.hidesOnDeactivate = false
+        self.isReleasedWhenClosed = false
+        self.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
 
         setupUI(width: standardWidth, height: standardHeight)
+    }
+
+    override func cancelOperation(_ sender: Any?) {
+        if commandBoxVisible {
+            commandBoxVisible = false
+            applyCommandBoxVisibility()
+        }
+        // Do not call super to prevent closing/ordering out the Mini Display
     }
 
     private func setupUI(width: CGFloat, height: CGFloat) {
@@ -582,6 +653,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         miniPointerLayer.shadowColor = NSColor.cyan.cgColor
         miniPointerLayer.shadowRadius = 4
         miniPointerLayer.shadowOpacity = 0.9
+        miniPointerLayer.opacity = 0.0 // Start hidden on boot! Zero frozen pointer.
         previewImageView.layer?.addSublayer(miniPointerLayer)
     }
 
@@ -818,6 +890,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
                 self.headerSpinner.isHidden = true
                 self.statusLabel.frame = NSRect(x: 14, y: 6, width: self.statusPillView.frame.width - 28, height: 20)
                 self.statusLabel.alignment = .center
+                self.hideMiniPointer(animated: true)
             } else {
                 self.spinnerIndicator.isHidden = false
                 self.spinnerIndicator.startAnimation(nil)
@@ -930,7 +1003,42 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         try? p.run()
     }
 
+    func showMiniPointer(animated: Bool = true) {
+        if miniPointerLayer.opacity >= 0.95 { return }
+        if animated {
+            let anim = CABasicAnimation(keyPath: "opacity")
+            anim.fromValue = miniPointerLayer.opacity
+            anim.toValue = 1.0
+            anim.duration = 0.2
+            miniPointerLayer.opacity = 1.0
+            miniPointerLayer.add(anim, forKey: "fadeIn")
+        } else {
+            miniPointerLayer.opacity = 1.0
+        }
+    }
+
+    func hideMiniPointer(animated: Bool = true) {
+        if miniPointerLayer.opacity <= 0.05 { return }
+        if animated {
+            CATransaction.begin()
+            CATransaction.setAnimationDuration(0.35)
+            CATransaction.setCompletionBlock { [weak self] in
+                self?.miniPointerLayer.opacity = 0.0
+            }
+            let anim = CABasicAnimation(keyPath: "opacity")
+            anim.fromValue = miniPointerLayer.opacity
+            anim.toValue = 0.0
+            anim.duration = 0.35
+            miniPointerLayer.opacity = 0.0
+            miniPointerLayer.add(anim, forKey: "fadeOut")
+            CATransaction.commit()
+        } else {
+            miniPointerLayer.opacity = 0.0
+        }
+    }
+
     func updateMiniPointer(targetScreenPoint: CGPoint) {
+        showMiniPointer(animated: true)
         guard let screen = NSScreen.main else { return }
         let previewBounds = previewImageView.bounds
         let normX = targetScreenPoint.x / screen.frame.width
@@ -1002,13 +1110,20 @@ class HUDAppController: NSObject, NSApplicationDelegate {
     func updateAction(status: String, x: CGFloat? = nil, y: CGFloat? = nil, click: Bool = false, isDone: Bool = false) {
         miniDisplay.setStatus(status, isDone: isDone)
 
+        if isDone {
+            ghostCursor.hideCursor(animated: true)
+            miniDisplay.hideMiniPointer(animated: true)
+        }
+
         if let px = x, let py = y {
-            let pt = CGPoint(x: px, y: py)
-            miniDisplay.updateMiniPointer(targetScreenPoint: pt)
-            if click {
-                ghostCursor.clickAt(point: pt)
-            } else {
-                ghostCursor.moveCursor(to: pt)
+            if px > 0 || py > 0 {
+                let pt = CGPoint(x: px, y: py)
+                miniDisplay.updateMiniPointer(targetScreenPoint: pt)
+                if click {
+                    ghostCursor.clickAt(point: pt)
+                } else {
+                    ghostCursor.moveCursor(to: pt)
+                }
             }
         }
     }
@@ -1039,6 +1154,15 @@ class HUDAppController: NSObject, NSApplicationDelegate {
         if header.lowercased() == "quit" || header.lowercased() == "exit" {
             DispatchQueue.main.async {
                 NSApp.terminate(nil)
+            }
+            return
+        }
+
+        // Hide Cursor Command: hide_cursor or cursor_hide
+        if header.lowercased() == "hide_cursor" || header.lowercased() == "cursor_hide" {
+            DispatchQueue.main.async { [weak self] in
+                self?.ghostCursor.hideCursor(animated: true)
+                self?.miniDisplay.hideMiniPointer(animated: true)
             }
             return
         }
