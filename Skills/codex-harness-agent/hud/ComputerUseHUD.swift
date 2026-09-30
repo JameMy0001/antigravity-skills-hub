@@ -282,6 +282,14 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     private let standardWidth: CGFloat = 460
     private let standardHeight: CGFloat = 350
 
+    override var canBecomeKey: Bool {
+        return true
+    }
+
+    override var canBecomeMain: Bool {
+        return true
+    }
+
     init() {
         let screenRect = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
         let padding: CGFloat = 20
@@ -290,7 +298,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
         super.init(
             contentRect: NSRect(x: x, y: y, width: standardWidth, height: standardHeight),
-            styleMask: [.borderless, .nonactivatingPanel],
+            styleMask: [.borderless],
             backing: .buffered,
             defer: false
         )
@@ -464,6 +472,18 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         return false
     }
 
+    func controlTextDidBeginEditing(_ obj: Notification) {
+        if let fieldEditor = (obj.object as? NSTextField)?.currentEditor() as? NSTextView {
+            fieldEditor.insertionPointColor = NSColor.cyan
+        }
+    }
+
+    @objc func handleStatusPillClick() {
+        if !commandBoxVisible && (approvalContainer == nil || approvalContainer.isHidden) {
+            showAndFocusCommandBar()
+        }
+    }
+
     @objc func toggleCommandInput() {
         if isCollapsed {
             handleToggleCollapse()
@@ -489,8 +509,13 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
             statusPillView.layer?.borderWidth = 1.5
             cmdToggleBtn.layer?.backgroundColor = NSColor.cyan.withAlphaComponent(0.3).cgColor
             cmdToggleBtn.contentTintColor = NSColor.cyan
+
+            NSApp.activate(ignoringOtherApps: true)
             self.makeKeyAndOrderFront(nil)
             self.makeFirstResponder(commandInputBox)
+            if let fieldEditor = self.fieldEditor(true, for: commandInputBox) as? NSTextView {
+                fieldEditor.insertionPointColor = NSColor.cyan
+            }
         } else {
             commandInputBox.isHidden = true
             statusLabel.isHidden = false
@@ -499,6 +524,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
             statusPillView.layer?.borderWidth = 1.0
             cmdToggleBtn.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.15).cgColor
             cmdToggleBtn.contentTintColor = NSColor.white
+            self.resignFirstResponder()
         }
     }
 
@@ -662,6 +688,10 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         statusPillView.layer?.borderColor = NSColor.white.withAlphaComponent(0.15).cgColor
         statusPillView.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.25).cgColor
 
+        // Click anywhere on status pill to open command bar
+        let pillClickGesture = NSClickGestureRecognizer(target: self, action: #selector(handleStatusPillClick))
+        statusPillView.addGestureRecognizer(pillClickGesture)
+
         // Spinner
         spinnerIndicator = NSProgressIndicator(frame: NSRect(x: 10, y: 8, width: 16, height: 16))
         spinnerIndicator.style = .spinning
@@ -684,6 +714,9 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         commandInputBox.backgroundColor = .clear
         commandInputBox.isBordered = false
         commandInputBox.focusRingType = .none
+        commandInputBox.isEditable = true
+        commandInputBox.isSelectable = true
+        commandInputBox.refusesFirstResponder = false
         commandInputBox.target = self
         commandInputBox.action = #selector(handleCommandSubmit)
         commandInputBox.delegate = self
