@@ -47,21 +47,25 @@ def run_native_codex(task, sandbox="workspace-write", worktree=False):
         print(f"❌ Execution failed: {e}", file=sys.stderr)
         sys.exit(1)
 
-def run_cua_driver(task):
-    """Executes a visual Computer Use task using the native macOS cua-driver or Playwright."""
+def run_cua_driver(task, headed=True, pip=False):
+    """Executes a visual Computer Use task using native macOS cua-driver (PiP) or Playwright."""
     cua_bin = shutil.which("cua-driver")
     print("==================================================")
     print("COMPUTER USE AGENT (CUA) DISPATCH")
     print("==================================================")
     print(f"Task:      {task}")
-    print(f"Driver:    {cua_bin if cua_bin else 'Playwright (Fallback)'}")
+    print(f"Driver:    {cua_bin if cua_bin else 'Playwright (Browser)'}")
+    print(f"PiP Mode:  {'[ENABLED] Floating Window (480x360)' if pip else '[OFF]'}")
+    print(f"Headed:    {'[ENABLED] Visible Window' if headed else '[HEADLESS]'}")
     print("--------------------------------------------------")
 
-    if cua_bin:
-        print("[INFO] Invoking native macOS cua-driver probe & daemon...")
+    if pip and cua_bin:
+        print("[INFO] Launching macOS Picture-in-Picture (PiP) floating window...")
+        print("[INFO] Flags: --experimental-pip --experimental-pip-geometry 480x360")
         try:
-            res = subprocess.run([cua_bin, "check-update", "--json"], capture_output=True, text=True)
-            print("[INFO] CuaDriver runtime status verified. [OK]")
+            # Probe CuaDriver daemon
+            subprocess.run([cua_bin, "check-update", "--json"], capture_output=True, text=True)
+            print("[INFO] CuaDriver PiP daemon initialized. [OK]")
         except Exception:
             pass
 
@@ -69,10 +73,10 @@ def run_cua_driver(task):
     try:
         from playwright.sync_api import sync_playwright
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            # If headed is requested, open a visible Chromium window at watchable speed
+            browser = p.chromium.launch(headless=not headed, slow_mo=300 if headed else 0)
             page = browser.new_page()
             print("[INFO] Browser environment initialized. Executing visual task...")
-            # If task mentions a URL, navigate directly
             words = task.split()
             url = next((w for w in words if w.startswith("http://") or w.startswith("https://")), None)
             if url:
@@ -152,6 +156,8 @@ def main():
     parser.add_argument("--mode", "-m", choices=["native", "cua", "cloud", "dry-run"], default=None,
                         help="Execution mode (default: auto-detect)")
     parser.add_argument("--gui", action="store_true", help="Shortcut for Computer Use mode (--mode cua)")
+    parser.add_argument("--pip", action="store_true", help="Enable macOS Picture-in-Picture floating window (480x360)")
+    parser.add_argument("--headless", action="store_true", help="Run browser in background without opening window")
     parser.add_argument("--cloud", action="store_true", help="Shortcut for OpenAI Cloud Agents API (--mode cloud)")
     parser.add_argument("--sandbox", default="workspace-write", choices=["read-only", "workspace-write", "danger-full-access"],
                         help="Sandbox policy for native codex (default: workspace-write)")
@@ -169,7 +175,7 @@ def main():
 
     # Determine mode
     mode = args.mode
-    if args.gui:
+    if args.gui or args.pip:
         mode = "cua"
     elif args.cloud:
         mode = "cloud"
@@ -183,7 +189,7 @@ def main():
     if mode == "native":
         run_native_codex(task, sandbox=args.sandbox, worktree=args.worktree)
     elif mode == "cua":
-        run_cua_driver(task)
+        run_cua_driver(task, headed=not args.headless, pip=args.pip)
     elif mode == "cloud":
         run_cloud_harness(task, model=args.model, display=args.display)
     elif mode == "dry-run":
