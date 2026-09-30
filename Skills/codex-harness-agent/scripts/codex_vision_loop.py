@@ -167,13 +167,22 @@ class ComputerUseAgentLoop:
         hud_pipe: str = "/tmp/cua_hud.pipe"
     ):
         self.task = task
-        self.model = model
-        self.api_key = api_key or os.environ.get("ANTHROPIC_AUTH_TOKEN") or os.environ.get("OPENROUTER_API_KEY")
-        self.api_base = api_base
         self.max_steps = max_steps
         self.max_tokens_per_turn = 80
         self.hud_pipe = hud_pipe
         self.session_id = str(uuid.uuid4())[:8]
+
+        # Multi-provider auto-detection: Google AI Studio (Free) vs OpenRouter
+        gemini_key = os.environ.get("GEMINI_API_KEY")
+        if gemini_key and (not api_key or "sk-or-v1" not in str(api_key)) and (model in ["google/gemini-2.5-flash", "gemini", "gemini-2.0-flash"]):
+            self.api_key = gemini_key
+            self.api_base = "https://generativelanguage.googleapis.com/v1beta/openai"
+            self.model = "gemini-2.0-flash"
+            print("[INFO] Active VLM Provider: Google AI Studio (Free Tier: gemini-2.0-flash)")
+        else:
+            self.api_key = api_key or os.environ.get("ANTHROPIC_AUTH_TOKEN") or os.environ.get("OPENROUTER_API_KEY")
+            self.api_base = api_base
+            self.model = "openrouter/free" if model == "free" else model
 
         self.transformer = CoordinateTransformer()
         self.synthesizer = NativeInputSynthesizer()
@@ -418,9 +427,16 @@ class ComputerUseAgentLoop:
                         print(f"[INFO] Auto-adapting max_tokens to affordable quota ({self.max_tokens_per_turn} tokens)...")
                         return self.call_vlm_model(retries=retries - 1)
             if e.code == 402:
+                if self.model != "openrouter/free" and "openrouter.ai" in self.api_base and retries > 0:
+                    print("[INFO] Paid OpenRouter quota exhausted. Attempting fallback to zero-cost 'openrouter/free'...")
+                    self.model = "openrouter/free"
+                    return self.call_vlm_model(retries=0)
                 raise RuntimeError(
                     "OpenRouter credit balance exhausted (HTTP 402). "
-                    "Please top up balance at https://openrouter.ai/settings/credits or specify a free vision model via --model."
+                    "Zero-cost alternatives: "
+                    "(1) Run free Local Neural OCR: codex-agent --gui --ocr <query>, "
+                    "(2) Use free Google Gemini API key: export GEMINI_API_KEY=<key> from https://aistudio.google.com/, "
+                    "(3) Top up balance at https://openrouter.ai/settings/credits."
                 )
             raise RuntimeError(f"VLM API HTTP Error {e.code}: {err_body}")
 
