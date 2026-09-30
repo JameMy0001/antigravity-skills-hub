@@ -243,6 +243,18 @@ struct ActionFrame {
 // MARK: - Mini Display (Picture-in-Picture) Window
 class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     private var visualEffectView: NSVisualEffectView!
+    private var headerBarView: NSView!
+    private var redBtn: NSButton!
+    private var yellowBtn: NSButton!
+    private var greenBtn: NSButton!
+    private var titleLabel: NSTextField!
+    private var cmdToggleBtn: NSButton!
+
+    // Collapsed Dynamic Island Pill Controls
+    private var headerSpinner: NSProgressIndicator!
+    private var headerStatusLabel: NSTextField!
+    private var headerExpandBtn: NSButton!
+
     private var previewImageView: NSImageView!
     private var statusPillView: NSVisualEffectView!
     private var statusLabel: NSTextField!
@@ -260,6 +272,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     private var commandBoxVisible = false
 
     // Phase 4: Filmstrip History Carousel UI
+    private var filmstripTrayContainer: NSView!
     private var filmstripStackView: NSStackView!
     private var historyFrames: [ActionFrame] = []
     private var thumbnailViews: [NSImageView] = []
@@ -305,7 +318,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         visualEffectView.layer?.borderWidth = 1.0
         visualEffectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.25).cgColor
 
-        // Header: Traffic Lights + Title + Command Box Toggle
+        // Header Bar Container
         setupHeader(width: width, height: height)
 
         // Phase 3: Quick Command Bar (Collapsible)
@@ -339,8 +352,14 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     }
 
     private func setupHeader(width: CGFloat, height: CGFloat) {
+        headerBarView = NSView(frame: NSRect(x: 0, y: height - 38, width: width, height: 38))
+        headerBarView.wantsLayer = true
+
+        let headerClick = NSClickGestureRecognizer(target: self, action: #selector(handleHeaderBarClick))
+        headerBarView.addGestureRecognizer(headerClick)
+
         // Red: Close
-        let redBtn = NSButton(frame: NSRect(x: 16, y: height - 28, width: 12, height: 12))
+        redBtn = NSButton(frame: NSRect(x: 16, y: 13, width: 12, height: 12))
         redBtn.isBordered = false
         redBtn.title = ""
         redBtn.wantsLayer = true
@@ -349,22 +368,22 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         redBtn.toolTip = "ปิดหน้าต่าง Mini Display (Close)"
         redBtn.target = self
         redBtn.action = #selector(handleCloseHUD)
-        visualEffectView.addSubview(redBtn)
+        headerBarView.addSubview(redBtn)
 
         // Yellow: Collapse / Expand
-        let yellowBtn = NSButton(frame: NSRect(x: 34, y: height - 28, width: 12, height: 12))
+        yellowBtn = NSButton(frame: NSRect(x: 34, y: 13, width: 12, height: 12))
         yellowBtn.isBordered = false
         yellowBtn.title = ""
         yellowBtn.wantsLayer = true
         yellowBtn.layer?.cornerRadius = 6
         yellowBtn.layer?.backgroundColor = NSColor(red: 1.0, green: 0.74, blue: 0.18, alpha: 0.95).cgColor
-        yellowBtn.toolTip = "ย่อ/ขยายหน้าต่าง (Collapse / Expand)"
+        yellowBtn.toolTip = "ย่อหน้าต่างเป็นแถบสถานะ (Collapse to Pill)"
         yellowBtn.target = self
         yellowBtn.action = #selector(handleToggleCollapse)
-        visualEffectView.addSubview(yellowBtn)
+        headerBarView.addSubview(yellowBtn)
 
         // Green: Refresh Snapshot
-        let greenBtn = NSButton(frame: NSRect(x: 52, y: height - 28, width: 12, height: 12))
+        greenBtn = NSButton(frame: NSRect(x: 52, y: 13, width: 12, height: 12))
         greenBtn.isBordered = false
         greenBtn.title = ""
         greenBtn.wantsLayer = true
@@ -373,18 +392,18 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         greenBtn.toolTip = "รีเฟรชภาพหน้าจอล่าสุด (Refresh Preview)"
         greenBtn.target = self
         greenBtn.action = #selector(handleRefreshPreview)
-        visualEffectView.addSubview(greenBtn)
+        headerBarView.addSubview(greenBtn)
 
-        // Title Label (Draggable Area)
-        let titleLabel = NSTextField(labelWithString: "Computer Use Mini Display")
-        titleLabel.frame = NSRect(x: 74, y: height - 30, width: width - 150, height: 20)
+        // Title Label (Shown when expanded)
+        titleLabel = NSTextField(labelWithString: "Computer Use Mini Display")
+        titleLabel.frame = NSRect(x: 74, y: 9, width: width - 150, height: 20)
         titleLabel.font = NSFont.systemFont(ofSize: 11.5, weight: .semibold)
         titleLabel.textColor = NSColor.white.withAlphaComponent(0.9)
         titleLabel.alignment = .center
-        visualEffectView.addSubview(titleLabel)
+        headerBarView.addSubview(titleLabel)
 
-        // Phase 3: Toggle Command Box Button [⌘K]
-        let cmdToggleBtn = NSButton(frame: NSRect(x: width - 48, y: height - 30, width: 34, height: 18))
+        // Phase 3: Toggle Command Box Button [⌘K] (Shown when expanded)
+        cmdToggleBtn = NSButton(frame: NSRect(x: width - 48, y: 9, width: 34, height: 18))
         cmdToggleBtn.isBordered = false
         cmdToggleBtn.title = "⌘K"
         cmdToggleBtn.font = NSFont.monospacedSystemFont(ofSize: 10, weight: .bold)
@@ -395,7 +414,47 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         cmdToggleBtn.toolTip = "สั่งงาน Agent หรือป้อนคำสั่งลัด (Toggle Command Bar)"
         cmdToggleBtn.target = self
         cmdToggleBtn.action = #selector(toggleCommandInput)
-        visualEffectView.addSubview(cmdToggleBtn)
+        headerBarView.addSubview(cmdToggleBtn)
+
+        // Collapsed View: Mini Spinner (Hidden when expanded)
+        headerSpinner = NSProgressIndicator(frame: NSRect(x: 74, y: 11, width: 16, height: 16))
+        headerSpinner.style = .spinning
+        headerSpinner.controlSize = .small
+        headerSpinner.startAnimation(nil)
+        headerSpinner.isHidden = true
+        headerBarView.addSubview(headerSpinner)
+
+        // Collapsed View: Live Status Label (Hidden when expanded)
+        headerStatusLabel = NSTextField(labelWithString: "พร้อมทำงาน...")
+        headerStatusLabel.frame = NSRect(x: 96, y: 9, width: width - 140, height: 20)
+        headerStatusLabel.font = NSFont.systemFont(ofSize: 11, weight: .medium)
+        headerStatusLabel.textColor = NSColor.white
+        headerStatusLabel.alignment = .left
+        headerStatusLabel.isHidden = true
+        headerBarView.addSubview(headerStatusLabel)
+
+        // Collapsed View: Expand Button (Hidden when expanded)
+        headerExpandBtn = NSButton(frame: NSRect(x: width - 38, y: 9, width: 24, height: 20))
+        headerExpandBtn.isBordered = false
+        headerExpandBtn.title = "⤢"
+        headerExpandBtn.font = NSFont.systemFont(ofSize: 12, weight: .bold)
+        headerExpandBtn.wantsLayer = true
+        headerExpandBtn.layer?.cornerRadius = 4
+        headerExpandBtn.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.15).cgColor
+        headerExpandBtn.contentTintColor = NSColor.white
+        headerExpandBtn.toolTip = "ขยายหน้าต่าง (Expand)"
+        headerExpandBtn.target = self
+        headerExpandBtn.action = #selector(handleToggleCollapse)
+        headerExpandBtn.isHidden = true
+        headerBarView.addSubview(headerExpandBtn)
+
+        visualEffectView.addSubview(headerBarView)
+    }
+
+    @objc func handleHeaderBarClick() {
+        if isCollapsed {
+            handleToggleCollapse()
+        }
     }
 
     private func setupCommandInput(width: CGFloat, height: CGFloat) {
@@ -491,12 +550,12 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     // MARK: - Phase 4: Filmstrip History Carousel
     private func setupFilmstripTray(width: CGFloat) {
         let trayRect = NSRect(x: 14, y: 48, width: width - 28, height: 38)
-        let trayContainer = NSView(frame: trayRect)
-        trayContainer.wantsLayer = true
-        trayContainer.layer?.cornerRadius = 6
-        trayContainer.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.2).cgColor
-        trayContainer.layer?.borderWidth = 0.5
-        trayContainer.layer?.borderColor = NSColor.white.withAlphaComponent(0.1).cgColor
+        filmstripTrayContainer = NSView(frame: trayRect)
+        filmstripTrayContainer.wantsLayer = true
+        filmstripTrayContainer.layer?.cornerRadius = 6
+        filmstripTrayContainer.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.2).cgColor
+        filmstripTrayContainer.layer?.borderWidth = 0.5
+        filmstripTrayContainer.layer?.borderColor = NSColor.white.withAlphaComponent(0.1).cgColor
 
         filmstripStackView = NSStackView(frame: NSRect(x: 4, y: 3, width: trayRect.width - 8, height: 32))
         filmstripStackView.orientation = .horizontal
@@ -523,8 +582,8 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
             filmstripStackView.addArrangedSubview(thumb)
         }
 
-        trayContainer.addSubview(filmstripStackView)
-        visualEffectView.addSubview(trayContainer)
+        filmstripTrayContainer.addSubview(filmstripStackView)
+        visualEffectView.addSubview(filmstripTrayContainer)
     }
 
     func addActionSnapshot(label: String) {
@@ -680,14 +739,22 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.statusLabel.stringValue = text
+            self.headerStatusLabel.stringValue = text
+
             if isDone {
                 self.spinnerIndicator.stopAnimation(nil)
                 self.spinnerIndicator.isHidden = true
+                self.headerSpinner.stopAnimation(nil)
+                self.headerSpinner.isHidden = true
                 self.statusLabel.frame = NSRect(x: 14, y: 6, width: self.statusPillView.frame.width - 28, height: 20)
                 self.statusLabel.alignment = .center
             } else {
                 self.spinnerIndicator.isHidden = false
                 self.spinnerIndicator.startAnimation(nil)
+                if self.isCollapsed {
+                    self.headerSpinner.isHidden = false
+                    self.headerSpinner.startAnimation(nil)
+                }
                 self.statusLabel.frame = NSRect(x: 34, y: 6, width: self.statusPillView.frame.width - 44, height: 20)
                 self.statusLabel.alignment = .left
             }
@@ -726,23 +793,58 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     }
 
     @objc func handleToggleCollapse() {
-        var frame = self.frame
+        let currentFrame = self.frame
+        let topY = currentFrame.maxY
+
         if isCollapsed {
-            frame.size.height = standardHeight
-            frame.origin.y -= (standardHeight - 48)
+            // Expand to full Mini Display
+            let newFrame = NSRect(x: currentFrame.origin.x, y: topY - standardHeight, width: standardWidth, height: standardHeight)
+            self.setFrame(newFrame, display: true, animate: true)
+
+            visualEffectView.frame = NSRect(x: 0, y: 0, width: standardWidth, height: standardHeight)
+            visualEffectView.layer?.cornerRadius = 18
+
+            headerBarView.frame = NSRect(x: 0, y: standardHeight - 38, width: standardWidth, height: 38)
+            titleLabel.isHidden = false
+            cmdToggleBtn.isHidden = false
+            headerSpinner.isHidden = true
+            headerStatusLabel.isHidden = true
+            headerExpandBtn.isHidden = true
+
             previewImageView.isHidden = false
-            filmstripStackView.superview?.isHidden = false
+            filmstripTrayContainer?.isHidden = false
             statusPillView.isHidden = false
+            yellowBtn.toolTip = "ย่อหน้าต่างเป็นแถบสถานะ (Collapse to Pill)"
             isCollapsed = false
         } else {
-            frame.size.height = 48
-            frame.origin.y += (standardHeight - 48)
+            // Collapse to compact Dynamic Island pill
+            let collapsedHeight: CGFloat = 40
+            let newFrame = NSRect(x: currentFrame.origin.x, y: topY - collapsedHeight, width: standardWidth, height: collapsedHeight)
+            self.setFrame(newFrame, display: true, animate: true)
+
+            visualEffectView.frame = NSRect(x: 0, y: 0, width: standardWidth, height: collapsedHeight)
+            visualEffectView.layer?.cornerRadius = 20
+
+            headerBarView.frame = NSRect(x: 0, y: 1, width: standardWidth, height: 38)
+            titleLabel.isHidden = true
+            cmdToggleBtn.isHidden = true
+            let isFinished = statusLabel.stringValue.contains("[PASS]") || statusLabel.stringValue.contains("พร้อม")
+            headerSpinner.isHidden = isFinished
+            if !isFinished {
+                headerSpinner.startAnimation(nil)
+            }
+            headerStatusLabel.stringValue = statusLabel.stringValue
+            headerStatusLabel.isHidden = false
+            headerExpandBtn.isHidden = false
+
             previewImageView.isHidden = true
-            filmstripStackView.superview?.isHidden = true
+            filmstripTrayContainer?.isHidden = true
             statusPillView.isHidden = true
+            commandInputBox.isHidden = true
+            commandBoxVisible = false
+            yellowBtn.toolTip = "ขยายหน้าต่างเต็ม (Expand)"
             isCollapsed = true
         }
-        self.setFrame(frame, display: true, animate: true)
     }
 
     @objc func handleRefreshPreview() {
@@ -859,6 +961,14 @@ class HUDAppController: NSObject, NSApplicationDelegate {
         if header.lowercased() == "quit" || header.lowercased() == "exit" {
             DispatchQueue.main.async {
                 NSApp.terminate(nil)
+            }
+            return
+        }
+
+        // Toggle Collapse Command: collapse or toggle_collapse
+        if header.lowercased() == "collapse" || header.lowercased() == "toggle_collapse" {
+            DispatchQueue.main.async { [weak self] in
+                self?.miniDisplay.handleToggleCollapse()
             }
             return
         }
