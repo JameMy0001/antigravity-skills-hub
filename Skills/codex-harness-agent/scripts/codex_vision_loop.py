@@ -24,6 +24,7 @@ import select
 import subprocess
 import urllib.request
 import urllib.error
+import re
 import ctypes
 import ctypes.util
 from PIL import Image
@@ -170,6 +171,7 @@ class ComputerUseAgentLoop:
         self.api_key = api_key or os.environ.get("ANTHROPIC_AUTH_TOKEN") or os.environ.get("OPENROUTER_API_KEY")
         self.api_base = api_base
         self.max_steps = max_steps
+        self.max_tokens_per_turn = 80
         self.hud_pipe = hud_pipe
         self.session_id = str(uuid.uuid4())[:8]
 
@@ -234,7 +236,7 @@ class ComputerUseAgentLoop:
 
         return False
 
-    def capture_compressed_screenshot(self, target_max_width: int = 1280, quality: int = 70) -> Tuple[str, int, int]:
+    def capture_compressed_screenshot(self, target_max_width: int = 640, quality: int = 50) -> Tuple[str, int, int]:
         """
         Captures full desktop screenshot, resizes to target_max_width,
         and returns base64 JPEG string plus dimensions.
@@ -332,25 +334,20 @@ class ComputerUseAgentLoop:
         }
 
     def build_system_prompt(self) -> str:
-        """Constructs system prompt with normalized coordinate space definitions and grounding instructions."""
+        """Constructs compact system prompt with normalized coordinate space definitions and JSON actions."""
         geom = self.transformer.geometry
         return (
-            f"You are the OpenAI Codex Computer-Using Agent (CUA) operating a native macOS desktop.\n"
-            f"Display Geometry: {geom.logical_width}x{geom.logical_height} logical points, "
-            f"{geom.pixel_width}x{geom.pixel_height} Retina physical pixels.\n\n"
-            f"COORDINATE CONVENTIONS:\n"
-            f"- All coordinates are normalized in [0..1000, 0..1000] space.\n"
-            f"- (0, 0) is the top-left corner of the primary display.\n"
-            f"- (1000, 1000) is the bottom-right corner.\n"
-            f"- Center of the screen is (500, 500).\n\n"
-            f"ACTION DISPATCH RULES:\n"
-            f"1. Before taking any action, inspect the screenshot and semantic landmarks.\n"
-            f"2. Explicitly write your 'thought' verifying the prior action outcome before choosing the next primitive.\n"
-            f"3. To click a button or link, emit action='click' with coordinate=[x, y].\n"
-            f"4. To type, first click the target text input field, then on the next step emit action='type' with text='...'.\n"
-            f"5. If a password, payment, or secret field is encountered, emit action='takeover' to activate human privacy shielding.\n"
-            f"6. When the user goal is fully accomplished, emit action='done' with thought explaining completion.\n"
-            f"Zero decorative emojis. Maintain crisp, rigorous technical execution."
+            f"You are the OpenAI Codex Computer-Using Agent (CUA) operating macOS.\n"
+            f"Display: {geom.logical_width}x{geom.logical_height} pt. Coordinates are normalized [0..1000, 0..1000] (0,0 is top-left).\n"
+            f"Available actions:\n"
+            f"- click: {{\"action\": \"click\", \"coordinate\": [x, y], \"thought\": \"...\"}}\n"
+            f"- double_click: {{\"action\": \"double_click\", \"coordinate\": [x, y], \"thought\": \"...\"}}\n"
+            f"- type: {{\"action\": \"type\", \"text\": \"...\", \"thought\": \"...\"}}\n"
+            f"- press_key: {{\"action\": \"press_key\", \"key\": \"enter|tab|escape|space\", \"thought\": \"...\"}}\n"
+            f"- scroll: {{\"action\": \"scroll\", \"scroll_direction\": \"up|down\", \"scroll_amount\": 5, \"thought\": \"...\"}}\n"
+            f"- takeover: {{\"action\": \"takeover\", \"thought\": \"sensitive credentials\"}}\n"
+            f"- done: {{\"action\": \"done\", \"thought\": \"...\"}}\n"
+            f"Always output ONLY a valid JSON object with 'action' and 'thought'. Zero decorative emojis."
         )
 
     def compact_visual_context(self):
@@ -381,18 +378,15 @@ class ComputerUseAgentLoop:
                         compacted_content.append(item)
                 turn["content"] = compacted_content
 
-    def call_vlm_model(self) -> Dict[str, Any]:
-        """Calls VLM completion endpoint with tool calling schema."""
-        tools = [self.build_tool_schema()]
+    def call_vlm_model(self, retries: int = 1) -> Dict[str, Any]:
+        """Calls VLM completion endpoint with token-optimized JSON action schema."""
         messages = [{"role": "system", "content": self.build_system_prompt()}]
         messages.extend(self.conversation_turns)
 
         payload = {
             "model": self.model,
             "messages": messages,
-            "tools": tools,
-            "tool_choice": "auto",
-            "max_tokens": 400,
+            "max_tokens": self.max_tokens_per_turn,
             "temperature": 0.1
         }
 
@@ -415,6 +409,19 @@ class ComputerUseAgentLoop:
                 return data
         except urllib.error.HTTPError as e:
             err_body = e.read().decode("utf-8")
+            if retries > 0 and e.code == 402 and "can only afford" in err_body:
+                match = re.search(r"can only afford (\d+)", err_body)
+                if match:
+                    affordable = int(match.group(1))
+                    if affordable > 25 and self.max_tokens_per_turn > affordable:
+                        self.max_tokens_per_turn = max(35, affordable - 6)
+                        print(f"[INFO] Auto-adapting max_tokens to affordable quota ({self.max_tokens_per_turn} tokens)...")
+                        return self.call_vlm_model(retries=retries - 1)
+            if e.code == 402:
+                raise RuntimeError(
+                    "OpenRouter credit balance exhausted (HTTP 402). "
+                    "Please top up balance at https://openrouter.ai/settings/credits or specify a free vision model via --model."
+                )
             raise RuntimeError(f"VLM API HTTP Error {e.code}: {err_body}")
 
     def execute_action(self, tool_args: Dict[str, Any]) -> str:
@@ -595,8 +602,26 @@ class ComputerUseAgentLoop:
             self.conversation_turns.append(msg)
 
             tool_calls = msg.get("tool_calls")
-            if not tool_calls:
-                # If model responded with text without tool call, inspect text
+            func_args = None
+            tool_call_id = f"call_{step}"
+
+            if tool_calls:
+                tool_call = tool_calls[0]
+                tool_call_id = tool_call.get("id", f"call_{step}")
+                try:
+                    func_args = json.loads(tool_call["function"]["arguments"])
+                except Exception:
+                    func_args = {"action": "wait", "thought": "Failed to parse JSON arguments"}
+            else:
+                content = msg.get("content", "")
+                json_match = re.search(r"\{[\s\S]*\}", content)
+                if json_match:
+                    try:
+                        func_args = json.loads(json_match.group(0))
+                    except Exception:
+                        func_args = None
+
+            if not func_args:
                 content = msg.get("content", "")
                 print(f"[MODEL TEXT]: {content}")
                 if "done" in content.lower() or "complete" in content.lower():
@@ -605,14 +630,7 @@ class ComputerUseAgentLoop:
                     return True
                 continue
 
-            # 5. ACT: Execute structured tool call
-            tool_call = tool_calls[0]
-            func_args_str = tool_call["function"]["arguments"]
-            try:
-                func_args = json.loads(func_args_str)
-            except Exception:
-                func_args = {"action": "wait", "thought": "Failed to parse JSON arguments"}
-
+            # 5. ACT: Execute structured action primitive
             action = func_args.get("action", "")
             thought = func_args.get("thought", "")
 

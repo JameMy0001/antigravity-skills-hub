@@ -73,15 +73,15 @@ class AccessibilityScannerWrapper:
 
         return []
 
-    def get_grounding_context(self, app_name: Optional[str] = None) -> str:
+    def get_grounding_context(self, app_name: Optional[str] = None, max_elements: int = 6) -> str:
         """
         Returns a formatted block of accessibility landmarks ready to inject into VLM prompts.
         """
-        landmarks = self.scan(app_name=app_name)
+        landmarks = self.scan(app_name=app_name, max_elements=max_elements)
         if not landmarks:
             return ""
 
-        lines = ["[ACCESSIBILITY GROUNDING LANDMARKS (FAST PATH)]"]
+        lines = ["[ACCESSIBILITY GROUNDING LANDMARKS]"]
         for lm in landmarks:
             lines.append("- " + lm.to_prompt_string())
         return "\n".join(lines)
