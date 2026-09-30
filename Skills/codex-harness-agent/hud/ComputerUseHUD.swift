@@ -214,16 +214,23 @@ class MiniDisplayWindow: NSPanel {
             defer: false
         )
 
-        self.level = .floating
+        self.level = .floating + 2
         self.backgroundColor = .clear
         self.isOpaque = false
         self.hasShadow = true
+        self.isMovable = true
+        self.isMovableByWindowBackground = true
+        self.ignoresMouseEvents = false
         self.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
 
         setupUI(width: width, height: height)
     }
 
+    private var isCollapsed = false
+    private var originalHeight: CGFloat = 270
+
     private func setupUI(width: CGFloat, height: CGFloat) {
+        originalHeight = height
         // Frosted Glass Background
         visualEffectView = NSVisualEffectView(frame: NSRect(x: 0, y: 0, width: width, height: height))
         visualEffectView.material = .hudWindow
@@ -233,20 +240,20 @@ class MiniDisplayWindow: NSPanel {
         visualEffectView.layer?.cornerRadius = 18
         visualEffectView.layer?.masksToBounds = true
         visualEffectView.layer?.borderWidth = 1.0
-        visualEffectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.22).cgColor
+        visualEffectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.25).cgColor
 
-        // Traffic Light Dots
+        // Traffic Light Buttons
         setupTrafficLights()
 
-        // Title Label
+        // Title Label (Draggable Area)
         let titleLabel = NSTextField(labelWithString: "Computer Use Mini Display")
-        titleLabel.frame = NSRect(x: 80, y: height - 30, width: 260, height: 20)
-        titleLabel.font = NSFont.systemFont(ofSize: 11, weight: .semibold)
-        titleLabel.textColor = NSColor.white.withAlphaComponent(0.85)
+        titleLabel.frame = NSRect(x: 75, y: height - 30, width: 280, height: 20)
+        titleLabel.font = NSFont.systemFont(ofSize: 11.5, weight: .semibold)
+        titleLabel.textColor = NSColor.white.withAlphaComponent(0.9)
         titleLabel.alignment = .center
         visualEffectView.addSubview(titleLabel)
 
-        // Mini Screen Preview
+        // Mini Screen Preview (Clickable to bring app to front)
         let previewRect = NSRect(x: 14, y: 48, width: width - 28, height: height - 86)
         previewImageView = NSImageView(frame: previewRect)
         previewImageView.imageScaling = .scaleAxesIndependently
@@ -254,8 +261,10 @@ class MiniDisplayWindow: NSPanel {
         previewImageView.layer?.cornerRadius = 10
         previewImageView.layer?.masksToBounds = true
         previewImageView.layer?.borderWidth = 1.0
-        previewImageView.layer?.borderColor = NSColor.white.withAlphaComponent(0.12).cgColor
+        previewImageView.layer?.borderColor = NSColor.white.withAlphaComponent(0.15).cgColor
         previewImageView.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.35).cgColor
+        let clickGesture = NSClickGestureRecognizer(target: self, action: #selector(handlePreviewClick))
+        previewImageView.addGestureRecognizer(clickGesture)
         visualEffectView.addSubview(previewImageView)
 
         // Mini Ghost Pointer on Preview
@@ -269,18 +278,67 @@ class MiniDisplayWindow: NSPanel {
     }
 
     private func setupTrafficLights() {
-        let colors: [NSColor] = [
-            NSColor(red: 1.0, green: 0.37, blue: 0.34, alpha: 0.9), // Red
-            NSColor(red: 1.0, green: 0.74, blue: 0.18, alpha: 0.9), // Yellow
-            NSColor(red: 0.15, green: 0.79, blue: 0.25, alpha: 0.9)  // Green
-        ]
-        for (i, color) in colors.enumerated() {
-            let dot = NSView(frame: NSRect(x: 16 + (i * 18), y: 242, width: 11, height: 11))
-            dot.wantsLayer = true
-            dot.layer?.cornerRadius = 5.5
-            dot.layer?.backgroundColor = color.cgColor
-            visualEffectView.addSubview(dot)
+        // Red: Close / Dismiss
+        let redBtn = NSButton(frame: NSRect(x: 16, y: originalHeight - 28, width: 12, height: 12))
+        redBtn.isBordered = false
+        redBtn.title = ""
+        redBtn.wantsLayer = true
+        redBtn.layer?.cornerRadius = 6
+        redBtn.layer?.backgroundColor = NSColor(red: 1.0, green: 0.37, blue: 0.34, alpha: 0.95).cgColor
+        redBtn.toolTip = "ปิดหน้าต่าง Mini Display (Close)"
+        redBtn.target = self
+        redBtn.action = #selector(handleCloseHUD)
+        visualEffectView.addSubview(redBtn)
+
+        // Yellow: Collapse / Expand Window
+        let yellowBtn = NSButton(frame: NSRect(x: 34, y: originalHeight - 28, width: 12, height: 12))
+        yellowBtn.isBordered = false
+        yellowBtn.title = ""
+        yellowBtn.wantsLayer = true
+        yellowBtn.layer?.cornerRadius = 6
+        yellowBtn.layer?.backgroundColor = NSColor(red: 1.0, green: 0.74, blue: 0.18, alpha: 0.95).cgColor
+        yellowBtn.toolTip = "ย่อ/ขยายหน้าต่าง (Collapse / Expand)"
+        yellowBtn.target = self
+        yellowBtn.action = #selector(handleToggleCollapse)
+        visualEffectView.addSubview(yellowBtn)
+
+        // Green: Refresh Snapshot
+        let greenBtn = NSButton(frame: NSRect(x: 52, y: originalHeight - 28, width: 12, height: 12))
+        greenBtn.isBordered = false
+        greenBtn.title = ""
+        greenBtn.wantsLayer = true
+        greenBtn.layer?.cornerRadius = 6
+        greenBtn.layer?.backgroundColor = NSColor(red: 0.15, green: 0.79, blue: 0.25, alpha: 0.95).cgColor
+        greenBtn.toolTip = "รีเฟรชภาพหน้าจอล่าสุด (Refresh Preview)"
+        greenBtn.target = self
+        greenBtn.action = #selector(handleRefreshPreview)
+        visualEffectView.addSubview(greenBtn)
+    }
+
+    @objc func handleCloseHUD() {
+        NSApp.terminate(nil)
+    }
+
+    @objc func handleToggleCollapse() {
+        var frame = self.frame
+        if isCollapsed {
+            frame.size.height = originalHeight
+            frame.origin.y -= (originalHeight - 48)
+            previewImageView.isHidden = false
+            statusPillView.isHidden = false
+            isCollapsed = false
+        } else {
+            frame.size.height = 48
+            frame.origin.y += (originalHeight - 48)
+            previewImageView.isHidden = true
+            statusPillView.isHidden = true
+            isCollapsed = true
         }
+        self.setFrame(frame, display: true, animate: true)
+    }
+
+    @objc func handleRefreshPreview() {
+        forceScreenPreview()
     }
 
     private func setupMiniPointer(in bounds: NSRect) {
@@ -377,8 +435,11 @@ class MiniDisplayWindow: NSPanel {
         let now = Date().timeIntervalSince1970
         if now - lastCaptureTime < 2.0 { return }
         lastCaptureTime = now
+        forceScreenPreview()
+    }
 
-        DispatchQueue.global(qos: .utility).async { [weak self] in
+    func forceScreenPreview() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let path = "/tmp/cua_preview.jpg"
             let task = Process()
             task.launchPath = "/usr/sbin/screencapture"
@@ -392,6 +453,15 @@ class MiniDisplayWindow: NSPanel {
                 }
             }
         }
+    }
+
+    @objc func handlePreviewClick() {
+        forceScreenPreview()
+        let script = "tell application \"System Events\" to tell (first process whose frontmost is false and visible is true) to set frontmost to true"
+        let p = Process()
+        p.launchPath = "/usr/bin/osascript"
+        p.arguments = ["-e", script]
+        try? p.run()
     }
 
     func updateMiniPointer(targetScreenPoint: CGPoint) {
