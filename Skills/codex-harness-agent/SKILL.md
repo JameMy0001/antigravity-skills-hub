@@ -23,6 +23,37 @@ This skill provides an enterprise engineering blueprint and execution runner for
 
 ---
 
+## Quick Invocation & Shortcuts
+
+You can invoke this skill through multiple convenient methods:
+
+### 1. In AI Chat (Antigravity & Cursor)
+- **`/codex <task>`**: Dispatches task to the Codex Harness (runs in cloud or native Codex CLI).
+- **`/cua <task>`** or **`/cua <url>`**: Triggers visual Computer Use (inspects UI, clicks buttons, captures screenshots).
+- **Natural Language Triggers**:
+  - "สั่ง codex ทำ..."
+  - "รันบน codex harness..."
+  - "ใช้ computer use ตรวจสอบหน้าเว็บ..."
+  - "รันงานระยะยาวบนคลาวด์..."
+
+### 2. From Terminal (Global CLI Shortcut)
+```bash
+# Run a task via native Codex CLI or cloud harness
+codex-agent "Refactor auth middleware and verify tests"
+
+# Run visual Computer Use on a target URL / web application
+codex-agent --gui "http://localhost:3000"
+
+# Run in an isolated managed git worktree
+codex-agent --worktree "Implement new billing model"
+
+# Cloud mode via OpenAI Agents API
+export OPENAI_API_KEY="sk-..."
+codex-agent --cloud "Run full overnight stress testing"
+```
+
+---
+
 ## 1. Architecture Overview: Managed Codex Harness vs. Client SDK
 
 ```

@@ -80,7 +80,7 @@ done
 
 # ── Mode: List ───────────────────────────────────────────────────────────────
 if [[ "$MODE" == "list" ]]; then
-    echo -e "${BOLD}${BLUE}⚡ Antigravity Skills Hub — Catalog (${SKILL_COUNT} Skills)${RESET}\n"
+    echo -e "${BOLD}${BLUE}Antigravity Skills Hub — Catalog (${SKILL_COUNT} Skills)${RESET}\n"
     python3 -c "
 import os, yaml
 s_dir = '$SKILLS_DIR'
@@ -110,7 +110,7 @@ fi
 
 # ── Banner ────────────────────────────────────────────────────────────────────
 echo -e "${BOLD}${BLUE}"
-echo "  ⚡ Antigravity Skills Hub — Setup Installer"
+echo "  Antigravity Skills Hub — Setup Installer"
 echo "  By Jamemm (@JameMy0001)"
 echo "  https://github.com/JameMy0001/antigravity-skills-hub"
 echo -e "${RESET}"
@@ -188,6 +188,12 @@ for s in sorted(os.listdir(s_dir)):
 link_target_dir "$HOME/.gemini/config/skills" "Google Antigravity"
 link_target_dir "$HOME/.cursor/skills" "Cursor IDE"
 
+# ── CLI Utilities Symlink ───────────────────────────────────────────────────
+if [[ -d "$HOME/.local/bin" ]]; then
+    ln -sf "$SKILLS_DIR/codex-harness-agent/scripts/codex_agent_runner.py" "$HOME/.local/bin/codex-agent"
+    ok "CLI shortcut installed → ~/.local/bin/codex-agent"
+fi
+
 # ── Python dependencies ────────────────────────────────────────────────────────
 if [[ "$INSTALL_DEPS" == true ]]; then
     log "Installing Python dependencies..."
@@ -213,14 +219,14 @@ log "Running vault verification..."
 if python3 "$VAULT_DIR/verify_skills_vault.py"; then
     echo ""
     echo -e "${BOLD}${GREEN}══════════════════════════════════════════════════════${RESET}"
-    echo -e "${BOLD}${GREEN}  ✅ All $SKILL_COUNT skills installed and verified!${RESET}"
+    echo -e "${BOLD}${GREEN}  [OK] All $SKILL_COUNT skills installed and verified!${RESET}"
     echo -e "${BOLD}${GREEN}══════════════════════════════════════════════════════${RESET}"
     echo ""
-    echo -e "  🎯 Google Antigravity: ready at ${CYAN}~/.gemini/config/skills${RESET}"
-    echo -e "  🎯 Cursor IDE:         ready at ${CYAN}~/.cursor/skills${RESET}"
+    echo -e "  [OK] Google Antigravity: ready at ${CYAN}~/.gemini/config/skills${RESET}"
+    echo -e "  [OK] Cursor IDE:         ready at ${CYAN}~/.cursor/skills${RESET}"
     echo ""
-    echo -e "  📖 Open Obsidian → Vault → '$(basename "$VAULT_DIR")' for Graph View"
-    echo -e "  📚 README: ${CYAN}$VAULT_DIR/README.md${RESET}"
+    echo -e "  [INFO] Open Obsidian → Vault → '$(basename "$VAULT_DIR")' for Graph View"
+    echo -e "  [INFO] README: ${CYAN}$VAULT_DIR/README.md${RESET}"
     echo ""
 else
     warn "Verification completed with warnings. See output above for details."
