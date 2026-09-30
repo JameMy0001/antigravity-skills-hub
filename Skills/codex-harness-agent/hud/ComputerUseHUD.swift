@@ -1,12 +1,58 @@
 //
 // ComputerUseHUD.swift
 // Native macOS Mini Display (Picture-in-Picture) and Ghost Cursor for Computer Use
+// Incorporating Apple Vision Neural OCR Grounding, Safety Guardrail Approval Gate,
+// In-HUD Quick Command Box (⌘K / ⌥Space), and Action Filmstrip History Carousel.
+//
 // Author: Jamemm (@JameMy0001)
 //
 
 import Cocoa
 import CoreGraphics
 import QuartzCore
+import Vision
+
+// MARK: - Screen OCR Detector (Phase 1: Apple Neural Vision Framework)
+class ScreenOCRDetector {
+    static let shared = ScreenOCRDetector()
+
+    func findTextLocation(query: String, in image: CGImage, completion: @escaping (CGPoint?, String?) -> Void) {
+        let request = VNRecognizeTextRequest { request, error in
+            guard error == nil, let observations = request.results as? [VNRecognizedTextObservation] else {
+                completion(nil, nil)
+                return
+            }
+
+            let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            for obs in observations {
+                guard let candidate = obs.topCandidates(1).first else { continue }
+                let candText = candidate.string.lowercased()
+                if candText.contains(trimmedQuery) {
+                    let box = obs.boundingBox
+                    // Convert normalized Vision coordinates (0,0 bottom-left) to primary screen coordinates
+                    if let screen = NSScreen.main {
+                        let screenWidth = screen.frame.width
+                        let screenHeight = screen.frame.height
+                        let centerX = screen.frame.origin.x + (box.origin.x + box.size.width / 2.0) * screenWidth
+                        let centerY = screen.frame.origin.y + (box.origin.y + box.size.height / 2.0) * screenHeight
+                        completion(CGPoint(x: centerX, y: centerY), candidate.string)
+                        return
+                    }
+                }
+            }
+            completion(nil, nil)
+        }
+
+        request.recognitionLevel = .accurate
+        request.recognitionLanguages = ["en-US", "th-TH"]
+        request.usesLanguageCorrection = true
+
+        let handler = VNImageRequestHandler(cgImage: image, options: [:])
+        DispatchQueue.global(qos: .userInitiated).async {
+            try? handler.perform([request])
+        }
+    }
+}
 
 // MARK: - Ghost Cursor Overlay Window
 class GhostCursorWindow: NSPanel {
@@ -63,14 +109,12 @@ class GhostCursorView: NSView {
         pointerLayer.anchorPoint = CGPoint(x: 0.15, y: 0.85)
         pointerLayer.position = currentPosition
 
-        // Create glowing pointer image
         let img = createPointerImage()
         pointerLayer.contents = img
 
-        // Shadow
         pointerLayer.shadowColor = NSColor.cyan.cgColor
         pointerLayer.shadowRadius = 8
-        pointerLayer.shadowOpacity = 0.8
+        pointerLayer.shadowOpacity = 0.85
         pointerLayer.shadowOffset = CGSize(width: 0, height: -2)
 
         self.layer?.addSublayer(pointerLayer)
@@ -102,7 +146,6 @@ class GhostCursorView: NSView {
             bitmapInfo: bitmapInfo
         ) else { return nil }
 
-        // Draw modern Mac-style arrow with cyan tint
         context.setFillColor(NSColor.white.cgColor)
         context.setStrokeColor(NSColor.cyan.cgColor)
         context.setLineWidth(1.5)
@@ -132,7 +175,7 @@ class GhostCursorView: NSView {
         }
 
         CATransaction.begin()
-        CATransaction.setAnimationDuration(0.6)
+        CATransaction.setAnimationDuration(0.4)
         CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
         CATransaction.setCompletionBlock { [weak self] in
             self?.currentPosition = point
@@ -142,7 +185,7 @@ class GhostCursorView: NSView {
         let anim = CABasicAnimation(keyPath: "position")
         anim.fromValue = NSValue(point: pointerLayer.position)
         anim.toValue = NSValue(point: point)
-        anim.duration = 0.6
+        anim.duration = 0.4
         anim.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
         pointerLayer.position = point
@@ -154,7 +197,7 @@ class GhostCursorView: NSView {
         moveTo(point: point, animated: true) { [weak self] in
             guard let self = self else { return }
             self.triggerClickRipple(at: point)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 completion?()
             }
         }
@@ -171,18 +214,18 @@ class GhostCursorView: NSView {
         let scaleAnim = CABasicAnimation(keyPath: "transform.scale")
         scaleAnim.fromValue = 0.2
         scaleAnim.toValue = 1.3
-        scaleAnim.duration = 0.4
+        scaleAnim.duration = 0.35
         scaleAnim.timingFunction = CAMediaTimingFunction(name: .easeOut)
 
         let fadeAnim = CABasicAnimation(keyPath: "opacity")
         fadeAnim.fromValue = 1.0
         fadeAnim.toValue = 0.0
-        fadeAnim.duration = 0.4
+        fadeAnim.duration = 0.35
         fadeAnim.timingFunction = CAMediaTimingFunction(name: .easeOut)
 
         let group = CAAnimationGroup()
         group.animations = [scaleAnim, fadeAnim]
-        group.duration = 0.4
+        group.duration = 0.35
         group.isRemovedOnCompletion = false
         group.fillMode = .forwards
 
@@ -190,8 +233,15 @@ class GhostCursorView: NSView {
     }
 }
 
+// MARK: - Action Frame Model (Phase 4: Action Filmstrip History)
+struct ActionFrame {
+    let image: NSImage
+    let label: String
+    let timestamp: Date
+}
+
 // MARK: - Mini Display (Picture-in-Picture) Window
-class MiniDisplayWindow: NSPanel {
+class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
     private var visualEffectView: NSVisualEffectView!
     private var previewImageView: NSImageView!
     private var statusPillView: NSVisualEffectView!
@@ -199,16 +249,33 @@ class MiniDisplayWindow: NSPanel {
     private var spinnerIndicator: NSProgressIndicator!
     private var miniPointerLayer: CALayer!
 
+    // Phase 2: Approval Gate UI
+    private var approvalContainer: NSView!
+    private var approvalLabel: NSTextField!
+    private var approveBtn: NSButton!
+    private var denyBtn: NSButton!
+
+    // Phase 3: Quick Command Box UI
+    private var commandInputBox: NSTextField!
+    private var commandBoxVisible = false
+
+    // Phase 4: Filmstrip History Carousel UI
+    private var filmstripStackView: NSStackView!
+    private var historyFrames: [ActionFrame] = []
+    private var thumbnailViews: [NSImageView] = []
+
+    private var isCollapsed = false
+    private let standardWidth: CGFloat = 460
+    private let standardHeight: CGFloat = 345
+
     init() {
         let screenRect = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
-        let width: CGFloat = 430
-        let height: CGFloat = 270
         let padding: CGFloat = 20
-        let x = screenRect.maxX - width - padding
-        let y = screenRect.maxY - height - padding
+        let x = screenRect.maxX - standardWidth - padding
+        let y = screenRect.maxY - standardHeight - padding
 
         super.init(
-            contentRect: NSRect(x: x, y: y, width: width, height: height),
+            contentRect: NSRect(x: x, y: y, width: standardWidth, height: standardHeight),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
@@ -223,14 +290,10 @@ class MiniDisplayWindow: NSPanel {
         self.ignoresMouseEvents = false
         self.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
 
-        setupUI(width: width, height: height)
+        setupUI(width: standardWidth, height: standardHeight)
     }
 
-    private var isCollapsed = false
-    private var originalHeight: CGFloat = 270
-
     private func setupUI(width: CGFloat, height: CGFloat) {
-        originalHeight = height
         // Frosted Glass Background
         visualEffectView = NSVisualEffectView(frame: NSRect(x: 0, y: 0, width: width, height: height))
         visualEffectView.material = .hudWindow
@@ -242,19 +305,14 @@ class MiniDisplayWindow: NSPanel {
         visualEffectView.layer?.borderWidth = 1.0
         visualEffectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.25).cgColor
 
-        // Traffic Light Buttons
-        setupTrafficLights()
+        // Header: Traffic Lights + Title + Command Box Toggle
+        setupHeader(width: width, height: height)
 
-        // Title Label (Draggable Area)
-        let titleLabel = NSTextField(labelWithString: "Computer Use Mini Display")
-        titleLabel.frame = NSRect(x: 75, y: height - 30, width: 280, height: 20)
-        titleLabel.font = NSFont.systemFont(ofSize: 11.5, weight: .semibold)
-        titleLabel.textColor = NSColor.white.withAlphaComponent(0.9)
-        titleLabel.alignment = .center
-        visualEffectView.addSubview(titleLabel)
+        // Phase 3: Quick Command Bar (Collapsible)
+        setupCommandInput(width: width, height: height)
 
-        // Mini Screen Preview (Clickable to bring app to front)
-        let previewRect = NSRect(x: 14, y: 48, width: width - 28, height: height - 86)
+        // Screen Preview Area
+        let previewRect = NSRect(x: 14, y: 92, width: width - 28, height: height - 138)
         previewImageView = NSImageView(frame: previewRect)
         previewImageView.imageScaling = .scaleAxesIndependently
         previewImageView.wantsLayer = true
@@ -270,16 +328,19 @@ class MiniDisplayWindow: NSPanel {
         // Mini Ghost Pointer on Preview
         setupMiniPointer(in: previewRect)
 
-        // Status Pill Badge (Bottom)
-        setupStatusPill(width: width)
+        // Phase 4: Filmstrip History Carousel Tray
+        setupFilmstripTray(width: width)
+
+        // Phase 2: Status Pill & Safety Approval Container (Bottom)
+        setupStatusAndApprovalPill(width: width)
 
         self.contentView = visualEffectView
         updateScreenPreview()
     }
 
-    private func setupTrafficLights() {
-        // Red: Close / Dismiss
-        let redBtn = NSButton(frame: NSRect(x: 16, y: originalHeight - 28, width: 12, height: 12))
+    private func setupHeader(width: CGFloat, height: CGFloat) {
+        // Red: Close
+        let redBtn = NSButton(frame: NSRect(x: 16, y: height - 28, width: 12, height: 12))
         redBtn.isBordered = false
         redBtn.title = ""
         redBtn.wantsLayer = true
@@ -290,8 +351,8 @@ class MiniDisplayWindow: NSPanel {
         redBtn.action = #selector(handleCloseHUD)
         visualEffectView.addSubview(redBtn)
 
-        // Yellow: Collapse / Expand Window
-        let yellowBtn = NSButton(frame: NSRect(x: 34, y: originalHeight - 28, width: 12, height: 12))
+        // Yellow: Collapse / Expand
+        let yellowBtn = NSButton(frame: NSRect(x: 34, y: height - 28, width: 12, height: 12))
         yellowBtn.isBordered = false
         yellowBtn.title = ""
         yellowBtn.wantsLayer = true
@@ -303,7 +364,7 @@ class MiniDisplayWindow: NSPanel {
         visualEffectView.addSubview(yellowBtn)
 
         // Green: Refresh Snapshot
-        let greenBtn = NSButton(frame: NSRect(x: 52, y: originalHeight - 28, width: 12, height: 12))
+        let greenBtn = NSButton(frame: NSRect(x: 52, y: height - 28, width: 12, height: 12))
         greenBtn.isBordered = false
         greenBtn.title = ""
         greenBtn.wantsLayer = true
@@ -313,32 +374,80 @@ class MiniDisplayWindow: NSPanel {
         greenBtn.target = self
         greenBtn.action = #selector(handleRefreshPreview)
         visualEffectView.addSubview(greenBtn)
+
+        // Title Label (Draggable Area)
+        let titleLabel = NSTextField(labelWithString: "Computer Use Mini Display")
+        titleLabel.frame = NSRect(x: 74, y: height - 30, width: width - 150, height: 20)
+        titleLabel.font = NSFont.systemFont(ofSize: 11.5, weight: .semibold)
+        titleLabel.textColor = NSColor.white.withAlphaComponent(0.9)
+        titleLabel.alignment = .center
+        visualEffectView.addSubview(titleLabel)
+
+        // Phase 3: Toggle Command Box Button [⌘K]
+        let cmdToggleBtn = NSButton(frame: NSRect(x: width - 48, y: height - 30, width: 34, height: 18))
+        cmdToggleBtn.isBordered = false
+        cmdToggleBtn.title = "⌘K"
+        cmdToggleBtn.font = NSFont.monospacedSystemFont(ofSize: 10, weight: .bold)
+        cmdToggleBtn.wantsLayer = true
+        cmdToggleBtn.layer?.cornerRadius = 4
+        cmdToggleBtn.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.15).cgColor
+        cmdToggleBtn.contentTintColor = NSColor.white
+        cmdToggleBtn.toolTip = "สั่งงาน Agent หรือป้อนคำสั่งลัด (Toggle Command Bar)"
+        cmdToggleBtn.target = self
+        cmdToggleBtn.action = #selector(toggleCommandInput)
+        visualEffectView.addSubview(cmdToggleBtn)
     }
 
-    @objc func handleCloseHUD() {
-        NSApp.terminate(nil)
+    private func setupCommandInput(width: CGFloat, height: CGFloat) {
+        commandInputBox = NSTextField(frame: NSRect(x: 14, y: height - 58, width: width - 28, height: 24))
+        commandInputBox.placeholderString = "⌘K สั่งงาน Agent (กด Enter เพื่อเริ่ม, ⌥Space เปิดจากทุกที่)..."
+        commandInputBox.font = NSFont.systemFont(ofSize: 11, weight: .regular)
+        commandInputBox.textColor = NSColor.white
+        commandInputBox.backgroundColor = NSColor.black.withAlphaComponent(0.4)
+        commandInputBox.isBordered = true
+        commandInputBox.wantsLayer = true
+        commandInputBox.layer?.cornerRadius = 6
+        commandInputBox.layer?.borderColor = NSColor.cyan.withAlphaComponent(0.5).cgColor
+        commandInputBox.layer?.borderWidth = 1.0
+        commandInputBox.target = self
+        commandInputBox.action = #selector(handleCommandSubmit)
+        commandInputBox.delegate = self
+        commandInputBox.isHidden = true
+        visualEffectView.addSubview(commandInputBox)
     }
 
-    @objc func handleToggleCollapse() {
-        var frame = self.frame
-        if isCollapsed {
-            frame.size.height = originalHeight
-            frame.origin.y -= (originalHeight - 48)
-            previewImageView.isHidden = false
-            statusPillView.isHidden = false
-            isCollapsed = false
-        } else {
-            frame.size.height = 48
-            frame.origin.y += (originalHeight - 48)
-            previewImageView.isHidden = true
-            statusPillView.isHidden = true
-            isCollapsed = true
+    @objc func toggleCommandInput() {
+        commandBoxVisible = !commandBoxVisible
+        commandInputBox.isHidden = !commandBoxVisible
+        if commandBoxVisible {
+            self.makeKeyAndOrderFront(nil)
+            self.makeFirstResponder(commandInputBox)
         }
-        self.setFrame(frame, display: true, animate: true)
     }
 
-    @objc func handleRefreshPreview() {
-        forceScreenPreview()
+    func showAndFocusCommandBar() {
+        commandBoxVisible = true
+        commandInputBox.isHidden = false
+        self.makeKeyAndOrderFront(nil)
+        self.makeFirstResponder(commandInputBox)
+    }
+
+    @objc func handleCommandSubmit() {
+        let taskText = commandInputBox.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !taskText.isEmpty {
+            setStatus("Working... เริ่มต้นคำสั่ง: \(taskText)", isDone: false)
+            commandInputBox.stringValue = ""
+            commandBoxVisible = false
+            commandInputBox.isHidden = true
+
+            // Dispatch command in background via codex-agent runner
+            DispatchQueue.global(qos: .userInitiated).async {
+                let proc = Process()
+                proc.launchPath = "/bin/zsh"
+                proc.arguments = ["-c", "codex-agent --gui \"\(taskText)\""]
+                try? proc.run()
+            }
+        }
     }
 
     private func setupMiniPointer(in bounds: NSRect) {
@@ -347,7 +456,6 @@ class MiniDisplayWindow: NSPanel {
         miniPointerLayer.anchorPoint = CGPoint(x: 0.1, y: 0.9)
         miniPointerLayer.position = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
 
-        // Draw small pointer
         let size = CGSize(width: 14, height: 14)
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let context = CGContext(
@@ -380,35 +488,192 @@ class MiniDisplayWindow: NSPanel {
         previewImageView.layer?.addSublayer(miniPointerLayer)
     }
 
-    private func setupStatusPill(width: CGFloat) {
+    // MARK: - Phase 4: Filmstrip History Carousel
+    private func setupFilmstripTray(width: CGFloat) {
+        let trayRect = NSRect(x: 14, y: 48, width: width - 28, height: 38)
+        let trayContainer = NSView(frame: trayRect)
+        trayContainer.wantsLayer = true
+        trayContainer.layer?.cornerRadius = 6
+        trayContainer.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.2).cgColor
+        trayContainer.layer?.borderWidth = 0.5
+        trayContainer.layer?.borderColor = NSColor.white.withAlphaComponent(0.1).cgColor
+
+        filmstripStackView = NSStackView(frame: NSRect(x: 4, y: 3, width: trayRect.width - 8, height: 32))
+        filmstripStackView.orientation = .horizontal
+        filmstripStackView.spacing = 6
+        filmstripStackView.distribution = .fillEqually
+
+        // Create 6 thumbnail slots
+        thumbnailViews.removeAll()
+        for i in 0..<6 {
+            let thumb = NSImageView(frame: NSRect(x: 0, y: 0, width: 64, height: 32))
+            thumb.wantsLayer = true
+            thumb.layer?.cornerRadius = 4
+            thumb.layer?.masksToBounds = true
+            thumb.layer?.borderWidth = 1.0
+            thumb.layer?.borderColor = NSColor.white.withAlphaComponent(0.12).cgColor
+            thumb.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.3).cgColor
+            thumb.imageScaling = .scaleAxesIndependently
+            thumb.tag = i
+
+            let click = NSClickGestureRecognizer(target: self, action: #selector(handleThumbnailClick(_:)))
+            thumb.addGestureRecognizer(click)
+
+            thumbnailViews.append(thumb)
+            filmstripStackView.addArrangedSubview(thumb)
+        }
+
+        trayContainer.addSubview(filmstripStackView)
+        visualEffectView.addSubview(trayContainer)
+    }
+
+    func addActionSnapshot(label: String) {
+        let path = "/tmp/cua_preview.jpg"
+        guard let img = NSImage(contentsOfFile: path) else { return }
+        let frame = ActionFrame(image: img, label: label, timestamp: Date())
+
+        if historyFrames.count >= 6 {
+            historyFrames.removeFirst()
+        }
+        historyFrames.append(frame)
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            for (idx, thumb) in self.thumbnailViews.enumerated() {
+                if idx < self.historyFrames.count {
+                    let f = self.historyFrames[idx]
+                    thumb.image = f.image
+                    thumb.toolTip = "Step \(idx + 1): \(f.label)"
+                    thumb.layer?.borderColor = (idx == self.historyFrames.count - 1) ?
+                        NSColor.cyan.cgColor : NSColor.white.withAlphaComponent(0.2).cgColor
+                } else {
+                    thumb.image = nil
+                    thumb.toolTip = nil
+                    thumb.layer?.borderColor = NSColor.white.withAlphaComponent(0.08).cgColor
+                }
+            }
+        }
+    }
+
+    @objc func handleThumbnailClick(_ sender: NSClickGestureRecognizer) {
+        guard let view = sender.view as? NSImageView else { return }
+        let index = view.tag
+        if index < historyFrames.count {
+            let frame = historyFrames[index]
+            previewImageView.image = frame.image
+            statusLabel.stringValue = "[ประวัติขั้นตอนที่ \(index + 1)] \(frame.label)"
+        }
+    }
+
+    // MARK: - Phase 2: Status Pill & Safety Approval Container
+    private func setupStatusAndApprovalPill(width: CGFloat) {
         let pillWidth: CGFloat = width - 28
-        let pillHeight: CGFloat = 30
+        let pillHeight: CGFloat = 32
         statusPillView = NSVisualEffectView(frame: NSRect(x: 14, y: 10, width: pillWidth, height: pillHeight))
         statusPillView.material = .hudWindow
         statusPillView.blendingMode = .withinWindow
         statusPillView.state = .active
         statusPillView.wantsLayer = true
-        statusPillView.layer?.cornerRadius = 15
+        statusPillView.layer?.cornerRadius = 16
         statusPillView.layer?.masksToBounds = true
         statusPillView.layer?.borderWidth = 1.0
         statusPillView.layer?.borderColor = NSColor.white.withAlphaComponent(0.15).cgColor
         statusPillView.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.25).cgColor
 
         // Spinner
-        spinnerIndicator = NSProgressIndicator(frame: NSRect(x: 10, y: 7, width: 16, height: 16))
+        spinnerIndicator = NSProgressIndicator(frame: NSRect(x: 10, y: 8, width: 16, height: 16))
         spinnerIndicator.style = .spinning
         spinnerIndicator.controlSize = .small
         spinnerIndicator.startAnimation(nil)
         statusPillView.addSubview(spinnerIndicator)
 
-        // Status Text Label
-        statusLabel = NSTextField(labelWithString: "Working... กำลังเตรียมการ")
-        statusLabel.frame = NSRect(x: 34, y: 5, width: pillWidth - 44, height: 20)
-        statusLabel.font = NSFont.systemFont(ofSize: 11.5, weight: .medium)
+        // Status Label
+        statusLabel = NSTextField(labelWithString: "Working... เตรียมความพร้อมระบบ")
+        statusLabel.frame = NSRect(x: 34, y: 6, width: pillWidth - 44, height: 20)
+        statusLabel.font = NSFont.systemFont(ofSize: 11, weight: .medium)
         statusLabel.textColor = NSColor.white
         statusPillView.addSubview(statusLabel)
 
+        // Approval Gate Overlay (Hidden by default)
+        approvalContainer = NSView(frame: NSRect(x: 0, y: 0, width: pillWidth, height: pillHeight))
+        approvalContainer.wantsLayer = true
+        approvalContainer.layer?.cornerRadius = 16
+        approvalContainer.layer?.backgroundColor = NSColor(red: 0.25, green: 0.05, blue: 0.05, alpha: 0.95).cgColor
+        approvalContainer.isHidden = true
+
+        approvalLabel = NSTextField(labelWithString: "🔴 ยืนยันการทำงานที่มีความเสี่ยง?")
+        approvalLabel.frame = NSRect(x: 10, y: 6, width: pillWidth - 170, height: 20)
+        approvalLabel.font = NSFont.systemFont(ofSize: 10.5, weight: .bold)
+        approvalLabel.textColor = NSColor(red: 1.0, green: 0.4, blue: 0.4, alpha: 1.0)
+        approvalContainer.addSubview(approvalLabel)
+
+        // Approve Button
+        approveBtn = NSButton(frame: NSRect(x: pillWidth - 156, y: 5, width: 72, height: 22))
+        approveBtn.title = "อนุมัติ"
+        approveBtn.font = NSFont.systemFont(ofSize: 10.5, weight: .bold)
+        approveBtn.wantsLayer = true
+        approveBtn.layer?.cornerRadius = 5
+        approveBtn.layer?.backgroundColor = NSColor(red: 0.15, green: 0.75, blue: 0.25, alpha: 0.9).cgColor
+        approveBtn.contentTintColor = NSColor.white
+        approveBtn.isBordered = false
+        approveBtn.target = self
+        approveBtn.action = #selector(handleApproveClick)
+        approvalContainer.addSubview(approveBtn)
+
+        // Deny Button
+        denyBtn = NSButton(frame: NSRect(x: pillWidth - 78, y: 5, width: 70, height: 22))
+        denyBtn.title = "ปฏิเสธ"
+        denyBtn.font = NSFont.systemFont(ofSize: 10.5, weight: .bold)
+        denyBtn.wantsLayer = true
+        denyBtn.layer?.cornerRadius = 5
+        denyBtn.layer?.backgroundColor = NSColor(red: 0.9, green: 0.25, blue: 0.25, alpha: 0.9).cgColor
+        denyBtn.contentTintColor = NSColor.white
+        denyBtn.isBordered = false
+        denyBtn.target = self
+        denyBtn.action = #selector(handleDenyClick)
+        approvalContainer.addSubview(denyBtn)
+
+        statusPillView.addSubview(approvalContainer)
         visualEffectView.addSubview(statusPillView)
+    }
+
+    func requestApproval(message: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.approvalLabel.stringValue = "🔴 \(message)"
+            self.approvalContainer.isHidden = false
+            self.visualEffectView.layer?.borderColor = NSColor.systemRed.cgColor
+            self.visualEffectView.layer?.borderWidth = 2.0
+            self.orderFrontRegardless()
+        }
+    }
+
+    @objc func handleApproveClick() {
+        sendApprovalResponse("approve")
+        dismissApprovalUI()
+    }
+
+    @objc func handleDenyClick() {
+        sendApprovalResponse("deny")
+        dismissApprovalUI()
+    }
+
+    private func sendApprovalResponse(_ response: String) {
+        let pipePath = "/tmp/cua_approval.pipe"
+        DispatchQueue.global(qos: .userInitiated).async {
+            if let handle = FileHandle(forWritingAtPath: pipePath) {
+                if let data = (response + "\n").data(using: .utf8) {
+                    handle.write(data)
+                    try? handle.close()
+                }
+            }
+        }
+    }
+
+    private func dismissApprovalUI() {
+        approvalContainer.isHidden = true
+        visualEffectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.25).cgColor
+        visualEffectView.layer?.borderWidth = 1.0
     }
 
     func setStatus(_ text: String, isDone: Bool = false) {
@@ -418,22 +683,23 @@ class MiniDisplayWindow: NSPanel {
             if isDone {
                 self.spinnerIndicator.stopAnimation(nil)
                 self.spinnerIndicator.isHidden = true
-                self.statusLabel.frame = NSRect(x: 14, y: 5, width: self.statusPillView.frame.width - 28, height: 20)
+                self.statusLabel.frame = NSRect(x: 14, y: 6, width: self.statusPillView.frame.width - 28, height: 20)
                 self.statusLabel.alignment = .center
             } else {
                 self.spinnerIndicator.isHidden = false
                 self.spinnerIndicator.startAnimation(nil)
-                self.statusLabel.frame = NSRect(x: 34, y: 5, width: self.statusPillView.frame.width - 44, height: 20)
+                self.statusLabel.frame = NSRect(x: 34, y: 6, width: self.statusPillView.frame.width - 44, height: 20)
                 self.statusLabel.alignment = .left
             }
             self.updateScreenPreview()
+            self.addActionSnapshot(label: text)
         }
     }
 
     private var lastCaptureTime: TimeInterval = 0
     func updateScreenPreview() {
         let now = Date().timeIntervalSince1970
-        if now - lastCaptureTime < 2.0 { return }
+        if now - lastCaptureTime < 1.5 { return }
         lastCaptureTime = now
         forceScreenPreview()
     }
@@ -455,6 +721,34 @@ class MiniDisplayWindow: NSPanel {
         }
     }
 
+    @objc func handleCloseHUD() {
+        NSApp.terminate(nil)
+    }
+
+    @objc func handleToggleCollapse() {
+        var frame = self.frame
+        if isCollapsed {
+            frame.size.height = standardHeight
+            frame.origin.y -= (standardHeight - 48)
+            previewImageView.isHidden = false
+            filmstripStackView.superview?.isHidden = false
+            statusPillView.isHidden = false
+            isCollapsed = false
+        } else {
+            frame.size.height = 48
+            frame.origin.y += (standardHeight - 48)
+            previewImageView.isHidden = true
+            filmstripStackView.superview?.isHidden = true
+            statusPillView.isHidden = true
+            isCollapsed = true
+        }
+        self.setFrame(frame, display: true, animate: true)
+    }
+
+    @objc func handleRefreshPreview() {
+        forceScreenPreview()
+    }
+
     @objc func handlePreviewClick() {
         forceScreenPreview()
         let script = "tell application \"System Events\" to tell (first process whose frontmost is false and visible is true) to set frontmost to true"
@@ -474,7 +768,7 @@ class MiniDisplayWindow: NSPanel {
         let miniY = normY * previewBounds.height
 
         CATransaction.begin()
-        CATransaction.setAnimationDuration(0.5)
+        CATransaction.setAnimationDuration(0.4)
         miniPointerLayer.position = CGPoint(x: miniX, y: miniY)
         CATransaction.commit()
     }
@@ -493,11 +787,35 @@ class HUDAppController: NSObject, NSApplicationDelegate {
         miniDisplay.orderFrontRegardless()
         ghostCursor.orderFrontRegardless()
 
+        registerGlobalHotkeys()
+        startPipeListener()
+
         let args = ProcessInfo.processInfo.arguments
         if args.contains("demo") {
             runDemoScenario()
-        } else {
-            startPipeListener()
+        }
+    }
+
+    // Phase 3: Global Hotkey Listener (⌥Space and ⌘K)
+    private func registerGlobalHotkeys() {
+        // Global monitor for ⌥Space (Option + Space) across any app
+        NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            if event.modifierFlags.contains(.option) && event.keyCode == 49 {
+                DispatchQueue.main.async {
+                    self?.miniDisplay.showAndFocusCommandBar()
+                }
+            }
+        }
+
+        // Local monitor when HUD is active (⌘K to toggle command bar)
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            if event.modifierFlags.contains(.command) && event.keyCode == 40 {
+                DispatchQueue.main.async {
+                    self?.miniDisplay.toggleCommandInput()
+                }
+                return nil
+            }
+            return event
         }
     }
 
@@ -516,7 +834,9 @@ class HUDAppController: NSObject, NSApplicationDelegate {
     }
 
     func startPipeListener() {
-        mkfifo(commandPipePath, 0o666)
+        if !FileManager.default.fileExists(atPath: commandPipePath) {
+            mkfifo(commandPipePath, 0o666)
+        }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             while true {
                 guard let handle = FileHandle(forReadingAtPath: self?.commandPipePath ?? "") else {
@@ -532,19 +852,33 @@ class HUDAppController: NSObject, NSApplicationDelegate {
     }
 
     private func handleCommandString(_ line: String) {
-        // Parses simple pipe commands
-        // Format: status|x|y|click|done
         let parts = line.components(separatedBy: "|")
-        let status = parts.first ?? "Working..."
+        guard let header = parts.first else { return }
 
-        // Check for explicit termination command
-        if status.lowercased() == "quit" || status.lowercased() == "exit" {
+        // 1. Quit Command
+        if header.lowercased() == "quit" || header.lowercased() == "exit" {
             DispatchQueue.main.async {
                 NSApp.terminate(nil)
             }
             return
         }
 
+        // 2. Phase 2: Safety Approval Gate Command: ask_approval|<message>
+        if header.lowercased() == "ask_approval" {
+            let warningMsg = (parts.count > 1) ? parts[1] : "ยืนยันการทำคำสั่งเสี่ยง?"
+            miniDisplay.requestApproval(message: warningMsg)
+            return
+        }
+
+        // 3. Phase 1: Neural Vision OCR Click Command: ocr_click|<target_text>
+        if header.lowercased() == "ocr_click" {
+            let targetQuery = (parts.count > 1) ? parts[1] : ""
+            executeOCRClick(query: targetQuery)
+            return
+        }
+
+        // 4. Standard Coordinate Movement Command: <status>|<x>|<y>|<click>|<done>
+        let status = header
         var x: CGFloat? = nil
         var y: CGFloat? = nil
         var click = false
@@ -563,7 +897,44 @@ class HUDAppController: NSObject, NSApplicationDelegate {
 
         DispatchQueue.main.async { [weak self] in
             self?.updateAction(status: status, x: x, y: y, click: click, isDone: isDone)
-            // Persistent Mode: Keep HUD open and ready for subsequent commands without closing!
+        }
+    }
+
+    // Phase 1: Apple Vision Neural Engine OCR Execution
+    private func executeOCRClick(query: String) {
+        miniDisplay.setStatus("Working... Apple Vision กำลังตรวจหา '\(query)' บนหน้าจอ")
+        let snapshotPath = "/tmp/cua_ocr_temp.jpg"
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let captureProc = Process()
+            captureProc.launchPath = "/usr/sbin/screencapture"
+            captureProc.arguments = ["-x", "-t", "jpg", snapshotPath]
+            try? captureProc.run()
+            captureProc.waitUntilExit()
+
+            guard let img = NSImage(contentsOfFile: snapshotPath),
+                  let cgImage = img.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+                DispatchQueue.main.async {
+                    self?.miniDisplay.setStatus("ล้มเหลว: ไม่สามารถจับภาพหน้าจอเพื่อทำ OCR", isDone: true)
+                }
+                return
+            }
+
+            ScreenOCRDetector.shared.findTextLocation(query: query, in: cgImage) { [weak self] targetPoint, matchedText in
+                DispatchQueue.main.async {
+                    if let pt = targetPoint, let found = matchedText {
+                        self?.updateAction(
+                            status: "พบ '\(found)' บนหน้าจอ! กำลังคลิก (x:\(Int(pt.x)), y:\(Int(pt.y)))",
+                            x: pt.x,
+                            y: pt.y,
+                            click: true,
+                            isDone: true
+                        )
+                    } else {
+                        self?.miniDisplay.setStatus("ไม่พบข้อความ '\(query)' บนหน้าจอ [WARN]", isDone: true)
+                    }
+                }
+            }
         }
     }
 
@@ -586,10 +957,6 @@ class HUDAppController: NSObject, NSApplicationDelegate {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 6.0) { [weak self] in
             self?.updateAction(status: "ดำเนินการเรียบร้อยแล้ว [PASS] ✅", isDone: true)
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 9.0) {
-            NSApp.terminate(nil)
         }
     }
 }

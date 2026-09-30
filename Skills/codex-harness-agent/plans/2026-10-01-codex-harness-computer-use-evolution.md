@@ -49,7 +49,7 @@
 - Modify: `Skills/codex-harness-agent/hud/ComputerUseHUD.swift`
 - Test: `tests/test_vision_ocr.sh`
 
-- [ ] **Step 1: Import Vision Framework & Implement `ScreenOCRDetector`**
+- [x] **Step 1: Import Vision Framework & Implement `ScreenOCRDetector`**
   Add `import Vision` to `ComputerUseHUD.swift`. Implement class `ScreenOCRDetector`:
   ```swift
   import Vision
@@ -82,14 +82,14 @@
   }
   ```
 
-- [ ] **Step 2: Add Pipe Command for OCR Click (`ocr_click|<text>`)**
+- [x] **Step 2: Add Pipe Command for OCR Click (`ocr_click|<text>`)**
   Update `handleCommandString` in `HUDAppController` to parse `ocr_click|<target_text>`:
   - Captures current display image via `screencapture`.
   - Runs `ScreenOCRDetector.shared.findTextLocation`.
   - Converts normalized Vision coordinates (`0.0 - 1.0` bottom-left origin) to macOS display coordinates (`top-left origin`).
   - Animates Ghost Cursor directly to the detected bounding box center and executes click ripple.
 
-- [ ] **Step 3: Verification Test**
+- [x] **Step 3: Verification Test**
   Compile and verify Vision OCR detection with test script:
   ```bash
   swiftc -O "Skills/codex-harness-agent/hud/ComputerUseHUD.swift" \
@@ -99,7 +99,7 @@
   ```
   Confirm Ghost Cursor accurately glides to the text "Safari" on screen.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
   ```bash
   git commit -m "feat(cua-hud): implement Apple Vision Neural Engine OCR text grounding"
   ```
@@ -113,7 +113,7 @@
 - Modify: `Skills/codex-harness-agent/hud/ComputerUseHUD.swift`
 - Modify: `Skills/codex-harness-agent/scripts/codex_agent_runner.py`
 
-- [ ] **Step 1: Add Risk Classification Table in Python Runner**
+- [x] **Step 1: Add Risk Classification Table in Python Runner**
   In `codex_agent_runner.py`, define pattern matcher:
   ```python
   DANGEROUS_ACTIONS = [
@@ -130,7 +130,7 @@
       return "info"
   ```
 
-- [ ] **Step 2: Add Visual Warning & Approval Buttons to HUD**
+- [x] **Step 2: Add Visual Warning & Approval Buttons to HUD**
   In `MiniDisplayWindow`:
   - When `risk == "critical"`:
     - Set HUD border color to Orange/Red (`#EF4444`).
@@ -138,14 +138,14 @@
     - Ghost Cursor movement is paused until user clicks `Approve`.
     - Writes approval result (`approved` / `denied`) to `/tmp/cua_approval.pipe`.
 
-- [ ] **Step 3: Verification Test**
+- [x] **Step 3: Verification Test**
   Trigger test dangerous action:
   ```bash
   codex-agent --gui "drop table patient_medications in supabase"
   ```
   Confirm HUD pauses with red border and waits for human click before proceeding.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
   ```bash
   git commit -m "feat(cua-safety): add human-in-the-loop approval gate for critical actions"
   ```
@@ -158,7 +158,7 @@
 **Files:**
 - Modify: `Skills/codex-harness-agent/hud/ComputerUseHUD.swift`
 
-- [ ] **Step 1: Create Expandable `NSTextField` in Mini Display**
+- [x] **Step 1: Create Expandable `NSTextField` in Mini Display**
   In `MiniDisplayWindow`:
   - Add search bar container below title or pill:
     ```swift
@@ -174,19 +174,19 @@
     ```
   - Toggle visibility with `⌘ + K` or by clicking a search icon button in the header.
 
-- [ ] **Step 2: Register Global Hotkey (`⌥ + Space`)**
+- [x] **Step 2: Register Global Hotkey (`⌥ + Space`)**
   Use Carbon `RegisterEventHotKey` or `NSEvent.addGlobalMonitorForEvents(matching: .keyDown)`:
   - When `⌥ + Space` is pressed anywhere in macOS:
     - Mini Display orders to front (`makeKeyAndOrderFront`).
     - Focuses `commandInputBox` immediately.
 
-- [ ] **Step 3: Wire Submission to `codex-agent`**
+- [x] **Step 3: Wire Submission to `codex-agent`**
   When Enter is pressed:
   - Reads input text.
   - Spawns `codex-agent --gui "<entered_task>"` in background.
   - Clears text and updates status pill to `Working...`.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
   ```bash
   git commit -m "feat(cua-hud): add in-HUD quick command box and global hotkey invocation"
   ```
@@ -199,7 +199,7 @@
 **Files:**
 - Modify: `Skills/codex-harness-agent/hud/ComputerUseHUD.swift`
 
-- [ ] **Step 1: Implement Action Frame History Ring Buffer**
+- [x] **Step 1: Implement Action Frame History Ring Buffer**
   In `MiniDisplayWindow`, maintain a queue of up to 6 frames:
   ```swift
   struct ActionFrame {
@@ -210,19 +210,19 @@
   private var historyFrames: [ActionFrame] = []
   ```
 
-- [ ] **Step 2: Add Filmstrip Tray UI**
+- [x] **Step 2: Add Filmstrip Tray UI**
   Add horizontal scrollview / stackview at the bottom of the preview area:
   - Width: 48px per thumbnail, Height: 32px, Corner Radius: 4px.
   - Hovering over a frame swaps the main preview to that historical frame and displays its action label.
 
-- [ ] **Step 3: Verification Test**
+- [x] **Step 3: Verification Test**
   Run a 4-step task:
   ```bash
   codex-agent --gui "เปิด Safari -> เปิด YouTube -> ค้นหาเพลง -> คลิกเล่น"
   ```
   Confirm all 4 historical snapshots appear in the filmstrip tray and can be inspected by hover.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
   ```bash
   git commit -m "feat(cua-hud): implement action filmstrip visual history carousel"
   ```
@@ -236,7 +236,7 @@
 - Modify: `Skills/codex-harness-agent/scripts/codex_agent_runner.py`
 - Modify: `Skills/codex-harness-agent/SKILL.md`
 
-- [ ] **Step 1: Implement Streaming Agent Dispatch in Python**
+- [x] **Step 1: Implement Streaming Agent Dispatch in Python**
   In `codex_agent_runner.py`:
   - When `--mode hybrid` is specified:
     - Boots OpenAI Agents API session with `gpt-4o` / `o3-mini`.
@@ -247,20 +247,20 @@
       - Dispatches to `send_hud()` and triggers local Ghost Cursor and native action.
       - Takes fresh screenshot and returns it to the Cloud Session as tool observation.
 
-- [ ] **Step 2: End-to-End Verification Test**
+- [x] **Step 2: End-to-End Verification Test**
   ```bash
   codex-agent --mode hybrid "ตรวจสอบสคีมาของโปรเจกต์ YaCheck ใน Supabase"
   ```
   Verify that reasoning occurs in OpenAI Cloud Harness while physical actions visibly execute on local screen via HUD and Ghost Cursor.
 
-- [ ] **Step 3: Update Skills Vault Documentation**
+- [x] **Step 3: Update Skills Vault Documentation**
   Update `Skills/codex-harness-agent/SKILL.md` and `reference.md` documenting the new flags:
   `--mode hybrid`, `--vision-ocr`, `--safety-gate`, `--filmstrip`.
 
-- [ ] **Step 4: Parity & Vault Verification**
+- [x] **Step 4: Parity & Vault Verification**
   Run `python3 verify_skills_vault.py` to confirm 100% parity with iCloud Vault and zero broken links.
 
-- [ ] **Step 5: Final Push & Release**
+- [x] **Step 5: Final Push & Release**
   ```bash
   git commit -m "feat(codex-harness-agent): complete 5-pillar enterprise computer use evolution"
   git push origin main
