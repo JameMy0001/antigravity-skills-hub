@@ -188,10 +188,23 @@ for s in sorted(os.listdir(s_dir)):
 link_target_dir "$HOME/.gemini/config/skills" "Google Antigravity"
 link_target_dir "$HOME/.cursor/skills" "Cursor IDE"
 
-# ── CLI Utilities Symlink ───────────────────────────────────────────────────
+# ── CLI Utilities & Native HUD Symlink ───────────────────────────────────────
 if [[ -d "$HOME/.local/bin" ]]; then
     ln -sf "$SKILLS_DIR/codex-harness-agent/scripts/codex_agent_runner.py" "$HOME/.local/bin/codex-agent"
     ok "CLI shortcut installed → ~/.local/bin/codex-agent"
+fi
+
+if [[ "$(uname -s)" == "Darwin" ]] && command -v swiftc &>/dev/null; then
+    log "Compiling native Computer Use Mini Display HUD (Swift)..."
+    swiftc -O "$SKILLS_DIR/codex-harness-agent/hud/ComputerUseHUD.swift" \
+        -o "$SKILLS_DIR/codex-harness-agent/hud/computer-use-hud" \
+        -framework Cocoa -framework CoreGraphics -framework QuartzCore
+    ok "Native HUD compiled → $SKILLS_DIR/codex-harness-agent/hud/computer-use-hud"
+    if [[ -d "$HOME/.local/bin" ]]; then
+        ln -sf "$SKILLS_DIR/codex-harness-agent/hud/computer-use-hud" "$HOME/.local/bin/computer-use-hud"
+        ln -sf "$SKILLS_DIR/codex-harness-agent/hud/computer-use-hud" "$HOME/.local/bin/cua-hud"
+        ok "HUD shortcuts installed → ~/.local/bin/computer-use-hud"
+    fi
 fi
 
 # ── Python dependencies ────────────────────────────────────────────────────────
