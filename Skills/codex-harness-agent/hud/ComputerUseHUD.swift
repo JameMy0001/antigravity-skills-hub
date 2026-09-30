@@ -273,13 +273,14 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
     // Phase 4: Filmstrip History Carousel UI
     private var filmstripTrayContainer: NSView!
+    private var emptyHistoryLabel: NSTextField!
     private var filmstripStackView: NSStackView!
     private var historyFrames: [ActionFrame] = []
     private var thumbnailViews: [NSImageView] = []
 
     private var isCollapsed = false
     private let standardWidth: CGFloat = 460
-    private let standardHeight: CGFloat = 345
+    private let standardHeight: CGFloat = 350
 
     init() {
         let screenRect = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
@@ -321,11 +322,8 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         // Header Bar Container
         setupHeader(width: width, height: height)
 
-        // Phase 3: Quick Command Bar (Collapsible)
-        setupCommandInput(width: width, height: height)
-
-        // Screen Preview Area
-        let previewRect = NSRect(x: 14, y: 92, width: width - 28, height: height - 138)
+        // Screen Preview Area (Clean 8px below header, 8px above filmstrip)
+        let previewRect = NSRect(x: 14, y: 94, width: width - 28, height: 210)
         previewImageView = NSImageView(frame: previewRect)
         previewImageView.imageScaling = .scaleAxesIndependently
         previewImageView.wantsLayer = true
@@ -341,10 +339,10 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         // Mini Ghost Pointer on Preview
         setupMiniPointer(in: previewRect)
 
-        // Phase 4: Filmstrip History Carousel Tray
+        // Phase 4: Filmstrip History Carousel Tray (y: 50, height: 36)
         setupFilmstripTray(width: width)
 
-        // Phase 2: Status Pill & Safety Approval Container (Bottom)
+        // Phase 2 & 3: Status Pill, Safety Approval Container & Integrated Command Bar (Bottom y: 10, height: 32)
         setupStatusAndApprovalPill(width: width)
 
         self.contentView = visualEffectView
@@ -457,47 +455,61 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         }
     }
 
-    private func setupCommandInput(width: CGFloat, height: CGFloat) {
-        commandInputBox = NSTextField(frame: NSRect(x: 14, y: height - 58, width: width - 28, height: 24))
-        commandInputBox.placeholderString = "⌘K สั่งงาน Agent (กด Enter เพื่อเริ่ม, ⌥Space เปิดจากทุกที่)..."
-        commandInputBox.font = NSFont.systemFont(ofSize: 11, weight: .regular)
-        commandInputBox.textColor = NSColor.white
-        commandInputBox.backgroundColor = NSColor.black.withAlphaComponent(0.4)
-        commandInputBox.isBordered = true
-        commandInputBox.wantsLayer = true
-        commandInputBox.layer?.cornerRadius = 6
-        commandInputBox.layer?.borderColor = NSColor.cyan.withAlphaComponent(0.5).cgColor
-        commandInputBox.layer?.borderWidth = 1.0
-        commandInputBox.target = self
-        commandInputBox.action = #selector(handleCommandSubmit)
-        commandInputBox.delegate = self
-        commandInputBox.isHidden = true
-        visualEffectView.addSubview(commandInputBox)
+    func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+        if commandSelector == #selector(NSResponder.cancelOperation(_:)) {
+            commandBoxVisible = false
+            applyCommandBoxVisibility()
+            return true
+        }
+        return false
     }
 
     @objc func toggleCommandInput() {
-        commandBoxVisible = !commandBoxVisible
-        commandInputBox.isHidden = !commandBoxVisible
-        if commandBoxVisible {
-            self.makeKeyAndOrderFront(nil)
-            self.makeFirstResponder(commandInputBox)
+        if isCollapsed {
+            handleToggleCollapse()
         }
+        commandBoxVisible = !commandBoxVisible
+        applyCommandBoxVisibility()
     }
 
     func showAndFocusCommandBar() {
+        if isCollapsed {
+            handleToggleCollapse()
+        }
         commandBoxVisible = true
-        commandInputBox.isHidden = false
-        self.makeKeyAndOrderFront(nil)
-        self.makeFirstResponder(commandInputBox)
+        applyCommandBoxVisibility()
+    }
+
+    private func applyCommandBoxVisibility() {
+        if commandBoxVisible {
+            spinnerIndicator.isHidden = true
+            statusLabel.isHidden = true
+            commandInputBox.isHidden = false
+            statusPillView.layer?.borderColor = NSColor.cyan.cgColor
+            statusPillView.layer?.borderWidth = 1.5
+            cmdToggleBtn.layer?.backgroundColor = NSColor.cyan.withAlphaComponent(0.3).cgColor
+            cmdToggleBtn.contentTintColor = NSColor.cyan
+            self.makeKeyAndOrderFront(nil)
+            self.makeFirstResponder(commandInputBox)
+        } else {
+            commandInputBox.isHidden = true
+            statusLabel.isHidden = false
+            spinnerIndicator.isHidden = statusLabel.stringValue.contains("[PASS]") || statusLabel.stringValue.contains("พร้อม")
+            statusPillView.layer?.borderColor = NSColor.white.withAlphaComponent(0.15).cgColor
+            statusPillView.layer?.borderWidth = 1.0
+            cmdToggleBtn.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.15).cgColor
+            cmdToggleBtn.contentTintColor = NSColor.white
+        }
     }
 
     @objc func handleCommandSubmit() {
         let taskText = commandInputBox.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        commandInputBox.stringValue = ""
+        commandBoxVisible = false
+        applyCommandBoxVisibility()
+
         if !taskText.isEmpty {
             setStatus("Working... เริ่มต้นคำสั่ง: \(taskText)", isDone: false)
-            commandInputBox.stringValue = ""
-            commandBoxVisible = false
-            commandInputBox.isHidden = true
 
             // Dispatch command in background via codex-agent runner
             DispatchQueue.global(qos: .userInitiated).async {
@@ -549,7 +561,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
     // MARK: - Phase 4: Filmstrip History Carousel
     private func setupFilmstripTray(width: CGFloat) {
-        let trayRect = NSRect(x: 14, y: 48, width: width - 28, height: 38)
+        let trayRect = NSRect(x: 14, y: 50, width: width - 28, height: 36)
         filmstripTrayContainer = NSView(frame: trayRect)
         filmstripTrayContainer.wantsLayer = true
         filmstripTrayContainer.layer?.cornerRadius = 6
@@ -557,7 +569,15 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         filmstripTrayContainer.layer?.borderWidth = 0.5
         filmstripTrayContainer.layer?.borderColor = NSColor.white.withAlphaComponent(0.1).cgColor
 
-        filmstripStackView = NSStackView(frame: NSRect(x: 4, y: 3, width: trayRect.width - 8, height: 32))
+        emptyHistoryLabel = NSTextField(labelWithString: "Filmstrip Carousel: บันทึกภาพย้อนหลังอัตโนมัติเมื่อเริ่มงาน")
+        emptyHistoryLabel.frame = NSRect(x: 10, y: 9, width: trayRect.width - 20, height: 18)
+        emptyHistoryLabel.alignment = .center
+        emptyHistoryLabel.font = NSFont.systemFont(ofSize: 10.5, weight: .regular)
+        emptyHistoryLabel.textColor = NSColor.white.withAlphaComponent(0.35)
+        emptyHistoryLabel.isHidden = true
+        filmstripTrayContainer.addSubview(emptyHistoryLabel)
+
+        filmstripStackView = NSStackView(frame: NSRect(x: 4, y: 3, width: trayRect.width - 8, height: 30))
         filmstripStackView.orientation = .horizontal
         filmstripStackView.spacing = 6
         filmstripStackView.distribution = .fillEqually
@@ -565,7 +585,7 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         // Create 6 thumbnail slots
         thumbnailViews.removeAll()
         for i in 0..<6 {
-            let thumb = NSImageView(frame: NSRect(x: 0, y: 0, width: 64, height: 32))
+            let thumb = NSImageView(frame: NSRect(x: 0, y: 0, width: 64, height: 30))
             thumb.wantsLayer = true
             thumb.layer?.cornerRadius = 4
             thumb.layer?.masksToBounds = true
@@ -598,6 +618,9 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
 
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            self.emptyHistoryLabel.isHidden = !self.historyFrames.isEmpty
+            self.filmstripStackView.isHidden = self.historyFrames.isEmpty
+
             for (idx, thumb) in self.thumbnailViews.enumerated() {
                 if idx < self.historyFrames.count {
                     let f = self.historyFrames[idx]
@@ -652,6 +675,20 @@ class MiniDisplayWindow: NSPanel, NSTextFieldDelegate {
         statusLabel.font = NSFont.systemFont(ofSize: 11, weight: .medium)
         statusLabel.textColor = NSColor.white
         statusPillView.addSubview(statusLabel)
+
+        // Phase 3: Seamless In-Pill Command Input Box (Zero overlap on preview!)
+        commandInputBox = NSTextField(frame: NSRect(x: 14, y: 5, width: pillWidth - 28, height: 22))
+        commandInputBox.placeholderString = "⌘K สั่งงาน Agent (พิมพ์คำสั่งแล้วกด Enter, Esc เพื่อยกเลิก)..."
+        commandInputBox.font = NSFont.systemFont(ofSize: 11, weight: .medium)
+        commandInputBox.textColor = NSColor.white
+        commandInputBox.backgroundColor = .clear
+        commandInputBox.isBordered = false
+        commandInputBox.focusRingType = .none
+        commandInputBox.target = self
+        commandInputBox.action = #selector(handleCommandSubmit)
+        commandInputBox.delegate = self
+        commandInputBox.isHidden = true
+        statusPillView.addSubview(commandInputBox)
 
         // Approval Gate Overlay (Hidden by default)
         approvalContainer = NSView(frame: NSRect(x: 0, y: 0, width: pillWidth, height: pillHeight))
@@ -892,6 +929,14 @@ class HUDAppController: NSObject, NSApplicationDelegate {
         registerGlobalHotkeys()
         startPipeListener()
 
+        // Populate initial frame so filmstrip is never an empty void
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+            self?.miniDisplay.forceScreenPreview()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self?.miniDisplay.addActionSnapshot(label: "เริ่มต้นระบบ (Ready)")
+            }
+        }
+
         let args = ProcessInfo.processInfo.arguments
         if args.contains("demo") {
             runDemoScenario()
@@ -969,6 +1014,14 @@ class HUDAppController: NSObject, NSApplicationDelegate {
         if header.lowercased() == "collapse" || header.lowercased() == "toggle_collapse" {
             DispatchQueue.main.async { [weak self] in
                 self?.miniDisplay.handleToggleCollapse()
+            }
+            return
+        }
+
+        // Toggle Command Bar Command: input or cmdk
+        if header.lowercased() == "input" || header.lowercased() == "cmdk" {
+            DispatchQueue.main.async { [weak self] in
+                self?.miniDisplay.toggleCommandInput()
             }
             return
         }
