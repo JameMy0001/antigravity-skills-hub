@@ -8,7 +8,7 @@ tags:
   - agent-skills
 ---
 
-# 🧭 Agent Skills System: คู่มือและสารบัญ 8 ขั้นตอน (66 Skills)
+# 🧭 Agent Skills System: คู่มือและสารบัญ 8 ขั้นตอน (67 Skills)
 
 ยินดีต้อนรับสู่ระบบจัดเก็บและเรียกใช้งาน **Agent Skills** ที่จัดระเบียบตาม **Software Development Life Cycle (SDLC) 8 ขั้นตอน**
 ช่วยให้ AI Assistant ทำงานได้อย่างแม่นยำ เป็นขั้นเป็นตอน ไม่ลัดขั้นตอน และเรียกใช้เครื่องมือที่ถูกต้องเสมอ
@@ -117,6 +117,7 @@ tags:
 | [[Skills/automate/SKILL|`automate`]] | สร้างและตั้งค่า Automations สำหรับระบบงานประจำ |
 | [[Skills/baoyu-infographic/SKILL|`baoyu-infographic`]] | แปลงแนวคิดทางเทคนิคและสถาปัตยกรรมเป็น Infographic ภาพสวยงาม 21 รูปแบบและ 21 สไตล์ |
 | [[Skills/codebase-onboarding/SKILL|`codebase-onboarding`]] | สแกนโปรเจกต์ใหม่ ทำแผนผังโครงสร้างสถาปัตยกรรม และวิเคราะห์ Entry Points อัตโนมัติ |
+| [[Skills/codex-harness-agent/SKILL|`codex-harness-agent`]] | ใช้งาน OpenAI Agents API, Managed Codex Cloud Harness และ Computer Use ควบคุม GUI |
 | [[Skills/create-hook/SKILL|`create-hook`]] | สร้าง Lifecycle Hook สำหรับดักจับเหตุการณ์ในระบบ Agent |
 | [[Skills/create-rule/SKILL|`create-rule`]] | สร้าง Rule ถาวรสำหรับควบคุมแนวทางการเขียนโค้ดของ AI |
 | [[Skills/create-skill/SKILL|`create-skill`]] | สร้าง Agent Skill ใหม่พร้อมโครงสร้างมาตรฐานสากล |

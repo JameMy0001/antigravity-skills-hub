@@ -5,7 +5,7 @@
 ### The Unified 8-Stage SDLC Agentic Skills Ecosystem
 
 [![Architect](https://img.shields.io/badge/Architect-Jamemm-blue?style=flat-square&logo=github)](https://github.com/JameMy0001)
-[![Skills](https://img.shields.io/badge/Skills-66%20Production--Grade-10B981?style=flat-square)](./Skills)
+[![Skills](https://img.shields.io/badge/Skills-67%20Production--Grade-10B981?style=flat-square)](./Skills)
 [![CI Pipeline](https://github.com/JameMy0001/antigravity-skills-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/JameMy0001/antigravity-skills-hub/actions/workflows/ci.yml)
 [![Web Showcase](https://img.shields.io/badge/Web%20Showcase-Live%20Explorer-6366F1?style=flat-square&logo=googlechrome)](https://jamemy0001.github.io/antigravity-skills-hub/)
 [![Platforms](https://img.shields.io/badge/Platforms-Antigravity%20%7C%20Cursor%20%7C%20Claude-purple?style=flat-square)](./setup.sh)
@@ -137,7 +137,7 @@ Explore all 66 skills in our responsive web app at [**jamemy0001.github.io/antig
 
 ---
 
-## 📚 Skill Catalog (66 Skills Across 8 Stages)
+## 📚 Skill Catalog (67 Skills Across 8 Stages)
 
 ### 🟢 Stage 01 — New Features & Business Logic (8 skills)
 | Skill | Description |
@@ -203,10 +203,11 @@ Explore all 66 skills in our responsive web app at [**jamemy0001.github.io/antig
 | `share` | Save, back up, or share current project |
 | `origin` | Install/sign in to the Cursor origin CLI |
 
-### ⚪ Stage 07 — Codebase Exploration & Tooling (20 skills)
+### ⚪ Stage 07 — Codebase Exploration & Tooling (21 skills)
 | Skill | Description |
 |---|---|
 | `codebase-onboarding` | Architectural recon, key entry points, conventions & CLAUDE.md generation |
+| `codex-harness-agent` | OpenAI Agents API, Codex Cloud Harness, session state & Computer Use |
 | `llm-wiki` | Build and query interlinked Markdown knowledge base for deep research |
 | `tmux` | Remote-control tmux sessions for persistent interactive CLI processes |
 | `excalidraw` | Hand-drawn Excalidraw JSON diagrams: flowcharts, sequence diagrams, maps |

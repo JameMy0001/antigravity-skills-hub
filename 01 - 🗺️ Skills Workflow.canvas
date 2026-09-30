@@ -547,6 +547,15 @@
       "y": 950,
       "width": 320,
       "height": 180
+    },
+    {
+      "id": "node_codex_harness_agent",
+      "type": "file",
+      "file": "Skills/codex-harness-agent/SKILL.md",
+      "x": 600,
+      "y": 950,
+      "width": 320,
+      "height": 180
     }
   ],
   "edges": [
@@ -793,7 +802,15 @@
       "fromSide": "bottom",
       "toNode": "node_no_emoji_minimalism",
       "toSide": "top"
+    },
+    {
+      "id": "edge_subagent_to_codex_harness",
+      "fromNode": "node_subagent_driven_development",
+      "fromSide": "bottom",
+      "toNode": "node_codex_harness_agent",
+      "toSide": "top",
+      "label": "Offload to Codex Cloud Harness"
     }
   ],
-  "updated": "2026-09-29"
+  "updated": "2026-09-30"
 }
