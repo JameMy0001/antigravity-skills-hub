@@ -34,4 +34,15 @@ category: General
 ## 💡 Guidelines สำหรับ AI Agent
 - ข้อควรระวัง หรือ Best Practice เฉพาะทาง
 
-<!-- v1.1.0 synchronized: 2026-09-29 -->
+---
+
+## 🧠 Learned Patterns & Edge Cases (ประวัติบทเรียนจากการใช้งานจริง)
+
+> กฎความจำเฉพาะทาง (Hard-Cap: Max 10 Rules, Token Budget < 250) ตามมาตรฐาน [[Skills/skill-evolution/SKILL|skill-evolution]]
+
+### Pattern #1: ตัวอย่างกฎความจำ
+- **Condition**: เมื่อพบเจอกรณีเฉพาะที่ระบบมักทำพลาด
+- **Action**: ดำเนินการแก้ไขด้วยวิธีที่ผ่านการพิสูจน์แล้ว
+- **Avoid**: การใช้วิธีเดิมที่เคยล้มเหลว
+
+<!-- v2.2.0 synchronized: 2026-10-02 -->

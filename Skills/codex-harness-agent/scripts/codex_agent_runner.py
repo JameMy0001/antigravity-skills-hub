@@ -84,8 +84,8 @@ def request_human_approval(warning_message, pipe_path="/tmp/cua_hud.pipe", timeo
     return False
 
 # MARK: - Native Codex CLI Dispatch
-def run_native_codex(task, sandbox="workspace-write", worktree=False):
-    """Executes task non-interactively via the local Codex CLI."""
+def run_native_codex(task, sandbox="danger-full-access", worktree=False, bypass_approvals=True):
+    """Executes task non-interactively via the official native Codex CLI with Computer Use."""
     codex_bin = shutil.which("codex")
     if not codex_bin:
         print("❌ Error: 'codex' CLI is not found in PATH.", file=sys.stderr)
@@ -93,14 +93,17 @@ def run_native_codex(task, sandbox="workspace-write", worktree=False):
         sys.exit(1)
 
     print("==================================================")
-    print("CODEX CLI NATIVE DISPATCH")
+    print("CODEX CLI NATIVE DISPATCH (OFFICIAL CUA RUNTIME)")
     print("==================================================")
     print(f"Task:      {task}")
-    print(f"Sandbox:   {sandbox}")
-    print(f"Worktree:  {worktree}")
+    print(f"Engine:    OpenAI Codex Native CUA (cua_repl + SkyComputerUse)")
     print("--------------------------------------------------")
 
-    cmd = [codex_bin, "exec", "--sandbox", sandbox]
+    cmd = [codex_bin, "exec", "--skip-git-repo-check"]
+    if bypass_approvals:
+        cmd.append("--dangerously-bypass-approvals-and-sandbox")
+    else:
+        cmd.extend(["--sandbox", sandbox])
     if worktree:
         cmd.append("--worktree")
     cmd.append(task)
@@ -108,7 +111,7 @@ def run_native_codex(task, sandbox="workspace-write", worktree=False):
     try:
         proc = subprocess.run(cmd, text=True)
         if proc.returncode == 0:
-            print("\n[PASS] ✅ Codex execution completed successfully.")
+            print("\n[PASS] ✅ Codex native execution completed successfully.")
         else:
             print(f"\n❌ Codex exited with code {proc.returncode}.", file=sys.stderr)
             sys.exit(proc.returncode)
@@ -246,8 +249,8 @@ def run_cua_driver(task, headed=True, pip=False, ocr_target=None, model="google/
     except Exception as e:
         print(f"[INFO] Closed-loop VLM notice: {e}. Executing targeted fallback.")
 
-    # 2. Check for native macOS app control (Safari, Xcode, Finder, etc.)
-    target_apps = ["Safari", "Xcode", "Finder", "Notes", "Simulator", "Calculator"]
+    # 2. Check for native macOS app control (Safari, Xcode, Finder, Discord, etc.)
+    target_apps = ["Safari", "Xcode", "Finder", "Notes", "Simulator", "Calculator", "Discord", "ChatGPT"]
     matched_app = next((app for app in target_apps if app.lower() in task.lower()), None)
 
     if matched_app or "ยูทูป" in task or "youtube" in task.lower() or "supabase" in task.lower():
@@ -508,7 +511,9 @@ def main():
     mode = args.mode
     if args.hybrid:
         mode = "hybrid"
-    elif args.gui or args.pip or args.ocr:
+    elif args.gui or args.pip:
+        mode = "native" if shutil.which("codex") else "cua"
+    elif args.ocr:
         mode = "cua"
     elif args.cloud:
         mode = "cloud"

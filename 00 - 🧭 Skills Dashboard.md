@@ -8,13 +8,13 @@ tags:
   - agent-skills
 ---
 
-# 🧭 Agent Skills System: คู่มือและสารบัญ 8 ขั้นตอน (67 Skills)
+# 🧭 Agent Skills System: คู่มือและสารบัญ 8 ขั้นตอน (68 Skills)
 
 ยินดีต้อนรับสู่ระบบจัดเก็บและเรียกใช้งาน **Agent Skills** ที่จัดระเบียบตาม **Software Development Life Cycle (SDLC) 8 ขั้นตอน**
 ช่วยให้ AI Assistant ทำงานได้อย่างแม่นยำ เป็นขั้นเป็นตอน ไม่ลัดขั้นตอน และเรียกใช้เครื่องมือที่ถูกต้องเสมอ
 
-> [!NOTE] 💡 ระบบการเรียกใช้แบบ On-Demand (ถามก่อนใช้)
-> ระบบทำงานในโหมด **On-Demand Confirmation**: AI จะถามก่อนดึง Skill มาใช้เสมอ และ**ห้ามแตก Subagent โดยพลการ** เพื่อประหยัดเวลาและ Token 100%
+> [!NOTE] ⚡ ระบบการเรียกใช้แบบ Autonomous Dispatch (ดึงอัตโนมัติ ไม่เด้งถาม)
+> ระบบทำงานในโหมด **Autonomous Dispatch (v2.1)**: AI ดึง Skill มาใช้ตามเนื้องานหรือเมื่อมีคำสั่ง `/boost` โดยอัตโนมัติ และ**ห้ามแตก Subagent โดยพลการ** เพื่อประหยัดเวลาและ Token 100%
 
 ---
 
@@ -131,6 +131,7 @@ tags:
 | [[Skills/rename-chat/SKILL|`rename-chat`]] | ตั้งชื่อและจัดระเบียบ Session บทสนทนาตามหัวข้อที่ทำ |
 | [[Skills/sdk/SKILL|`sdk`]] | พัฒนาแอปและสคริปต์ควบคุม Agent ผ่าน Cursor/Gemini SDK |
 | [[Skills/shell/SKILL|`shell`]] | รันคำสั่ง Terminal ผ่าน Agent อย่างปลอดภัยและมีประสิทธิภาพ |
+| [[Skills/skill-evolution/SKILL|`skill-evolution`]] | สถาปัตยกรรมวิวัฒนาการสกิล คัดกรองบทเรียน คุมเพดาน 10 กฎทอง ป้องกัน Prompt บวม |
 | [[Skills/statusline/SKILL|`statusline`]] | ปรับแต่งแถบสถานะ CLI Statusline |
 | [[Skills/tmux/SKILL|`tmux`]] | ควบคุมเซสชัน tmux สำหรับโปรเซสพื้นหลังระยะยาว การส่งคีย์สโตรก และอ่านเอาต์พุตเทอร์มินัล |
 | [[Skills/update-cli-config/SKILL|`update-cli-config`]] | ดูและแก้ไขการตั้งค่าคอนฟิกของ CLI |

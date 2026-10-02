@@ -33,6 +33,24 @@ class AccessibilityLandmark:
         self.norm_y: int = data.get("normY", 0)
         self.is_sensitive: bool = data.get("isSensitive", False)
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Converts landmark to dictionary representation."""
+        return {
+            "role": self.role,
+            "subrole": self.subrole,
+            "title": self.title,
+            "value": self.value,
+            "x": self.x,
+            "y": self.y,
+            "width": self.width,
+            "height": self.height,
+            "center_x": self.center_x,
+            "center_y": self.center_y,
+            "norm_x": self.norm_x,
+            "norm_y": self.norm_y,
+            "is_sensitive": self.is_sensitive,
+        }
+
     def to_prompt_string(self) -> str:
         """Formats the landmark into a compact string for LLM/VLM context."""
         sensitive_flag = " [SENSITIVE_CREDENTIAL_FIELD]" if self.is_sensitive else ""

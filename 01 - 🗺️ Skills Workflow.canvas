@@ -556,6 +556,15 @@
       "y": 950,
       "width": 320,
       "height": 180
+    },
+    {
+      "id": "node_skill_evolution",
+      "type": "file",
+      "file": "Skills/skill-evolution/SKILL.md",
+      "x": 980,
+      "y": 910,
+      "width": 320,
+      "height": 180
     }
   ],
   "edges": [
@@ -810,6 +819,13 @@
       "toNode": "node_codex_harness_agent",
       "toSide": "top",
       "label": "Offload to Codex Cloud Harness"
+    },
+    {
+      "id": "edge_create_skill_to_evolution",
+      "fromNode": "node_create_skill",
+      "fromSide": "bottom",
+      "toNode": "node_skill_evolution",
+      "toSide": "top"
     }
   ],
   "updated": "2026-09-30"
