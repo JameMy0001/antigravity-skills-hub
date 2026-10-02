@@ -28,13 +28,13 @@
     <text x="72" y="96" fill="#64748b" font-size="12" font-weight="400">System Architecture Blueprint • 68 Standardized Skills • 8 SDLC Pipelines • Dual-Vault Parity Engine</text>
 
     <!-- Status Badges (Right-Aligned) -->
-    <rect x="1092" y="63" width="124" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
-    <circle cx="1108" cy="77" r="3.5" fill="#334155"/>
-    <text x="1120" y="81" fill="#1e293b" font-size="11" font-weight="600" letter-spacing="0.02em">v2.2.0 RELEASE</text>
+    <rect x="996" y="63" width="160" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    <circle cx="1014" cy="77" r="3.5" fill="#334155"/>
+    <text x="1026" y="81" fill="#1e293b" font-size="11" font-weight="600" letter-spacing="0.02em">v2.2.0 RELEASE</text>
 
-    <rect x="1228" y="63" width="144" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
-    <circle cx="1244" cy="77" r="3.5" fill="#059669"/>
-    <text x="1256" y="81" fill="#065f46" font-size="11" font-weight="600" letter-spacing="0.02em">100% VAULT PARITY</text>
+    <rect x="1172" y="63" width="196" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    <circle cx="1190" cy="77" r="3.5" fill="#059669"/>
+    <text x="1202" y="81" fill="#065f46" font-size="11" font-weight="600" letter-spacing="0.02em">100% VAULT PARITY</text>
   </g>
 
   <!-- ==================== LAYER 1: CLIENT RUNTIMES & ENTRYPOINTS ==================== -->
@@ -108,7 +108,7 @@
     <!-- Stage 01: Features -->
     <g transform="translate(48, 372)">
       <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
-      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="10" y="12" width="28" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
       <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">01</text>
       <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Features</text>
       <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">tdd-workflow</text>
@@ -121,7 +121,7 @@
     <!-- Stage 02: Debugging -->
     <g transform="translate(217, 372)">
       <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
-      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="10" y="12" width="28" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
       <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">02</text>
       <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Debugging</text>
       <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">systematic-debug</text>
@@ -134,7 +134,7 @@
     <!-- Stage 03: Database -->
     <g transform="translate(386, 372)">
       <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
-      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="10" y="12" width="28" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
       <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">03</text>
       <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Database</text>
       <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">db-migrations</text>
@@ -147,7 +147,7 @@
     <!-- Stage 04: Web Craft -->
     <g transform="translate(555, 372)">
       <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
-      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="10" y="12" width="28" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
       <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">04</text>
       <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Web Craft</text>
       <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">claude-design</text>
@@ -160,7 +160,7 @@
     <!-- Stage 05: Security -->
     <g transform="translate(724, 372)">
       <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
-      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="10" y="12" width="28" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
       <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">05</text>
       <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Security</text>
       <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">threat-modeling</text>
@@ -173,7 +173,7 @@
     <!-- Stage 06: Git & Release -->
     <g transform="translate(893, 372)">
       <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
-      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="10" y="12" width="28" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
       <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">06</text>
       <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Git &amp; PRs</text>
       <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">git-workflow</text>
@@ -186,7 +186,7 @@
     <!-- Stage 07: Tooling & Science -->
     <g transform="translate(1062, 372)">
       <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
-      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="10" y="12" width="28" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
       <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">07</text>
       <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Tooling &amp; Sci</text>
       <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">codex-harness</text>
@@ -199,7 +199,7 @@
     <!-- Stage 08: Publication Docs -->
     <g transform="translate(1231, 372)">
       <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
-      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="10" y="12" width="28" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
       <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">08</text>
       <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Publication</text>
       <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">document-design</text>
@@ -231,13 +231,13 @@
       <!-- 4-Tier Gate Box -->
       <rect x="24" y="72" width="614" height="74" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
       <text x="38" y="94" fill="#0f172a" font-size="12" font-weight="600">4-Tier Anti-Bloat Filtration Pipeline</text>
-      <text x="38" y="114" fill="#334155" font-size="11">1. Ephemerality (Drop hacks)  ➔  2. Deduplication (Semantic cluster)</text>
-      <text x="38" y="132" fill="#334155" font-size="11">3. Rule of 10 Hard-Cap (Max 10)  ➔  4. Token Budget (&lt; 250 tokens)</text>
+      <text x="38" y="114" fill="#334155" font-size="11">1. Ephemerality (Drop hacks)  →  2. Deduplication (Semantic cluster)</text>
+      <text x="38" y="132" fill="#334155" font-size="11">3. Rule of 10 Hard-Cap (Max 10)  →  4. Token Budget (&lt; 250 tokens)</text>
 
       <!-- Sub-card 1: Execution Ledger -->
       <rect x="24" y="158" width="298" height="70" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
       <text x="38" y="182" fill="#0f172a" font-size="12" font-weight="600">Telemetry Execution Ledger</text>
-      <text x="38" y="200" fill="#475569" font-size="11">00 - 📜 Skills Execution Ledger.md</text>
+      <text x="38" y="200" fill="#475569" font-size="11">00 - Skills Execution Ledger.md</text>
       <text x="38" y="216" fill="#64748b" font-size="10">Audits tokens, latency, and outcomes</text>
 
       <!-- Sub-card 2: Distilled Patterns -->
