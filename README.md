@@ -5,7 +5,7 @@
 ### The Unified 8-Stage SDLC Agentic Skills Ecosystem
 
 [![Architect](https://img.shields.io/badge/Architect-Jamemm-blue?style=flat-square&logo=github)](https://github.com/JameMy0001)
-[![Skills](https://img.shields.io/badge/Skills-67%20Production--Grade-10B981?style=flat-square)](./Skills)
+[![Skills](https://img.shields.io/badge/Skills-68%20Production--Grade-10B981?style=flat-square)](./Skills)
 [![CI Pipeline](https://github.com/JameMy0001/antigravity-skills-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/JameMy0001/antigravity-skills-hub/actions/workflows/ci.yml)
 [![Web Showcase](https://img.shields.io/badge/Web%20Showcase-Live%20Explorer-6366F1?style=flat-square&logo=googlechrome)](https://jamemy0001.github.io/antigravity-skills-hub/)
 [![Platforms](https://img.shields.io/badge/Platforms-Antigravity%20%7C%20Cursor%20%7C%20Claude-purple?style=flat-square)](./setup.sh)
@@ -137,7 +137,7 @@ Explore all 66 skills in our responsive web app at [**jamemy0001.github.io/antig
 
 ---
 
-## 📚 Skill Catalog (67 Skills Across 8 Stages)
+## 📚 Skill Catalog (68 Skills Across 8 Stages)
 
 ### 🟢 Stage 01 — New Features & Business Logic (8 skills)
 | Skill | Description |
@@ -203,12 +203,13 @@ Explore all 66 skills in our responsive web app at [**jamemy0001.github.io/antig
 | `share` | Save, back up, or share current project |
 | `origin` | Install/sign in to the Cursor origin CLI |
 
-### ⚪ Stage 07 — Codebase Exploration & Tooling (21 skills)
+### ⚪ Stage 07 — Codebase Exploration & Tooling (22 skills)
 | Skill | Description |
 |---|---|
 | `codebase-onboarding` | Architectural recon, key entry points, conventions & CLAUDE.md generation |
 | `codex-harness-agent` | OpenAI Agents API, Codex Cloud Harness, session state & Computer Use |
 | `llm-wiki` | Build and query interlinked Markdown knowledge base for deep research |
+| `skill-evolution` | Curated anti-bloat skill evolution engine with Rule of 10 hard-cap |
 | `tmux` | Remote-control tmux sessions for persistent interactive CLI processes |
 | `excalidraw` | Hand-drawn Excalidraw JSON diagrams: flowcharts, sequence diagrams, maps |
 | `baoyu-infographic` | Convert technical concepts into visual infographics with 21 layouts/styles |
@@ -244,7 +245,7 @@ Explore all 66 skills in our responsive web app at [**jamemy0001.github.io/antig
 
 This vault is engineered to production standards:
 - **XML Security**: All Office document validators (`docx`, `powerpoint`) enforce `resolve_entities=False` and `no_network=True` to eliminate XML External Entity (XXE) and SSRF risks.
-- **Zero Broken Links**: 100% relative link integrity verified across all 65 skills.
+- **Zero Broken Links**: 100% relative link integrity verified across all 68 skills.
 - **Single-Agent Protocol**: Strict prohibition on autonomous runaway subagents to eliminate token exhaustion.
 - **Continuous Integration**: Automated GitHub Actions testing YAML frontmatter, directory structures, script compilation, and link integrity on every push.
 
@@ -258,7 +259,7 @@ Open this repository directly in [Obsidian](https://obsidian.md):
 3. Open `00 - 🧭 Skills Dashboard.md` for the central command dashboard
 4. Open `01 - 🗺️ Skills Workflow.canvas` for the visual SDLC workflow map
 
-All 65 skills are interconnected via bidirectional `[[Wikilinks]]` with color-coded stage groupings.
+All 68 skills are interconnected via bidirectional `[[Wikilinks]]` with color-coded stage groupings.
 
 ---
 
@@ -271,7 +272,7 @@ python3 verify_skills_vault.py
 ```
 
 The test runner validates:
-1. `SKILL.md` readability and UTF-8 encoding across all 65 directories
+1. `SKILL.md` readability and UTF-8 encoding across all 68 directories
 2. Valid YAML frontmatter and `## 🔗 Connected Skills`
 3. 100% parity between local mirror and iCloud Vault
 4. Symlink health in `~/.gemini` and `~/.cursor`
