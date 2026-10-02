@@ -11,11 +11,13 @@ Briefly describe the skill, bugfix, or enhancement introduced by this PR.
 - [ ] 07 - Codebase Exploration & Tooling
 - [ ] 08 - Productivity & Office Documents
 
-## Quality Checklist
-- [ ] `SKILL.md` includes valid YAML frontmatter (`name`, `description`, `aliases`, `category`, `tags`)
-- [ ] Includes `## 🔗 Connected Skills` with valid `[[Wikilinks]]`
-- [ ] No hardcoded machine paths (`/Users/...`)
-- [ ] Adheres to Single-Agent First (no autonomous subagent spawning)
-- [ ] Passed `python3 verify_skills_vault.py` locally
+## Quality & Anti-Bloat Checklist
+- [ ] `SKILL.md` includes valid YAML frontmatter (`name`, `description`, `aliases`, `category`, `tags`).
+- [ ] Includes `## Connected Skills` with valid `[[Wikilinks]]`.
+- [ ] Zero machine-specific absolute paths (`/Users/...`).
+- [ ] Strictly operates in Single-Agent Mode (no unauthorized background subagent spawning).
+- [ ] Follows Zero Decorative Emoji Protocol (clean technical typography).
+- [ ] Verified locally via `python3 verify_skills_vault.py` (All checks PASS).
+- [ ] Verified anti-bloat compliance via `python3 Skills/skill-evolution/scripts/evolve_skill.py audit` ([PASS]).
 
-<!-- v1.1.0 synchronized: 2026-09-29 -->
+<!-- v2.2.0 synchronized: 2026-10-02 -->

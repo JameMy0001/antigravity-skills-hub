@@ -57,4 +57,9 @@ jobs:
         run: |
           python verify_skills_vault.py
 
-# v1.1.0 synchronized: 2026-09-29
+      - name: Run Anti-Bloat Heuristic Audit
+        run: |
+          python Skills/skill-evolution/scripts/evolve_skill.py audit
+
+# v2.2.0 synchronized: 2026-10-02
+

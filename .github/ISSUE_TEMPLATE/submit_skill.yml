@@ -1,0 +1,63 @@
+name: Submit New Skill (Contribution)
+description: Submit a new production-ready skill to be merged into the hub
+title: "[CONTRIB]: "
+labels: ["skill-submission", "community-contrib"]
+assignees:
+  - JameMy0001
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for contributing a skill to Antigravity Skills Hub!
+        Please review `Skills/create-skill/SKILL.md` before submitting.
+
+  - type: input
+    id: skill_name
+    attributes:
+      label: Skill Name
+      description: Exact folder name in `Skills/<name>/`
+      placeholder: my-skill
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sdlc_stage
+    attributes:
+      label: SDLC Stage
+      options:
+        - 01 - New Features & Business Logic
+        - 02 - Bug Fixing & Defect Resolution
+        - 03 - Database & Migrations
+        - 04 - Web & Frontend
+        - 05 - Security & Code Quality
+        - 06 - Git, Commits & Release
+        - 07 - Codebase Exploration & Tooling
+        - 08 - Productivity & Office Documents
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Skill Summary
+      description: Concise summary of what this skill provides.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: verification_checklist
+    attributes:
+      label: Pre-Submission Verification Checklist
+      options:
+        - label: SKILL.md contains valid YAML frontmatter (name, description, aliases, category, tags).
+          required: true
+        - label: Appended `## Connected Skills` with valid Obsidian `[[Wikilinks]]`.
+          required: true
+        - label: Zero hardcoded user paths (no `/Users/...` or hardcoded home directories).
+          required: true
+        - label: Executed `python3 verify_skills_vault.py` locally and verified 100% PASS.
+          required: true
+        - label: Executed `python3 Skills/skill-evolution/scripts/evolve_skill.py audit` and verified [PASS].
+          required: true
+        - label: Adheres to Zero Decorative Emoji Protocol (Only functional status markers permitted).
+          required: true

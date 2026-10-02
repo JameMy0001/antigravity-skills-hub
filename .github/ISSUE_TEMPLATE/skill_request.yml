@@ -1,0 +1,69 @@
+name: Skill Request
+description: Propose a new skill or capability for the Antigravity Skills Hub
+title: "[SKILL]: "
+labels: ["enhancement", "skill-request"]
+assignees:
+  - JameMy0001
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing a new skill to the Antigravity Skills Hub!
+        Please fill out this form to ensure proposed skills adhere to our modular, anti-bloat SDLC architecture.
+
+  - type: input
+    id: skill_name
+    attributes:
+      label: Proposed Skill Name
+      description: Use kebab-case (e.g. `fastapi-backend`, `database-migrations`).
+      placeholder: my-awesome-skill
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sdlc_stage
+    attributes:
+      label: Target SDLC Stage
+      description: Select which of the 8 SDLC stages this skill belongs to.
+      options:
+        - 01 - New Features & Business Logic
+        - 02 - Bug Fixing & Defect Resolution
+        - 03 - Database & Migrations
+        - 04 - Web & Frontend
+        - 05 - Security & Code Quality
+        - 06 - Git, Commits & Release
+        - 07 - Codebase Exploration & Tooling
+        - 08 - Productivity & Office Documents
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose & Rationale
+      description: What specific engineering challenge or workflow does this skill solve?
+      placeholder: Describe the concrete value and how it prevents AI agent hallucinations.
+    validations:
+      required: true
+
+  - type: textarea
+    id: triggers
+    attributes:
+      label: Trigger Keywords & Aliases
+      description: Under what conditions or user prompts should the AI activate this skill?
+      placeholder: "e.g., fast API endpoints, Pydantic models, async SQLAlchemy"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Quality & Anti-Bloat Gates
+      description: Confirm adherence to Antigravity Skills Hub architectural standards.
+      options:
+        - label: Proposes lean, reusable guidelines (Token Budget < 500 tokens per pattern).
+          required: true
+        - label: Strictly operates in Single-Agent Mode (No runaway autonomous subagents).
+          required: true
+        - label: Follows Zero Decorative Emoji Protocol (Only functional status markers permitted).
+          required: true
