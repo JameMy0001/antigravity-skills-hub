@@ -1,333 +1,289 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 920" width="1440" height="920" style="background:#07090e;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter','Segoe UI',sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 920" width="1440" height="920" style="background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter','Segoe UI',sans-serif;">
   <defs>
-    <!-- Background Grid -->
-    <pattern id="diag-grid" width="48" height="48" patternUnits="userSpaceOnUse">
-      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#111827" stroke-width="0.75" opacity="0.7"/>
-      <circle cx="48" cy="48" r="1" fill="#1e293b" opacity="0.6"/>
+    <!-- Subtle Slate Dot Grid -->
+    <pattern id="light-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="16" cy="16" r="0.85" fill="#cbd5e1" opacity="0.5"/>
     </pattern>
 
-    <!-- Linear Gradients for Surface Craft -->
-    <linearGradient id="headerTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f8fafc"/>
-      <stop offset="60%" stop-color="#cbd5e1"/>
-      <stop offset="100%" stop-color="#94a3b8"/>
-    </linearGradient>
-
-    <linearGradient id="cyanAccentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#0891b2" stop-opacity="0.04"/>
-    </linearGradient>
-
-    <linearGradient id="purpleAccentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.04"/>
-    </linearGradient>
-
-    <linearGradient id="amberAccentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#d97706" stop-opacity="0.04"/>
-    </linearGradient>
-
-    <linearGradient id="emeraldAccentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#10b981" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#059669" stop-opacity="0.04"/>
-    </linearGradient>
-
-    <!-- Connectors Markers -->
-    <marker id="dot-marker" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="4" markerHeight="4">
-      <circle cx="4" cy="4" r="3" fill="#38bdf8"/>
-    </marker>
-    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="6" markerHeight="6" orient="auto">
-      <path d="M 2 2 L 5 8 L 8 2" fill="none" stroke="#475569" stroke-width="1.5" stroke-linecap="round"/>
-    </marker>
+    <!-- Professional Hairline Card Shadow -->
+    <filter id="soft-shadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" flood-color="#0f172a" flood-opacity="0.04"/>
+    </filter>
   </defs>
 
-  <!-- Ambient Backdrop Grid -->
-  <rect width="1440" height="920" fill="url(#diag-grid)"/>
+  <!-- Clean Off-White Background Ground -->
+  <rect width="1440" height="920" fill="#f8fafc"/>
+  <rect width="1440" height="920" fill="url(#light-grid)"/>
 
-  <!-- Outer Architectural Canvas -->
-  <rect x="24" y="24" width="1392" height="872" rx="16" fill="none" stroke="#1e293b" stroke-width="1"/>
-  <rect x="24" y="24" width="1392" height="872" rx="16" fill="none" stroke="#0f172a" stroke-width="1.5" opacity="0.8"/>
+  <!-- Outer Structural Boundary -->
+  <rect x="24" y="24" width="1392" height="872" rx="12" fill="none" stroke="#cbd5e1" stroke-width="1.2"/>
 
   <!-- ==================== HEADER BAR ==================== -->
   <g id="header-group">
-    <rect x="48" y="44" width="1344" height="68" rx="10" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
+    <rect x="48" y="44" width="1344" height="68" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
     
-    <!-- Title and Subtitle -->
-    <text x="72" y="74" fill="url(#headerTextGrad)" font-size="20" font-weight="700" letter-spacing="0.05em">ANTIGRAVITY SKILLS HUB</text>
-    <text x="375" y="74" fill="#38bdf8" font-size="13" font-weight="600" letter-spacing="0.08em">THE LIVING AGENT OS</text>
+    <!-- Title & Subtitle -->
+    <text x="72" y="74" fill="#0f172a" font-size="20" font-weight="700" letter-spacing="0.03em">ANTIGRAVITY SKILLS HUB</text>
+    <text x="375" y="74" fill="#475569" font-size="13" font-weight="600" letter-spacing="0.06em">THE LIVING AGENT OS</text>
     <text x="72" y="96" fill="#64748b" font-size="12" font-weight="400">System Architecture Blueprint • 68 Standardized Skills • 8 SDLC Pipelines • Dual-Vault Parity Engine</text>
 
     <!-- Status Badges (Right-Aligned) -->
-    <rect x="1090" y="62" width="124" height="30" rx="6" fill="rgba(56, 189, 248, 0.1)" stroke="#0284c7" stroke-width="1"/>
-    <circle cx="1106" cy="77" r="4" fill="#38bdf8"/>
-    <text x="1118" y="81" fill="#38bdf8" font-size="11" font-weight="600" letter-spacing="0.04em">v2.2.0 RELEASE</text>
+    <rect x="1092" y="63" width="124" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    <circle cx="1108" cy="77" r="3.5" fill="#334155"/>
+    <text x="1120" y="81" fill="#1e293b" font-size="11" font-weight="600" letter-spacing="0.02em">v2.2.0 RELEASE</text>
 
-    <rect x="1226" y="62" width="146" height="30" rx="6" fill="rgba(16, 185, 129, 0.1)" stroke="#059669" stroke-width="1"/>
-    <circle cx="1242" cy="77" r="4" fill="#10b981"/>
-    <text x="1254" y="81" fill="#10b981" font-size="11" font-weight="600" letter-spacing="0.04em">100% VAULT PARITY</text>
+    <rect x="1228" y="63" width="144" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    <circle cx="1244" cy="77" r="3.5" fill="#059669"/>
+    <text x="1256" y="81" fill="#065f46" font-size="11" font-weight="600" letter-spacing="0.02em">100% VAULT PARITY</text>
   </g>
 
-  <!-- ==================== LAYER 1: CLIENT RUNTIMES & HOSTS ==================== -->
+  <!-- ==================== LAYER 1: CLIENT RUNTIMES & ENTRYPOINTS ==================== -->
   <g id="layer-clients">
-    <text x="48" y="136" fill="#475569" font-size="11" font-weight="700" letter-spacing="0.1em">01 / CLIENT HOSTS &amp; AGENT RUNTIMES</text>
+    <text x="48" y="136" fill="#475569" font-size="11" font-weight="700" letter-spacing="0.08em">01 / CLIENT HOSTS &amp; AGENT RUNTIMES</text>
 
     <!-- Client 1: Google Antigravity -->
     <g transform="translate(48, 148)">
-      <rect width="321" height="74" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="321" height="74" rx="8" fill="url(#cyanAccentGrad)"/>
-      <text x="20" y="34" fill="#f8fafc" font-size="14" font-weight="600">Google Antigravity</text>
-      <text x="20" y="54" fill="#94a3b8" font-size="11.5">IDE &amp; CLI Agent Host • ~/.gemini/config/skills</text>
-      <rect x="245" y="24" width="56" height="20" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
-      <text x="273" y="38" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">ACTIVE</text>
+      <rect width="322" height="74" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <text x="20" y="34" fill="#0f172a" font-size="14" font-weight="600">Google Antigravity</text>
+      <text x="20" y="54" fill="#64748b" font-size="11.5">IDE &amp; CLI Host (~/.gemini)</text>
+      <rect x="246" y="24" width="56" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="274" y="38" fill="#334155" font-size="10" font-weight="700" text-anchor="middle">ACTIVE</text>
     </g>
 
     <!-- Client 2: Cursor IDE -->
-    <g transform="translate(389, 148)">
-      <rect width="321" height="74" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="321" height="74" rx="8" fill="url(#cyanAccentGrad)"/>
-      <text x="20" y="34" fill="#f8fafc" font-size="14" font-weight="600">Cursor IDE</text>
-      <text x="20" y="54" fill="#94a3b8" font-size="11.5">Composer Agent • ~/.cursor/skills</text>
-      <rect x="245" y="24" width="56" height="20" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
-      <text x="273" y="38" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">ACTIVE</text>
+    <g transform="translate(388, 148)">
+      <rect width="322" height="74" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <text x="20" y="34" fill="#0f172a" font-size="14" font-weight="600">Cursor IDE</text>
+      <text x="20" y="54" fill="#64748b" font-size="11.5">Composer Agent (~/.cursor)</text>
+      <rect x="246" y="24" width="56" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="274" y="38" fill="#334155" font-size="10" font-weight="700" text-anchor="middle">ACTIVE</text>
     </g>
 
     <!-- Client 3: Claude Code -->
-    <g transform="translate(730, 148)">
-      <rect width="321" height="74" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="321" height="74" rx="8" fill="url(#cyanAccentGrad)"/>
-      <text x="20" y="34" fill="#f8fafc" font-size="14" font-weight="600">Claude Code</text>
-      <text x="20" y="54" fill="#94a3b8" font-size="11.5">Terminal Harness • ~/.claude/skills</text>
-      <rect x="245" y="24" width="56" height="20" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
-      <text x="273" y="38" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">ACTIVE</text>
+    <g transform="translate(728, 148)">
+      <rect width="322" height="74" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <text x="20" y="34" fill="#0f172a" font-size="14" font-weight="600">Claude Code</text>
+      <text x="20" y="54" fill="#64748b" font-size="11.5">Terminal Harness (~/.claude)</text>
+      <rect x="246" y="24" width="56" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="274" y="38" fill="#334155" font-size="10" font-weight="700" text-anchor="middle">ACTIVE</text>
     </g>
 
     <!-- Client 4: Codex Runner -->
-    <g transform="translate(1071, 148)">
-      <rect width="321" height="74" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="321" height="74" rx="8" fill="url(#cyanAccentGrad)"/>
-      <text x="20" y="34" fill="#f8fafc" font-size="14" font-weight="600">Codex Runner</text>
-      <text x="20" y="54" fill="#94a3b8" font-size="11.5">CLI Runner • ~/.local/bin/codex-agent</text>
-      <rect x="245" y="24" width="56" height="20" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
-      <text x="273" y="38" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">ACTIVE</text>
+    <g transform="translate(1068, 148)">
+      <rect width="324" height="74" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <text x="20" y="34" fill="#0f172a" font-size="14" font-weight="600">Codex Runner</text>
+      <text x="20" y="54" fill="#64748b" font-size="11.5">CLI Runner (~/.local/bin)</text>
+      <rect x="248" y="24" width="56" height="20" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="276" y="38" fill="#334155" font-size="10" font-weight="700" text-anchor="middle">ACTIVE</text>
     </g>
   </g>
 
   <!-- Connectors from Clients to Dispatch Kernel -->
-  <path d="M 208 222 L 208 248" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 3"/>
-  <path d="M 549 222 L 549 248" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 3"/>
-  <path d="M 890 222 L 890 248" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 3"/>
-  <path d="M 1231 222 L 1231 248" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="209" y1="222" x2="209" y2="248" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="549" y1="222" x2="549" y2="248" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="889" y1="222" x2="889" y2="248" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="1230" y1="222" x2="1230" y2="248" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
 
   <!-- ==================== LAYER 2: AUTONOMOUS DISPATCH KERNEL ==================== -->
   <g id="layer-dispatch" transform="translate(48, 248)">
-    <rect width="1344" height="66" rx="8" fill="#0f172a" stroke="#1e293b" stroke-width="1.2"/>
-    <rect width="1344" height="66" rx="8" fill="url(#cyanAccentGrad)"/>
+    <rect width="1344" height="66" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" filter="url(#soft-shadow)"/>
 
-    <text x="24" y="32" fill="#38bdf8" font-size="14" font-weight="700" letter-spacing="0.04em">AUTONOMOUS DISPATCH KERNEL v2.1</text>
-    <text x="312" y="32" fill="#94a3b8" font-size="12">• Zero-Modal Instant Routing • /boost Direct Activation • Single-Agent Execution Mode</text>
+    <text x="24" y="32" fill="#0f172a" font-size="14" font-weight="700" letter-spacing="0.03em">AUTONOMOUS DISPATCH KERNEL v2.1</text>
+    <text x="312" y="32" fill="#475569" font-size="12">• Zero-Modal Instant Routing • /boost Direct Activation • Single-Agent Execution</text>
     <text x="24" y="52" fill="#64748b" font-size="11">Rule 1 Enforced: Strictly 0 Unauthorized Subagents Spun (Saves 95%+ Token Consumption &amp; Eliminates Circular Loops)</text>
 
     <!-- Efficiency Pill -->
-    <rect x="1144" y="18" width="176" height="30" rx="6" fill="#0b0f19" stroke="#334155" stroke-width="1"/>
-    <text x="1232" y="38" fill="#38bdf8" font-size="11" font-weight="600" text-anchor="middle">TOKEN EFFICIENCY: 95%+</text>
+    <rect x="1144" y="18" width="176" height="30" rx="5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+    <text x="1232" y="38" fill="#1e293b" font-size="11" font-weight="600" text-anchor="middle">TOKEN SAVINGS: 95%+</text>
   </g>
 
-  <!-- Flow Arrow to SDLC Fabric -->
-  <line x1="720" y1="314" x2="720" y2="338" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3 3"/>
-  <polygon points="715,338 725,338 720,346" fill="#38bdf8"/>
+  <!-- Flow Connector to SDLC Fabric -->
+  <line x1="720" y1="314" x2="720" y2="338" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <polygon points="716,338 724,338 720,344" fill="#64748b"/>
 
-  <!-- ==================== LAYER 3: 8-STAGE SDLC SKILL FABRIC (THE CORE) ==================== -->
+  <!-- ==================== LAYER 3: 8-STAGE SDLC SKILL FABRIC ==================== -->
   <g id="layer-sdlc">
-    <text x="48" y="360" fill="#475569" font-size="11" font-weight="700" letter-spacing="0.1em">02 / 8-STAGE SDLC COGNITIVE SKILL FABRIC (68 PRODUCTION SKILLS)</text>
+    <text x="48" y="360" fill="#475569" font-size="11" font-weight="700" letter-spacing="0.08em">02 / 8-STAGE SDLC COGNITIVE SKILL FABRIC (68 PRODUCTION SKILLS)</text>
 
     <!-- Stage 01: Features -->
     <g transform="translate(48, 372)">
-      <rect width="156" height="152" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="156" height="152" rx="8" fill="url(#purpleAccentGrad)"/>
-      <rect x="12" y="14" width="24" height="24" rx="4" fill="#1e1b4b"/>
-      <text x="24" y="30" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">01</text>
-      <text x="44" y="30" fill="#f8fafc" font-size="12" font-weight="600">Features</text>
-      <text x="12" y="60" fill="#cbd5e1" font-size="11" font-weight="500">tdd-workflow</text>
-      <text x="12" y="78" fill="#94a3b8" font-size="10.5">writing-plans</text>
-      <text x="12" y="96" fill="#94a3b8" font-size="10.5">api-design</text>
-      <text x="12" y="114" fill="#94a3b8" font-size="10.5">fastapi-backend</text>
-      <text x="12" y="136" fill="#64748b" font-size="9.5">8 Skills Total</text>
+      <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">01</text>
+      <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Features</text>
+      <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">tdd-workflow</text>
+      <text x="12" y="76" fill="#475569" font-size="10.5">writing-plans</text>
+      <text x="12" y="94" fill="#475569" font-size="10.5">api-design</text>
+      <text x="12" y="112" fill="#475569" font-size="10.5">fastapi-backend</text>
+      <text x="12" y="136" fill="#64748b" font-size="10">8 Skills</text>
     </g>
 
     <!-- Stage 02: Debugging -->
-    <g transform="translate(218, 372)">
-      <rect width="156" height="152" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="156" height="152" rx="8" fill="url(#purpleAccentGrad)"/>
-      <rect x="12" y="14" width="24" height="24" rx="4" fill="#1e1b4b"/>
-      <text x="24" y="30" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">02</text>
-      <text x="44" y="30" fill="#f8fafc" font-size="12" font-weight="600">Debugging</text>
-      <text x="12" y="60" fill="#cbd5e1" font-size="11" font-weight="500">systematic-debug</text>
-      <text x="12" y="78" fill="#94a3b8" font-size="10.5">orch-fix-defect</text>
-      <text x="12" y="96" fill="#94a3b8" font-size="10.5">agent-introspection</text>
-      <text x="12" y="114" fill="#94a3b8" font-size="10.5">Root Cause First</text>
-      <text x="12" y="136" fill="#64748b" font-size="9.5">3 Skills Total</text>
+    <g transform="translate(217, 372)">
+      <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">02</text>
+      <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Debugging</text>
+      <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">systematic-debug</text>
+      <text x="12" y="76" fill="#475569" font-size="10.5">orch-fix-defect</text>
+      <text x="12" y="94" fill="#475569" font-size="10.5">agent-debug</text>
+      <text x="12" y="112" fill="#475569" font-size="10.5">root-cause-first</text>
+      <text x="12" y="136" fill="#64748b" font-size="10">3 Skills</text>
     </g>
 
     <!-- Stage 03: Database -->
-    <g transform="translate(388, 372)">
-      <rect width="156" height="152" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="156" height="152" rx="8" fill="url(#purpleAccentGrad)"/>
-      <rect x="12" y="14" width="24" height="24" rx="4" fill="#1e1b4b"/>
-      <text x="24" y="30" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">03</text>
-      <text x="44" y="30" fill="#f8fafc" font-size="12" font-weight="600">Database</text>
-      <text x="12" y="60" fill="#cbd5e1" font-size="11" font-weight="500">db-migrations</text>
-      <text x="12" y="78" fill="#94a3b8" font-size="10.5">docker-compose</text>
-      <text x="12" y="96" fill="#94a3b8" font-size="10.5">Zero-Downtime</text>
-      <text x="12" y="114" fill="#94a3b8" font-size="10.5">Non-Root Safety</text>
-      <text x="12" y="136" fill="#64748b" font-size="9.5">2 Skills Total</text>
+    <g transform="translate(386, 372)">
+      <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">03</text>
+      <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Database</text>
+      <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">db-migrations</text>
+      <text x="12" y="76" fill="#475569" font-size="10.5">docker-compose</text>
+      <text x="12" y="94" fill="#475569" font-size="10.5">zero-downtime</text>
+      <text x="12" y="112" fill="#475569" font-size="10.5">non-root-safety</text>
+      <text x="12" y="136" fill="#64748b" font-size="10">2 Skills</text>
     </g>
 
     <!-- Stage 04: Web Craft -->
-    <g transform="translate(558, 372)">
-      <rect width="156" height="152" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="156" height="152" rx="8" fill="url(#purpleAccentGrad)"/>
-      <rect x="12" y="14" width="24" height="24" rx="4" fill="#1e1b4b"/>
-      <text x="24" y="30" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">04</text>
-      <text x="44" y="30" fill="#f8fafc" font-size="12" font-weight="600">Web Craft</text>
-      <text x="12" y="60" fill="#cbd5e1" font-size="11" font-weight="500">claude-design</text>
-      <text x="12" y="78" fill="#94a3b8" font-size="10.5">modern-web-guide</text>
-      <text x="12" y="96" fill="#94a3b8" font-size="10.5">nextjs-fullstack</text>
-      <text x="12" y="114" fill="#94a3b8" font-size="10.5">4-Layer Button</text>
-      <text x="12" y="136" fill="#64748b" font-size="9.5">6 Skills Total</text>
+    <g transform="translate(555, 372)">
+      <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">04</text>
+      <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Web Craft</text>
+      <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">claude-design</text>
+      <text x="12" y="76" fill="#475569" font-size="10.5">modern-web-guide</text>
+      <text x="12" y="94" fill="#475569" font-size="10.5">nextjs-fullstack</text>
+      <text x="12" y="112" fill="#475569" font-size="10.5">4-layer-button</text>
+      <text x="12" y="136" fill="#64748b" font-size="10">6 Skills</text>
     </g>
 
     <!-- Stage 05: Security -->
-    <g transform="translate(728, 372)">
-      <rect width="156" height="152" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="156" height="152" rx="8" fill="url(#purpleAccentGrad)"/>
-      <rect x="12" y="14" width="24" height="24" rx="4" fill="#1e1b4b"/>
-      <text x="24" y="30" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">05</text>
-      <text x="44" y="30" fill="#f8fafc" font-size="12" font-weight="600">Security</text>
-      <text x="12" y="60" fill="#cbd5e1" font-size="11" font-weight="500">threat-modeling</text>
-      <text x="12" y="78" fill="#94a3b8" font-size="10.5">verify-completion</text>
-      <text x="12" y="96" fill="#94a3b8" font-size="10.5">review-security</text>
-      <text x="12" y="114" fill="#94a3b8" font-size="10.5">no-emoji-minimal</text>
-      <text x="12" y="136" fill="#64748b" font-size="9.5">6 Skills Total</text>
+    <g transform="translate(724, 372)">
+      <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">05</text>
+      <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Security</text>
+      <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">threat-modeling</text>
+      <text x="12" y="76" fill="#475569" font-size="10.5">verify-completion</text>
+      <text x="12" y="94" fill="#475569" font-size="10.5">review-security</text>
+      <text x="12" y="112" fill="#475569" font-size="10.5">no-emoji-minimal</text>
+      <text x="12" y="136" fill="#64748b" font-size="10">6 Skills</text>
     </g>
 
     <!-- Stage 06: Git & Release -->
-    <g transform="translate(898, 372)">
-      <rect width="156" height="152" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="156" height="152" rx="8" fill="url(#purpleAccentGrad)"/>
-      <rect x="12" y="14" width="24" height="24" rx="4" fill="#1e1b4b"/>
-      <text x="24" y="30" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">06</text>
-      <text x="44" y="30" fill="#f8fafc" font-size="12" font-weight="600">Git &amp; Release</text>
-      <text x="12" y="60" fill="#cbd5e1" font-size="11" font-weight="500">git-workflow</text>
-      <text x="12" y="78" fill="#94a3b8" font-size="10.5">github-pr-flow</text>
-      <text x="12" y="96" fill="#94a3b8" font-size="10.5">using-worktrees</text>
-      <text x="12" y="114" fill="#94a3b8" font-size="10.5">Conventional PR</text>
-      <text x="12" y="136" fill="#64748b" font-size="9.5">6 Skills Total</text>
+    <g transform="translate(893, 372)">
+      <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">06</text>
+      <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Git &amp; PRs</text>
+      <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">git-workflow</text>
+      <text x="12" y="76" fill="#475569" font-size="10.5">github-pr-flow</text>
+      <text x="12" y="94" fill="#475569" font-size="10.5">using-worktrees</text>
+      <text x="12" y="112" fill="#475569" font-size="10.5">conventional-pr</text>
+      <text x="12" y="136" fill="#64748b" font-size="10">6 Skills</text>
     </g>
 
     <!-- Stage 07: Tooling & Science -->
-    <g transform="translate(1068, 372)">
-      <rect width="156" height="152" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="156" height="152" rx="8" fill="url(#purpleAccentGrad)"/>
-      <rect x="12" y="14" width="24" height="24" rx="4" fill="#1e1b4b"/>
-      <text x="24" y="30" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">07</text>
-      <text x="44" y="30" fill="#f8fafc" font-size="12" font-weight="600">Tooling &amp; Sci</text>
-      <text x="12" y="60" fill="#cbd5e1" font-size="11" font-weight="500">codex-harness</text>
-      <text x="12" y="78" fill="#94a3b8" font-size="10.5">llm-wiki &amp; tmux</text>
-      <text x="12" y="96" fill="#94a3b8" font-size="10.5">23 Science APIs</text>
-      <text x="12" y="114" fill="#94a3b8" font-size="10.5">Cloud Sandboxes</text>
-      <text x="12" y="136" fill="#64748b" font-size="9.5">30 Skills Total</text>
+    <g transform="translate(1062, 372)">
+      <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">07</text>
+      <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Tooling &amp; Sci</text>
+      <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">codex-harness</text>
+      <text x="12" y="76" fill="#475569" font-size="10.5">llm-wiki &amp; tmux</text>
+      <text x="12" y="94" fill="#475569" font-size="10.5">23 science-apis</text>
+      <text x="12" y="112" fill="#475569" font-size="10.5">cloud-sandboxes</text>
+      <text x="12" y="136" fill="#64748b" font-size="10">30 Skills</text>
     </g>
 
     <!-- Stage 08: Publication Docs -->
-    <g transform="translate(1236, 372)">
-      <rect width="156" height="152" rx="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1"/>
-      <rect width="156" height="152" rx="8" fill="url(#purpleAccentGrad)"/>
-      <rect x="12" y="14" width="24" height="24" rx="4" fill="#1e1b4b"/>
-      <text x="24" y="30" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">08</text>
-      <text x="44" y="30" fill="#f8fafc" font-size="12" font-weight="600">Publication</text>
-      <text x="12" y="60" fill="#cbd5e1" font-size="11" font-weight="500">document-design</text>
-      <text x="12" y="78" fill="#94a3b8" font-size="10.5">docx &amp; xlsx</text>
-      <text x="12" y="96" fill="#94a3b8" font-size="10.5">pdf &amp; powerpoint</text>
-      <text x="12" y="114" fill="#94a3b8" font-size="10.5">Tufte Table Rules</text>
-      <text x="12" y="136" fill="#64748b" font-size="9.5">7 Skills Total</text>
+    <g transform="translate(1231, 372)">
+      <rect width="157" height="152" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#soft-shadow)"/>
+      <rect x="12" y="12" width="24" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="24" y="27" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">08</text>
+      <text x="44" y="28" fill="#0f172a" font-size="12" font-weight="600">Publication</text>
+      <text x="12" y="58" fill="#1e293b" font-size="11" font-weight="500">document-design</text>
+      <text x="12" y="76" fill="#475569" font-size="10.5">docx &amp; xlsx</text>
+      <text x="12" y="94" fill="#475569" font-size="10.5">pdf &amp; powerpoint</text>
+      <text x="12" y="112" fill="#475569" font-size="10.5">tufte-tables</text>
+      <text x="12" y="136" fill="#64748b" font-size="10">7 Skills</text>
     </g>
   </g>
 
-  <!-- Connectors from Fabric to Subsystems -->
-  <path d="M 384 524 L 384 560" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 3"/>
-  <path d="M 1056 524 L 1056 560" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <!-- Connectors to Bottom Subsystems -->
+  <line x1="384" y1="524" x2="384" y2="560" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="1056" y1="524" x2="1056" y2="560" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
 
   <!-- ==================== LAYER 4: TWIN AUTONOMOUS OPERATING ENGINES ==================== -->
   <g id="layer-engines">
-    <text x="48" y="552" fill="#475569" font-size="11" font-weight="700" letter-spacing="0.1em">03 / SPECIALIZED OPERATING SUBSYSTEMS &amp; HARDWARE BRIDGES</text>
+    <text x="48" y="552" fill="#475569" font-size="11" font-weight="700" letter-spacing="0.08em">03 / SPECIALIZED OPERATING SUBSYSTEMS &amp; HARDWARE BRIDGES</text>
 
     <!-- Subsystem Left: Curated Skill Evolution Engine (CSEE) -->
     <g transform="translate(48, 564)">
-      <rect width="662" height="248" rx="10" fill="#0b0f19" stroke="#1e293b" stroke-width="1.2"/>
-      <rect width="662" height="248" rx="10" fill="url(#amberAccentGrad)"/>
+      <rect width="662" height="248" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" filter="url(#soft-shadow)"/>
 
-      <!-- Engine Header -->
-      <text x="24" y="36" fill="#f59e0b" font-size="15" font-weight="700" letter-spacing="0.04em">CURATED SKILL EVOLUTION ENGINE (CSEE)</text>
-      <text x="410" y="36" fill="#fbbf24" font-size="11" font-weight="600">CLI: evolve-skill</text>
-      <text x="24" y="58" fill="#94a3b8" font-size="11.5">Usage-Driven Continuous Intelligence with Strict Anti-Bloat Governance</text>
+      <!-- Header -->
+      <text x="24" y="34" fill="#0f172a" font-size="14.5" font-weight="700" letter-spacing="0.02em">CURATED SKILL EVOLUTION ENGINE (CSEE)</text>
+      <rect x="470" y="18" width="168" height="24" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="554" y="34" fill="#334155" font-size="11" font-weight="600" text-anchor="middle">CLI: evolve-skill</text>
+      <text x="24" y="56" fill="#64748b" font-size="11.5">Usage-Driven Continuous Intelligence with Strict Anti-Bloat Governance</text>
 
       <!-- 4-Tier Gate Box -->
-      <rect x="24" y="74" width="614" height="78" rx="6" fill="#07090e" stroke="#1e293b" stroke-width="1"/>
-      <text x="40" y="96" fill="#f8fafc" font-size="12" font-weight="600">4-Tier Anti-Bloat Filtration Pipeline</text>
-      <text x="40" y="118" fill="#94a3b8" font-size="11">1. Ephemerality (Drop session hacks) ➔ 2. Deduplication (Semantic clustering)</text>
-      <text x="40" y="136" fill="#cbd5e1" font-size="11">3. Hard-Cap Rule of 10 (Strict limit) ➔ 4. Token Budget (&lt; 250 tokens per rule)</text>
+      <rect x="24" y="72" width="614" height="74" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="38" y="94" fill="#0f172a" font-size="12" font-weight="600">4-Tier Anti-Bloat Filtration Pipeline</text>
+      <text x="38" y="114" fill="#334155" font-size="11">1. Ephemerality (Drop hacks)  ➔  2. Deduplication (Semantic cluster)</text>
+      <text x="38" y="132" fill="#334155" font-size="11">3. Rule of 10 Hard-Cap (Max 10)  ➔  4. Token Budget (&lt; 250 tokens)</text>
 
       <!-- Sub-card 1: Execution Ledger -->
-      <rect x="24" y="164" width="298" height="66" rx="6" fill="#07090e" stroke="#1e293b" stroke-width="1"/>
-      <text x="38" y="188" fill="#38bdf8" font-size="11.5" font-weight="600">Telemetry Execution Ledger</text>
-      <text x="38" y="206" fill="#94a3b8" font-size="10.5">00 - 📜 Skills Execution Ledger.md</text>
-      <text x="38" y="220" fill="#64748b" font-size="10">Audits tokens, latency &amp; PASS/FAIL records</text>
+      <rect x="24" y="158" width="298" height="70" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="38" y="182" fill="#0f172a" font-size="12" font-weight="600">Telemetry Execution Ledger</text>
+      <text x="38" y="200" fill="#475569" font-size="11">00 - 📜 Skills Execution Ledger.md</text>
+      <text x="38" y="216" fill="#64748b" font-size="10">Audits tokens, latency, and outcomes</text>
 
       <!-- Sub-card 2: Distilled Patterns -->
-      <rect x="340" y="164" width="298" height="66" rx="6" fill="#07090e" stroke="#1e293b" stroke-width="1"/>
-      <text x="354" y="188" fill="#10b981" font-size="11.5" font-weight="600">Distilled Heuristic Injection</text>
-      <text x="354" y="206" fill="#94a3b8" font-size="10.5">learned_patterns.md in Skill Folders</text>
-      <text x="354" y="220" fill="#64748b" font-size="10">Self-improving skills with zero prompt rot</text>
+      <rect x="340" y="158" width="298" height="70" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="354" y="182" fill="#0f172a" font-size="12" font-weight="600">Distilled Heuristic Injection</text>
+      <text x="354" y="200" fill="#475569" font-size="11">learned_patterns.md in Skills</text>
+      <text x="354" y="216" fill="#64748b" font-size="10">Zero prompt rot • Verified rules</text>
     </g>
 
     <!-- Subsystem Right: Native macOS Computer Use (CUA) -->
     <g transform="translate(730, 564)">
-      <rect width="662" height="248" rx="10" fill="#0b0f19" stroke="#1e293b" stroke-width="1.2"/>
-      <rect width="662" height="248" rx="10" fill="url(#emeraldAccentGrad)"/>
+      <rect width="662" height="248" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" filter="url(#soft-shadow)"/>
 
-      <!-- Engine Header -->
-      <text x="24" y="36" fill="#10b981" font-size="15" font-weight="700" letter-spacing="0.04em">NATIVE MACOS COMPUTER USE (CUA) &amp; PARITY</text>
-      <text x="470" y="36" fill="#34d399" font-size="11" font-weight="600">CLI: ag-cua</text>
-      <text x="24" y="58" fill="#94a3b8" font-size="11.5">Direct macOS Accessibility Engine &amp; Dual-Vault Synchronization</text>
+      <!-- Header -->
+      <text x="24" y="34" fill="#0f172a" font-size="14.5" font-weight="700" letter-spacing="0.02em">NATIVE MACOS COMPUTER USE (CUA) &amp; PARITY</text>
+      <rect x="490" y="18" width="148" height="24" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="564" y="34" fill="#334155" font-size="11" font-weight="600" text-anchor="middle">CLI: ag-cua</text>
+      <text x="24" y="56" fill="#64748b" font-size="11.5">Direct macOS Accessibility Engine &amp; Dual-Vault Synchronization</text>
 
-      <!-- Parity & HUD Row -->
-      <rect x="24" y="74" width="298" height="78" rx="6" fill="#07090e" stroke="#1e293b" stroke-width="1"/>
-      <text x="38" y="98" fill="#38bdf8" font-size="12" font-weight="600">Dual-Vault Parity Engine</text>
-      <text x="38" y="118" fill="#94a3b8" font-size="11">Local Vault &lt;=&gt; iCloud Mobile Sync</text>
-      <text x="38" y="136" fill="#10b981" font-size="10.5" font-weight="600">[PASS] 100% Byte-for-Byte rsync</text>
+      <!-- Top Row -->
+      <rect x="24" y="72" width="298" height="74" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="38" y="94" fill="#0f172a" font-size="12" font-weight="600">Dual-Vault Parity Engine</text>
+      <text x="38" y="114" fill="#475569" font-size="11">Local Vault &lt;=&gt; iCloud Mobile Sync</text>
+      <text x="38" y="132" fill="#059669" font-size="10.5" font-weight="600">[PASS] 100% Byte-for-Byte rsync</text>
 
-      <rect x="340" y="74" width="298" height="78" rx="6" fill="#07090e" stroke="#1e293b" stroke-width="1"/>
-      <text x="354" y="98" fill="#f43f5e" font-size="12" font-weight="600">Native Cocoa HUD Overlay</text>
-      <text x="354" y="118" fill="#94a3b8" font-size="11">computer-use-hud (Swift Cocoa NSWindow)</text>
-      <text x="354" y="136" fill="#94a3b8" font-size="10.5">Live floating boundary indicator</text>
+      <rect x="340" y="72" width="298" height="74" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="354" y="94" fill="#0f172a" font-size="12" font-weight="600">Native Cocoa HUD Overlay</text>
+      <text x="354" y="114" fill="#475569" font-size="11">computer-use-hud (Swift Cocoa)</text>
+      <text x="354" y="132" fill="#64748b" font-size="10">Live floating boundary indicator</text>
 
-      <!-- AX-Scanner & Sandbox Row -->
-      <rect x="24" y="164" width="298" height="66" rx="6" fill="#07090e" stroke="#1e293b" stroke-width="1"/>
-      <text x="38" y="188" fill="#fbbf24" font-size="11.5" font-weight="600">Swift AX-Scanner Engine</text>
-      <text x="38" y="206" fill="#94a3b8" font-size="10.5">5-10ms UI Query via Accessibility API</text>
-      <text x="38" y="220" fill="#64748b" font-size="10">Bypasses slow 3-5s screenshot OCR</text>
+      <!-- Bottom Row -->
+      <rect x="24" y="158" width="298" height="70" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="38" y="182" fill="#0f172a" font-size="12" font-weight="600">Swift AX-Scanner Engine</text>
+      <text x="38" y="200" fill="#475569" font-size="11">5-10ms UI Query via Accessibility API</text>
+      <text x="38" y="216" fill="#64748b" font-size="10">Bypasses slow 3-5s screenshot OCR</text>
 
-      <rect x="340" y="164" width="298" height="66" rx="6" fill="#07090e" stroke="#1e293b" stroke-width="1"/>
-      <text x="354" y="188" fill="#38bdf8" font-size="11.5" font-weight="600">Safety &amp; Execution Gates</text>
-      <text x="354" y="206" fill="#94a3b8" font-size="10.5">Explicit Confirmation for Destructive Actions</text>
-      <text x="354" y="220" fill="#64748b" font-size="10">Non-Root Docker &amp; PyAutoGUI Fallback</text>
+      <rect x="340" y="158" width="298" height="70" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="354" y="182" fill="#0f172a" font-size="12" font-weight="600">Safety &amp; Execution Gates</text>
+      <text x="354" y="200" fill="#475569" font-size="11">Destructive Action Confirmation</text>
+      <text x="354" y="216" fill="#64748b" font-size="10">Non-Root Sandboxing &amp; Fallbacks</text>
     </g>
   </g>
 
-  <!-- ==================== FOOTER META ==================== -->
+  <!-- ==================== FOOTER ==================== -->
   <g transform="translate(48, 836)">
-    <text x="0" y="20" fill="#475569" font-size="11">Architecture: Antigravity Skills Hub • Architect: Jamemm (@JameMy0001) • Repository: github.com/JameMy0001/antigravity-skills-hub</text>
-    <text x="1344" y="20" fill="#475569" font-size="11" text-anchor="end">Engineered for Google Antigravity, Cursor IDE &amp; Claude Code</text>
+    <text x="0" y="20" fill="#64748b" font-size="11">Architecture: Antigravity Skills Hub • Architect: Jamemm (@JameMy0001) • Repository: github.com/JameMy0001/antigravity-skills-hub</text>
+    <text x="1344" y="20" fill="#64748b" font-size="11" text-anchor="end">Engineered for Google Antigravity, Cursor IDE &amp; Claude Code</text>
   </g>
 </svg>
