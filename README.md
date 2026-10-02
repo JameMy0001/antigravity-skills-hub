@@ -41,7 +41,7 @@ Contact: [Jamerrmool@gmail.com](mailto:Jamerrmool@gmail.com) · GitHub: [@JameMy
 Antigravity Skills Hub implements an **8-Stage SDLC Skill Dispatch System** paired with an autonomous **Curated Skill Evolution Engine (CSEE)** and **Native macOS Computer Use (CUA)**. One centralized Obsidian knowledge graph auto-routes to the right skill for every coding task, across every major AI agent platform simultaneously.
 
 <p align="center">
-  <img src="docs/assets/architecture-overview.svg" alt="Antigravity Skills Hub Architecture Overview" width="100%">
+  <img src="docs/assets/architecture-overview.png" alt="Antigravity Skills Hub Architecture Overview" width="100%">
 </p>
 
 ### Key Architectural Highlights
