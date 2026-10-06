@@ -73,6 +73,23 @@ Before any lesson or heuristic is permanently recorded into a skill, it must pas
 
 ---
 
+## 2026 Upstream Knowledge Ingestion Pipeline
+
+To ensure skills continually evolve with world-class engineering standards without manual toil:
+
+1. **Google Modern Web Guidance Engine**:
+   - Query upstream browser and CSS standards before frontend implementations:
+     `npx -y modern-web-guidance@latest search "<topic>"`
+2. **Upstream Agent Registries (VoltAgent / Awesome Agent Skills)**:
+   - Benchmark agent patterns against curated community and enterprise agent skills.
+3. **Framework Modernization Invariant Checks**:
+   - Ingest breaking changes and ergonomic upgrades from Tailwind v4, React 19, Next.js 15, and Pydantic v2.
+4. **Automated CLI Ingestion (`evolve_skill.py`)**:
+   - Run `python3 evolve_skill.py audit` to detect and prune bloat.
+   - Run `python3 evolve_skill.py learn <skill> "<lesson>"` to add vetted patterns through the 4-tier gate.
+
+---
+
 ## Dual-Decoupled Storage Architecture
 
 To ensure skills never accumulate historical logs or conversational clutter:

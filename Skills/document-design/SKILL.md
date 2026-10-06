@@ -21,7 +21,7 @@ Use this skill when designing, authoring, or styling formal reports, whitepapers
 
 ---
 
-## 🎨 The 60-30-10 Document Color Harmony
+## The 60-30-10 Document Color Harmony
 
 Most digital documents suffer from blinding pure white canvases (`#FFFFFF`) and harsh pure black ink (`#000000`), causing eye fatigue and looking like raw unstyled drafts. Master publication design follows the **60-30-10 harmony**:
 
@@ -55,7 +55,7 @@ Most digital documents suffer from blinding pure white canvases (`#FFFFFF`) and 
 
 ---
 
-## 📊 Edward Tufte's Table Rules (Zero Chartjunk)
+## Edward Tufte's Table Rules (Zero Chartjunk)
 
 Tables are instruments for reasoning about numbers. Default spreadsheet grids surround numbers in dense cages of black gridlines that distract the human eye. Edward Tufte’s table doctrine mandates:
 
@@ -71,9 +71,9 @@ Tables are instruments for reasoning about numbers. Default spreadsheet grids su
    - Use monospace numbers or CSS `font-variant-numeric: tabular-nums` to ensure decimals line up in a vertical column for effortless scanning.
 4. **Header-Data Alignment Parity:**
    - Column headers must match the alignment of the data beneath them:
-     - Left-aligned text ➔ Left-aligned header.
-     - Right-aligned numbers ➔ Right-aligned header.
-     - Centered icons/status ➔ Centered header.
+ - Left-aligned text Left-aligned header.
+ - Right-aligned numbers Right-aligned header.
+ - Centered icons/status Centered header.
 5. **Units in Header, Not Cells:**
    - State currency and units in the header once (e.g., `Revenue ($M)` or `Latency (ms)`), leaving cells clean (e.g., `12.4`, `18.1` instead of `$12.4M`, `$18.1M`).
 
@@ -134,7 +134,7 @@ Tables are instruments for reasoning about numbers. Default spreadsheet grids su
 
 ---
 
-## ✍️ Editorial Typographic Scale & Measure
+## Editorial Typographic Scale & Measure
 
 Reading comfort depends on the harmonious interaction of typeface, optical size, leading (line height), and measure (line length).
 
@@ -154,7 +154,7 @@ Reading comfort depends on the harmonious interaction of typeface, optical size,
 
 ---
 
-## 🖨️ Modern Web-to-PDF Pipeline (Playwright & CSS Paged Media)
+## Modern Web-to-PDF Pipeline (Playwright & CSS Paged Media)
 
 Legacy PDF generators (`wkhtmltopdf`, basic headless scripts) produce ugly breaks and distorted margins. The modern publication standard writes documents in **HTML5 + Tailwind CSS** with **CSS Paged Media**, compiled via **Playwright**.
 
@@ -244,7 +244,7 @@ def render_publication_pdf(html_file: str, output_pdf: str) -> None:
 
 ---
 
-## 📝 Word (`docx`) Production Recipes
+## Word (`docx`) Production Recipes
 
 When generating native Microsoft Word documents, adhere to these styling rules in both `docx-js` (Node/TypeScript) and `python-docx` (Python):
 
@@ -345,7 +345,7 @@ def create_editorial_document(filename: str):
 
 ---
 
-## 📽️ Presentation Decks (`powerpoint`)
+## Presentation Decks (`powerpoint`)
 
 For widescreen slide decks that command attention without looking like corporate bullet lists:
 
@@ -396,7 +396,7 @@ p2.font.color.rgb = RGBColor(0x52, 0x52, 0x4E)  # Muted charcoal
 
 ---
 
-## 📌 Callout Boxes (Architectural Accents)
+## Callout Boxes (Architectural Accents)
 
 Important takeaways, warnings, and executive notes should use restrained architectural callout boxes:
 

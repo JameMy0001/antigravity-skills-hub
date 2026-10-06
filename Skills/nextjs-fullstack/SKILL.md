@@ -23,7 +23,7 @@ Production guidelines for modern fullstack Next.js 15 applications utilizing the
 
 ---
 
-## 🏛️ Core Architectural Principles
+## Core Architectural Principles
 
 1. **Server Components by Default**:
    - Keep components as React Server Components (RSC) by default for zero client bundle overhead and direct backend/database access.
@@ -39,7 +39,7 @@ Production guidelines for modern fullstack Next.js 15 applications utilizing the
 
 ---
 
-## 💻 Standard Patterns & Recipes
+## Standard Patterns & Recipes
 
 ### 1. Server Component with Streaming & Fallback
 

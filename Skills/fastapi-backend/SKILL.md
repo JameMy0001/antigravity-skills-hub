@@ -22,7 +22,7 @@ Production standards for building robust, high-performance asynchronous REST API
 
 ---
 
-## 🏛️ Clean Architecture Layering
+## Clean Architecture Layering
 
 Organize FastAPI applications into distinct, decoupled layers:
 
@@ -40,7 +40,7 @@ app/
 
 ---
 
-## 🛡️ Core Rules & Patterns
+## Core Rules & Patterns
 
 1. **Pydantic v2 Schema Separation**:
    - Always maintain separate DTO models: `ItemCreate`, `ItemUpdate`, `ItemResponse`.
@@ -56,7 +56,7 @@ app/
 
 ---
 
-## 💻 Standard Implementation Recipe
+## Standard Implementation Recipe
 
 ```python
 # schemas/item.py

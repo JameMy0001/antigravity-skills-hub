@@ -21,7 +21,7 @@ Use this skill when designing frontend interfaces, visual systems, component lib
 
 ---
 
-## 🧭 Runtime Mode & Operating Philosophy
+## Runtime Mode & Operating Philosophy
 
 You are running in **CLI/API mode**, not the hosted Claude Design web UI.
 Preserve Claude Design's design behavior, taste, and craft while ignoring hosted-only tool plumbing that does not exist in local agent environments:
@@ -42,7 +42,7 @@ Act as an expert designer working with the user as the design partner and manage
 
 ---
 
-## 🎯 Dual-Mode Delivery Architecture
+## Dual-Mode Delivery Architecture
 
 Modern frontend workflows require two distinct delivery modalities depending on the user's objective:
 
@@ -81,7 +81,8 @@ Used when exploring ideas, pitching visual directions, sharing standalone delive
 <div id="tweaks-dock" style="position:fixed;bottom:20px;right:20px;z-index:9999;font-family:system-ui,sans-serif;">
   <button id="tweaks-toggle" onclick="document.getElementById('tweaks-drawer').classList.toggle('open')"
     style="background:#18181b;color:#f4f4f5;border:1px solid rgba(255,255,255,0.15);padding:8px 14px;border-radius:9999px;font-size:13px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);cursor:pointer;display:flex;align-items:center;gap:6px;">
-    <span>⚙️</span> <span>Tweaks</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span>Tweaks</span>
   </button>
   <div id="tweaks-drawer" style="display:none;margin-top:8px;background:#ffffff;border:1px solid #e4e4e7;padding:16px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:260px;">
     <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#71717a;margin-bottom:12px;">Display Controls</div>
@@ -133,9 +134,88 @@ Used when implementing within an existing project repository or building scalabl
 - **Component Modularity:** Strict separation into reusable atomic components (`components/ui/button.tsx`, `components/ui/card.tsx`), composite feature widgets, and page views.
 - **Class Variance Authority (`cva`):** Predictable variant management with type-safe props.
 
+### Mode C: Generative UI & Google Antigravity Native Artifacts
+
+Used when generating interactive widgets inline within chat responses or persistent workspace artifacts:
+
+- **Embed Tag:** Render inline widgets via `<agent-embed src="file:///<artifact_path>/widget.html"></agent-embed>`.
+- **Semantic CSS Variables:** Inherit the host theme automatically via injected CSS variables:
+  - Surfaces: `--background`, `--card`, `--sidebar`, `--content`
+  - Borders: `--border`, `--ring`
+  - Text: `--foreground`, `--muted-foreground`, `--placeholder`
+  - Accents: `--primary`, `--primary-foreground`, `--accent`, `--secondary`
+- **Tailwind In-Iframe Dependency:** Load the gstatic Tailwind script allowlisted by CSP:
+  `<script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>`
+- **No Local Fallbacks on `:root`**: Never declare hardcoded color overrides on `:root`; let host environment dictate contrast.
+
 ---
 
-## 🔘 Atomic Button Craft: The 4-Layer Construction
+## 2026 Modern Web Standards & Platform Primitives
+
+Do not use heavy legacy JavaScript libraries when modern browser primitives natively solve the problem with zero bundle weight and 60 FPS performance:
+
+1. **Native Popover API (`popover="auto"`):**
+   - Replaces floating-ui / popper for dropdowns and tooltips.
+   - Automatically handles top-layer promotion, click-outside dismissal, and ESC key closure:
+     ```html
+     <button popovertarget="user-menu">Account</button>
+     <div id="user-menu" popover>...</div>
+     ```
+2. **CSS Anchor Positioning (`anchor-name` & `position-anchor`):**
+   - Anchor floating elements directly to trigger buttons without JS coordinate math:
+     ```css
+     #user-menu {
+       position-anchor: --user-btn;
+       top: anchor(bottom);
+       left: anchor(left);
+     }
+     ```
+3. **Native `<dialog>` with Dynamic Backdrop:**
+   - Fully accessible modal dialogs with native focus trapping:
+     ```html
+     <dialog id="confirm-modal">
+       <form method="dialog">...</form>
+     </dialog>
+     <style>
+       dialog::backdrop {
+         background: rgba(0, 0, 0, 0.45);
+         backdrop-filter: blur(8px);
+       }
+     </style>
+     ```
+4. **View Transitions API (`document.startViewTransition`):**
+   - Seamless cross-fade and morph animations during DOM updates:
+     ```javascript
+     function navigateTab(newTab) {
+       if (document.startViewTransition) {
+         document.startViewTransition(() => renderTab(newTab));
+       } else {
+         renderTab(newTab);
+       }
+     }
+     ```
+5. **Tailwind CSS v4 `@theme` Engine & OKLCH Color Space:**
+   - Use perceptual uniform color spaces (`oklch`) for smooth color gradients and high-contrast palettes:
+     ```css
+     @theme {
+       --color-canvas: oklch(0.98 0.005 85);
+       --color-ink: oklch(0.18 0.01 60);
+       --color-accent: oklch(0.55 0.16 35);
+     }
+     ```
+6. **CSS Container Queries (`@container`) & `:has()`:**
+   - Style components based on container width, not screen viewport:
+     ```css
+     .card-container { container-type: inline-size; }
+     @container (min-width: 420px) {
+       .card-body { display: grid; grid-template-columns: 1fr 1fr; }
+     }
+     ```
+
+
+---
+
+## Atomic Button Craft: The 4-Layer Construction
 
 Buttons are the primary physical touchpoint in UI. Generic AI designs produce flat, lifeless rectangles. Master-level UI craft treats buttons as tangible, micro-machined physical elements built in **4 distinct visual layers** with **5 interactive states** and **asymmetric optical balancing**.
 
@@ -300,7 +380,7 @@ Button.displayName = "Button"
 
 ---
 
-## 🏛️ Surface-First Composition: The 7 Archetypes
+## Surface-First Composition: The 7 Archetypes
 
 Most AI design failures are **compositional, not cosmetic**. Naive generation repeatedly defaults to a centered hero banner followed by three equal-width feature cards. This layout is completely broken for dashboards, settings, data grids, or consoles.
 
@@ -318,7 +398,7 @@ Most AI design failures are **compositional, not cosmetic**. Naive generation re
 
 ---
 
-## 🔍 The 10-Point Slop Diagnostics & Scoring Protocol
+## The 10-Point Slop Diagnostics & Scoring Protocol
 
 Before declaring any UI artifact complete, run this strict 10-point audit. Score the design from 0 to 10 (each occurrence adds 1 penalty point; 0 is perfection):
 
@@ -334,15 +414,15 @@ Before declaring any UI artifact complete, run this strict 10-point audit. Score
 10. **Wrong Surface:** Using a marketing hero on a Monitor/Operate surface (the #1 AI giveaway).
 
 ### Targeted Repair Hierarchy
-- **Tells 3, 8, 10 Fired?** ➔ **Re-layout / Re-compose immediately.** Revisit the surface archetype. Do NOT just change colors.
-- **Tells 1, 2, 9 Fired?** ➔ **Re-palette / Re-typeset.** Establish strict neutral shades with ONE purposeful accent.
-- **Tells 4, 5, 6, 7 Fired?** ➔ **Strip the decoration.** Replace with genuine whitespace, font weight contrast, and clean hairlines.
+- **Tells 3, 8, 10 Fired?** **Re-layout / Re-compose immediately.** Revisit the surface archetype. Do NOT just change colors.
+- **Tells 1, 2, 9 Fired?** **Re-palette / Re-typeset.** Establish strict neutral shades with ONE purposeful accent.
+- **Tells 4, 5, 6, 7 Fired?** **Strip the decoration.** Replace with genuine whitespace, font weight contrast, and clean hairlines.
 
 **Mandatory Gate:** Diagnose first, treat second. Never claim an artifact is finished while compositional tells (3, 8, 10) are still firing.
 
 ---
 
-## 🎨 Variation Discipline & Slide Decks
+## Variation Discipline & Slide Decks
 
 ### 1. The 3-Variation Exploration Rule
 When exploring design directions for the user, default to 3 divergent options:
@@ -362,7 +442,7 @@ When asked for presentation slides:
 
 ---
 
-## ♿ Accessibility & Quality Gates
+## Accessibility & Quality Gates
 
 Every component and surface created must satisfy the following non-negotiable gates:
 
@@ -380,7 +460,7 @@ Every component and surface created must satisfy the following non-negotiable ga
 
 ---
 
-## 📚 Built-in Template Gallery (54 Production Archetypes)
+## Built-in Template Gallery (54 Production Archetypes)
 
 This skill includes 54 fully documented design system templates located in `templates/`:
 

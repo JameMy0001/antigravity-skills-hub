@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reddit Post Copy Helper</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0e1117; color: #e6edf3; padding: 30px; max-width: 800px; margin: auto; line-height: 1.6; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    h1, h2, h3 { color: #ffffff; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th, td { border: 1px solid #30363d; padding: 10px 14px; text-align: left; }
+    th { background: #21262d; color: #58a6ff; }
+    pre { background: #0d1117; border: 1px solid #30363d; padding: 12px; border-radius: 6px; overflow-x: auto; color: #79c0ff; font-family: monospace; }
+    button { background: #238636; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #2ea043; }
+    .badge { display: inline-block; background: #1f6feb22; color: #58a6ff; border: 1px solid #1f6feb; border-radius: 4px; padding: 2px 8px; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="badge">REDDIT MASTER POST — REFINED DEVELOPER EDITION</div>
+  <h2>Title:</h2>
+  <pre id="title-text">I built an open-source OS for AI coding agents: 68 skills, native macOS Computer Use, and an anti-bloat engine</pre>
+  <button onclick="navigator.clipboard.writeText(document.getElementById('title-text').innerText); this.innerText='Copied!';">Copy Title</button>
+
+  <h2 style="margin-top: 30px;">Body Preview (Sleek & Formatted):</h2>
+  <div class="card" id="post-body">
+    <p>Most AI coding setups suffer from <strong>prompt rot</strong>: cursor rules pile up, autonomous subagents run in circular loops burning your token budget, and context windows get choked with stale hacks.</p>
+    
+    <p>To solve this, I built <strong>Antigravity Skills Hub</strong>—an open-source cognitive operating architecture for <strong>Google Antigravity</strong>, <strong>Cursor</strong>, and <strong>Claude Code</strong>.</p>
+
+    <h3>Before vs After</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Problem</th>
+          <th>Default Setup</th>
+          <th>Antigravity Skills Hub</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Token Waste</strong></td>
+          <td>Thousands burned on stale rules</td>
+          <td>95%+ savings via single-agent kernel</td>
+        </tr>
+        <tr>
+          <td><strong>Rule Hygiene</strong></td>
+          <td>Bloats endlessly over time</td>
+          <td>Strict 4-tier anti-bloat (&lt; 250 tokens/skill)</td>
+        </tr>
+        <tr>
+          <td><strong>GUI Latency</strong></td>
+          <td>3-5s screenshot OCR lag</td>
+          <td>5-10ms native macOS accessibility queries</td>
+        </tr>
+        <tr>
+          <td><strong>Architecture</strong></td>
+          <td>Unstructured prompts</td>
+          <td>68 standardized skills across 8 SDLC stages</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Key Architecture Pillars</h3>
+    <ul>
+      <li><strong>68 Modular Skills across 8 SDLC Stages</strong>: From strict TDD and systematic debugging to zero-downtime database migrations, atomic UI design, and publication docs.</li>
+      <li><strong>Curated Skill Evolution Engine (CSEE)</strong>: A CLI utility (<code>evolve-skill</code>) that automatically audits rules and enforces a 10-rule hard cap to prevent prompt rot.</li>
+      <li><strong>Native macOS Computer Use (CUA)</strong>: Direct 5-10ms element discovery via Swift accessibility APIs, bypassing slow visual OCR.</li>
+      <li><strong>Single-Agent Protocol</strong>: Eliminates unconstrained subagent loops, cutting token consumption by 95%+.</li>
+    </ul>
+
+    <h3>Quickstart</h3>
+    <pre>git clone https://github.com/JameMy0001/antigravity-skills-hub.git
+cd antigravity-skills-hub && python3 verify_skills_vault.py</pre>
+
+    <p>Architecture diagram is attached above. The repo is MIT open source: <a href="https://github.com/JameMy0001/antigravity-skills-hub" style="color:#58a6ff;">github.com/JameMy0001/antigravity-skills-hub</a></p>
+
+    <p>Would love your feedback, questions, or ideas for new skills!</p>
+  </div>
+  <button onclick="
+    const el = document.getElementById('post-body');
+    const range = document.createRange();
+    range.selectNode(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    this.innerText = 'Rich Formatted Text Copied! (Ready to paste directly into Reddit)';
+  ">Copy Formatted Rich Text for Reddit</button>
+</body>
+</html>
