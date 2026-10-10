@@ -30,6 +30,13 @@ NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 
 If you haven't run the verification command in this message, you cannot claim it passes.
 
+## Pre-Execution Mental Simulation (Cognitive Sandbox)
+
+Before executing multi-file mutations, schema changes, or destructive shell operations:
+1. **Blast Radius Analysis**: Trace upstream callers and downstream consumers. Which modules break if this signature changes?
+2. **Failure Mode Hypothesis**: Formulate concrete failure scenarios (null inputs, timeouts, concurrency collisions).
+3. **Reversibility Guarantee**: Ensure every operation has a clean rollback path (git worktree, backup, down migration).
+
 ## The Gate Function
 
 ```

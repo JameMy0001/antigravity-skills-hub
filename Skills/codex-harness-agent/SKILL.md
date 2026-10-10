@@ -51,10 +51,10 @@ This skill provides an enterprise engineering blueprint and production execution
    - Native CoreGraphics event synthesis for mouse glide curves and typing cadences.
 2. **Pillar 2: Universal Coordinate Normalization Engine (`coordinate_transformer.py`)**:
    - Deterministic bidirectional coordinate mapping across Model Space `[0..1000, 0..1000]`, macOS Logical Points `(pt_x, pt_y)`, and Physical Retina Pixels `(px_x, px_y)`.
-   - Dynamic AppKit `backingScaleFactor` detection (2.0x Retina scaling) preventing coordinate drift.
-3. **Pillar 3: Triple Hybrid Grounding (AXTree + Apple OCR + VLM Coordinates)**:
-   - *Layer 1 (Fast Path)*: Native macOS Accessibility Scanner (`ax-scanner`) enumerating interactive buttons, text inputs, and menus (< 15ms).
-   - *Layer 2 (Text Path)*: Apple Silicon Neural Vision OCR (`VNRecognizeTextRequest`) running on local Neural Engine (< 20ms).
+   - Dynamic AppKit `backingScaleFactor` detection (2.0x Retina scaling) and multi-display coordinate virtualization.
+3. **Pillar 3: Triple Hybrid Grounding (AXTree v2 + Apple OCR + VLM Coordinates)**:
+   - *Layer 1 (Fast Path)*: Swift Native Accessibility Scanner v2 (`ax-scanner`) with in-memory element tree caching (< 5ms UI queries).
+   - *Layer 2 (Text Path)*: Apple Silicon Neural Vision OCR (`VNRecognizeTextRequest`) running on local Neural Engine (< 15ms).
    - *Layer 3 (Visual Path)*: Multimodal VLM bounding box coordinates for iconographic and unlabelled visual targets.
 4. **Pillar 4: Human Takeover Mode & Sensitive Field Privacy Shield**:
    - Dedicated `[ Take Over ]` and `[ Resume AI ]` buttons on the Mini Display HUD.

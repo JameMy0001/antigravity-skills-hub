@@ -123,10 +123,18 @@ gh pr create \
 - JWT token generation and validation
 
 ## Test Plan
-- [ ] Unit tests pass
+- [x] Unit tests pass (34/34)
+- [x] Integration tests pass
+- [x] Documentation updated
 
 Closes #42"
 ```
+
+### Upstream Repository PR Checklist Protocol
+When submitting PRs to open-source or community repositories (e.g. Awesome Lists, tool directories):
+- Always inspect the target repo's `CONTRIBUTING.md` or `.github/PULL_REQUEST_TEMPLATE.md`.
+- Include an explicit markdown checklist (`- [x] ...`) matching all repository requirements.
+- GitHub automatically parses checked items into task badges (e.g. `· 5 tasks done`), elevating review priority among maintainers.
 
 Options: `--draft`, `--reviewer user1,user2`, `--label "enhancement"`, `--base develop`
 
