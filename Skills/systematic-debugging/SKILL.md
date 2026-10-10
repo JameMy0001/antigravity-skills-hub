@@ -175,6 +175,22 @@ search_files("function_name(", path="src/", file_glob="*.py")
 search_files("variable_name\\s*=", path="src/", file_glob="*.py")
 ```
 
+### 6. Enterprise Scale & Concurrency Defect Protocol
+
+In large-scale systems or high-concurrency architectures, defects are rarely single-line typos:
+
+- **Race Condition & Deadlock Bisection**:
+  - Run language-native race detectors (`go test -race`, Python `asyncio` debug mode, Node.js `--trace-warnings`).
+  - Inject micro-delays or artificial jitter (`sleep(0.01)`) to expose tight timing windows deterministically.
+  - Inspect lock acquisition hierarchies across concurrent threads to detect potential circular locks.
+- **Memory Leak & Resource Starvation Profiling**:
+  - Compare differential heap snapshots before and after repeated operations to identify uncollected references.
+  - Audit database connection pool exhaustion (ensure every acquired client has a guaranteed `finally { client.release() }`).
+  - Verify event listener counts (`emitter.listenerCount()`) and file descriptor limits.
+- **Distributed Boundary & Correlation Tracing**:
+  - Trace requests across asynchronous worker queues, Kafka topics, or microservices using correlation IDs (`traceparent`, `x-request-id`).
+  - Diff request/response payloads at network boundaries before altering internal service logic.
+
 ### Phase 1 Completion Checklist
 
 - [ ] Error messages fully read and understood

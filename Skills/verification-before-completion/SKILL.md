@@ -37,6 +37,21 @@ Before executing multi-file mutations, schema changes, or destructive shell oper
 2. **Failure Mode Hypothesis**: Formulate concrete failure scenarios (null inputs, timeouts, concurrency collisions).
 3. **Reversibility Guarantee**: Ensure every operation has a clean rollback path (git worktree, backup, down migration).
 
+## Enterprise Scale & Zero-Anomaly Gates
+
+When working on large-scale codebases, monorepos, or high-throughput services:
+
+1. **Monorepo Downstream Ripple Gate**:
+   - Never verify only the local package when editing shared libraries, schemas, or utilities.
+   - Run dependency impact builds and downstream tests (`pnpm --filter ...`, `npm run build --workspaces`, or `turbo run test`).
+2. **Flake-Resistance Multi-Sampling**:
+   - For asynchronous, concurrent, or network-bound logic, a single pass does not prove correctness.
+   - Run critical regression tests 3 consecutive times (`for i in {1..3}; do <test>; done`) to prove zero flakiness and race immunity.
+3. **Hermetic Environment & Stale Artifact Purge**:
+   - Before final verification, remove cached artifacts (`dist/`, `.next/`, `build/`, `__pycache__`) to prevent false-green passes on stale bytecode.
+4. **Zero-Pollution Quarantine**:
+   - Audit `git status --porcelain` and diff to ensure zero uncommitted debug flags, temporary dumps, or secret leakage.
+
 ## The Gate Function
 
 ```

@@ -586,6 +586,19 @@ test('updates user', () => {
 - E2E tests cover critical user flows
 - Tests catch bugs before production
 
+## Enterprise Scale & Large-Suite Isolation Rules
+
+When codebases grow into thousands of tests across multiple teams:
+
+1. **Hermetic State Isolation**:
+   - Zero shared state across tests. Every test suite must run against an isolated transaction rollback or ephemeral schema.
+   - Never rely on test execution order. Randomize test execution order (`pytest --randomly-seed`, `jest --testSequencer`) to expose hidden state leaks.
+2. **Contract-Driven Mock Verification**:
+   - Never mock external API responses with arbitrary untyped payloads.
+   - Validate all mock responses against strict schema contracts (Pydantic models, Zod schemas, or OpenAPI specs) to prevent mock drift from production realities.
+3. **Impact-Bounded Test Execution**:
+   - For massive monorepos where full suites take extensive time, use affected test detection (`jest --changedSince`, `nx affected:test`) for rapid inner-loop TDD, but mandate full downstream suite execution before completion.
+
 ---
 
 **Remember**: Tests are not optional. They are the safety net that enables confident refactoring, rapid development, and production reliability.

@@ -352,6 +352,51 @@ const data = await withRetry(() => fetch('/api/data').then(r => r.json()), {
 })
 ```
 
+## Enterprise Resilience: Circuit Breaker & Cascading Failure Shields
+
+At high concurrency, uncoordinated retries trigger catastrophic thundering herd outages on degraded backends:
+
+### 1. Circuit Breaker with Fail-Fast State
+
+```typescript
+export class CircuitBreaker {
+  private failureCount = 0
+  private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED'
+  private nextAttempt = 0
+
+  constructor(
+    private readonly threshold = 5,
+    private readonly resetTimeoutMs = 15000,
+  ) {}
+
+  async execute<T>(fn: () => Promise<T>, fallback: () => Promise<T>): Promise<T> {
+    if (this.state === 'OPEN') {
+      if (Date.now() > this.nextAttempt) {
+        this.state = 'HALF_OPEN'
+      } else {
+        return fallback()
+      }
+    }
+    try {
+      const result = await fn()
+      if (this.state === 'HALF_OPEN') this.state = 'CLOSED'
+      this.failureCount = 0
+      return result
+    } catch (err) {
+      this.failureCount++
+      if (this.failureCount >= this.threshold) {
+        this.state = 'OPEN'
+        this.nextAttempt = Date.now() + this.resetTimeoutMs
+      }
+      return fallback()
+    }
+  }
+}
+```
+
+### 2. Distributed Correlation Context
+Always propagate `x-correlation-id` or `traceparent` headers across async queue jobs, HTTP requests, and database calls to isolate errors across distributed system boundaries without guessing.
+
 ## User-Facing Error Messages
 
 Map error codes to human-readable messages. Keep technical details out of user-visible text.

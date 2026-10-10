@@ -48,6 +48,16 @@ Before applying any migration:
 
 ## PostgreSQL Patterns
 
+### Mandatory Lock Timeout Defense
+In high-throughput databases, any DDL query waiting for a table lock blocks all incoming reads and writes behind it, causing cascading connection pool exhaustion. Always enforce timeouts at the head of every migration:
+
+```sql
+-- Abort migration if lock cannot be acquired within 2 seconds
+SET lock_timeout = '2s';
+-- Abort individual statement if execution exceeds 5 seconds
+SET statement_timeout = '5s';
+```
+
 ### Adding a Column Safely
 
 ```sql
@@ -130,6 +140,8 @@ BEGIN
     RAISE NOTICE 'Updated % rows', rows_updated;
     EXIT WHEN rows_updated = 0;
     COMMIT;
+    -- Throttle between batches to prevent replica lag and WAL spike
+    PERFORM pg_sleep(0.05);
   END LOOP;
 END $$;
 ```
